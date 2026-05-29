@@ -1,0 +1,375 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pwm_ccu8_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global PWMOutSin_timer_handle
+  18              	 .section .rodata.PWMOutSin_timer_handle,"a",%progbits
+  19              	 .align 2
+  22              	PWMOutSin_timer_handle:
+  23 0000 00       	 .byte 0
+  24 0001 00       	 .byte 0
+  25 0002 00       	 .byte 0
+  26 0003 00       	 .byte 0
+  27 0004 00       	 .byte 0
+  28 0005 000000   	 .space 3
+  29 0008 15       	 .byte 21
+  30 0009 000000   	 .space 3
+  31 000c 00       	 .byte 0
+  32 000d 00       	 .byte 0
+  33 000e 0000     	 .space 2
+  34              	 .global PWMOutSin_event0_config
+  35              	 .section .rodata.PWMOutSin_event0_config,"a",%progbits
+  36              	 .align 2
+  39              	PWMOutSin_event0_config:
+  40 0000 05       	 .byte 5
+  41 0001 01       	 .byte 1
+  42 0002 01       	 .byte 1
+  43 0003 02       	 .byte 2
+  44              	 .global PWMOutSin_event1_config
+  45              	 .section .rodata.PWMOutSin_event1_config,"a",%progbits
+  46              	 .align 2
+  49              	PWMOutSin_event1_config:
+  50 0000 00       	 .byte 0
+  51 0001 00       	 .byte 0
+  52 0002 01       	 .byte 1
+  53 0003 00       	 .byte 0
+  54              	 .global PWMOutSin_event2_config
+  55              	 .section .rodata.PWMOutSin_event2_config,"a",%progbits
+  56              	 .align 2
+  59              	PWMOutSin_event2_config:
+  60 0000 00       	 .byte 0
+  61 0001 00       	 .byte 0
+  62 0002 01       	 .byte 1
+  63 0003 00       	 .byte 0
+  64              	 .global PWMOutSin_dt_config
+  65              	 .section .rodata.PWMOutSin_dt_config,"a",%progbits
+  66              	 .align 2
+  69              	PWMOutSin_dt_config:
+  70 0000 00000000 	 .space 12
+  70      00000000 
+  70      00000000 
+  71              	 .global PWMOutSin_ch1_out0_config
+  72              	 .section .rodata.PWMOutSin_ch1_out0_config,"a",%progbits
+  73              	 .align 2
+  76              	PWMOutSin_ch1_out0_config:
+  77 0000 A8       	 .byte -88
+  78 0001 00       	 .byte 0
+  79 0002 0000     	 .space 2
+  80 0004 00000100 	 .word 65536
+  81              	 .global PWMOutSin_config_handle
+  82              	 .section .rodata.PWMOutSin_config_handle,"a",%progbits
+  83              	 .align 2
+  86              	PWMOutSin_config_handle:
+  87 0000 00       	 .byte 0
+  88 0001 00       	 .space 1
+  89 0002 FF31     	 .short 12799
+  90 0004 0000     	 .short 0
+  91 0006 FF18     	 .short 6399
+  92 0008 00       	 .byte 0
+  93 0009 00       	 .byte 0
+  94 000a 00       	 .byte 0
+  95 000b 00       	 .byte 0
+  96 000c 00       	 .byte 0
+  97 000d 00       	 .byte 0
+  98 000e 00       	 .byte 0
+  99 000f 00       	 .byte 0
+ 100 0010 00       	 .byte 0
+ 101 0011 00       	 .byte 0
+ 102 0012 00       	 .byte 0
+ 103 0013 00       	 .byte 0
+ 104 0014 00       	 .byte 0
+ 105 0015 00       	 .byte 0
+ 106 0016 00       	 .byte 0
+ 107 0017 00       	 .byte 0
+ 108 0018 00       	 .byte 0
+ 109 0019 00       	 .byte 0
+ 110 001a 0000     	 .space 2
+ 111 001c 00000000 	 .word PWMOutSin_event0_config
+ 112 0020 00000000 	 .word PWMOutSin_event1_config
+ 113 0024 00000000 	 .word PWMOutSin_event2_config
+ 114 0028 00       	 .byte 0
+ 115 0029 00       	 .byte 0
+ 116 002a 00       	 .byte 0
+ 117 002b 00       	 .byte 0
+ 118 002c 00       	 .byte 0
+ 119 002d 00       	 .byte 0
+ 120 002e 00       	 .byte 0
+ 121 002f 01       	 .byte 1
+ 122 0030 01       	 .byte 1
+ 123 0031 00       	 .byte 0
+ 124 0032 00       	 .byte 0
+ 125 0033 00       	 .byte 0
+ 126 0034 00       	 .byte 0
+ 127 0035 00       	 .byte 0
+ 128 0036 00       	 .byte 0
+ 129 0037 00       	 .byte 0
+ 130 0038 01       	 .byte 1
+ 131 0039 00       	 .byte 0
+ 132 003a 0000     	 .space 2
+ 133 003c 00000004 	 .word 67108864
+ 134 0040 00000000 	 .word PWMOutSin_dt_config
+ 135 0044 01       	 .byte 1
+ 136 0045 000000   	 .space 3
+ 137 0048 00000000 	 .word PWMOutSin_timer_handle
+ 138 004c 01       	 .byte 1
+ 139 004d 000000   	 .space 3
+ 140 0050 00010440 	 .word 1074004224
+ 141 0054 00       	 .byte 0
+ 142 0055 000000   	 .space 3
+ 143 0058 00000000 	 .word PWMOutSin_ch1_out0_config
+ 144 005c 00       	 .byte 0
+ 145 005d 000000   	 .space 3
+ 146 0060 00000000 	 .word 0
+ 147 0064 00       	 .byte 0
+ 148 0065 000000   	 .space 3
+ 149 0068 00000000 	 .word 0
+ 150 006c 00       	 .byte 0
+ 151 006d 000000   	 .space 3
+ 152 0070 00000000 	 .word 0
+ 153 0074 00       	 .byte 0
+ 154 0075 000000   	 .space 3
+ 155 0078 00000000 	 .word 0
+ 156 007c 00       	 .byte 0
+ 157 007d 000000   	 .space 3
+ 158 0080 00000000 	 .word 0
+ 159 0084 00       	 .byte 0
+ 160 0085 000000   	 .space 3
+ 161 0088 00000000 	 .word 0
+ 162 008c 00000000 	 .word GLOBAL_CCU8_0
+ 163              	 .global PWMOutSin
+ 164              	 .section .data.PWMOutSin,"aw",%progbits
+ 165              	 .align 2
+ 168              	PWMOutSin:
+ 169 0000 00000000 	 .word PWMOutSin_config_handle
+ 170 0004 00000050 	 .word 1342177280
+ 171 0008 00010050 	 .word 1342177536
+ 172 000c 00       	 .byte 0
+ 173 000d 00       	 .byte 0
+ 174 000e 0000     	 .space 2
+ 175 0010 01000000 	 .word 1
+ 176 0014 02000000 	 .word 2
+ 177 0018 04000000 	 .word 4
+ 178 001c 00       	 .byte 0
+ 179 001d 00000000 	 .space 7
+ 179      000000
+ 180 0024 00000000 	 .word 0
+ 181 0028 00000000 	 .word 0
+ 182 002c 87130000 	 .word 4999
+ 183 0030 00000000 	 .word 0
+ 184              	 .global PWMOutCos_timer_handle
+ 185              	 .section .rodata.PWMOutCos_timer_handle,"a",%progbits
+ 186              	 .align 2
+ 189              	PWMOutCos_timer_handle:
+ 190 0000 00       	 .byte 0
+ 191 0001 00       	 .byte 0
+ 192 0002 00       	 .byte 0
+ 193 0003 00       	 .byte 0
+ 194 0004 00       	 .byte 0
+ 195 0005 000000   	 .space 3
+ 196 0008 15       	 .byte 21
+ 197 0009 000000   	 .space 3
+ 198 000c 00       	 .byte 0
+ 199 000d 00       	 .byte 0
+ 200 000e 0000     	 .space 2
+ 201              	 .global PWMOutCos_event0_config
+ 202              	 .section .rodata.PWMOutCos_event0_config,"a",%progbits
+ 203              	 .align 2
+ 206              	PWMOutCos_event0_config:
+ 207 0000 05       	 .byte 5
+ 208 0001 01       	 .byte 1
+ 209 0002 01       	 .byte 1
+ 210 0003 02       	 .byte 2
+ 211              	 .global PWMOutCos_event1_config
+ 212              	 .section .rodata.PWMOutCos_event1_config,"a",%progbits
+ 213              	 .align 2
+ 216              	PWMOutCos_event1_config:
+ 217 0000 00       	 .byte 0
+ 218 0001 00       	 .byte 0
+ 219 0002 01       	 .byte 1
+ 220 0003 00       	 .byte 0
+ 221              	 .global PWMOutCos_event2_config
+ 222              	 .section .rodata.PWMOutCos_event2_config,"a",%progbits
+ 223              	 .align 2
+ 226              	PWMOutCos_event2_config:
+ 227 0000 00       	 .byte 0
+ 228 0001 00       	 .byte 0
+ 229 0002 01       	 .byte 1
+ 230 0003 00       	 .byte 0
+ 231              	 .global PWMOutCos_dt_config
+ 232              	 .section .rodata.PWMOutCos_dt_config,"a",%progbits
+ 233              	 .align 2
+ 236              	PWMOutCos_dt_config:
+ 237 0000 00000000 	 .space 12
+ 237      00000000 
+ 237      00000000 
+ 238              	 .global PWMOutCos_ch1_out0_config
+ 239              	 .section .rodata.PWMOutCos_ch1_out0_config,"a",%progbits
+ 240              	 .align 2
+ 243              	PWMOutCos_ch1_out0_config:
+ 244 0000 A8       	 .byte -88
+ 245 0001 00       	 .byte 0
+ 246 0002 0000     	 .space 2
+ 247 0004 00000100 	 .word 65536
+ 248              	 .global PWMOutCos_config_handle
+ 249              	 .section .rodata.PWMOutCos_config_handle,"a",%progbits
+ 250              	 .align 2
+ 253              	PWMOutCos_config_handle:
+ 254 0000 00       	 .byte 0
+ 255 0001 00       	 .space 1
+ 256 0002 FF31     	 .short 12799
+ 257 0004 0000     	 .short 0
+ 258 0006 FF18     	 .short 6399
+ 259 0008 00       	 .byte 0
+ 260 0009 00       	 .byte 0
+ 261 000a 00       	 .byte 0
+ 262 000b 00       	 .byte 0
+ 263 000c 00       	 .byte 0
+ 264 000d 00       	 .byte 0
+ 265 000e 00       	 .byte 0
+ 266 000f 00       	 .byte 0
+ 267 0010 00       	 .byte 0
+ 268 0011 00       	 .byte 0
+ 269 0012 00       	 .byte 0
+ 270 0013 00       	 .byte 0
+ 271 0014 00       	 .byte 0
+ 272 0015 00       	 .byte 0
+ 273 0016 00       	 .byte 0
+ 274 0017 00       	 .byte 0
+ 275 0018 00       	 .byte 0
+ 276 0019 00       	 .byte 0
+ 277 001a 0000     	 .space 2
+ 278 001c 00000000 	 .word PWMOutCos_event0_config
+ 279 0020 00000000 	 .word PWMOutCos_event1_config
+ 280 0024 00000000 	 .word PWMOutCos_event2_config
+ 281 0028 00       	 .byte 0
+ 282 0029 00       	 .byte 0
+ 283 002a 00       	 .byte 0
+ 284 002b 00       	 .byte 0
+ 285 002c 00       	 .byte 0
+ 286 002d 00       	 .byte 0
+ 287 002e 00       	 .byte 0
+ 288 002f 01       	 .byte 1
+ 289 0030 01       	 .byte 1
+ 290 0031 00       	 .byte 0
+ 291 0032 00       	 .byte 0
+ 292 0033 00       	 .byte 0
+ 293 0034 00       	 .byte 0
+ 294 0035 00       	 .byte 0
+ 295 0036 00       	 .byte 0
+ 296 0037 00       	 .byte 0
+ 297 0038 01       	 .byte 1
+ 298 0039 00       	 .byte 0
+ 299 003a 0000     	 .space 2
+ 300 003c 00000010 	 .word 268435456
+ 301 0040 00000000 	 .word PWMOutCos_dt_config
+ 302 0044 01       	 .byte 1
+ 303 0045 000000   	 .space 3
+ 304 0048 00000000 	 .word PWMOutCos_timer_handle
+ 305 004c 01       	 .byte 1
+ 306 004d 000000   	 .space 3
+ 307 0050 00020440 	 .word 1074004480
+ 308 0054 00       	 .byte 0
+ 309 0055 000000   	 .space 3
+ 310 0058 00000000 	 .word PWMOutCos_ch1_out0_config
+ 311 005c 00       	 .byte 0
+ 312 005d 000000   	 .space 3
+ 313 0060 00000000 	 .word 0
+ 314 0064 00       	 .byte 0
+ 315 0065 000000   	 .space 3
+ 316 0068 00000000 	 .word 0
+ 317 006c 00       	 .byte 0
+ 318 006d 000000   	 .space 3
+ 319 0070 00000000 	 .word 0
+ 320 0074 00       	 .byte 0
+ 321 0075 000000   	 .space 3
+ 322 0078 00000000 	 .word 0
+ 323 007c 00       	 .byte 0
+ 324 007d 000000   	 .space 3
+ 325 0080 00000000 	 .word 0
+ 326 0084 00       	 .byte 0
+ 327 0085 000000   	 .space 3
+ 328 0088 00000000 	 .word 0
+ 329 008c 00000000 	 .word GLOBAL_CCU8_0
+ 330              	 .global PWMOutCos
+ 331              	 .section .data.PWMOutCos,"aw",%progbits
+ 332              	 .align 2
+ 335              	PWMOutCos:
+ 336 0000 00000000 	 .word PWMOutCos_config_handle
+ 337 0004 00000050 	 .word 1342177280
+ 338 0008 00030050 	 .word 1342178048
+ 339 000c 00       	 .byte 0
+ 340 000d 02       	 .byte 2
+ 341 000e 0000     	 .space 2
+ 342 0010 00010000 	 .word 256
+ 343 0014 00020000 	 .word 512
+ 344 0018 00040000 	 .word 1024
+ 345 001c 00       	 .byte 0
+ 346 001d 00000000 	 .space 7
+ 346      000000
+ 347 0024 00000000 	 .word 0
+ 348 0028 00000000 	 .word 0
+ 349 002c 87130000 	 .word 4999
+ 350 0030 00000000 	 .word 0
+ 351              	 .text
+ 352              	.Letext0:
+ 353              	 .file 1 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 354              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 355              	 .file 3 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 356              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_gpio.h"
+ 357              	 .file 5 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc1_gpio.h"
+ 358              	 .file 6 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_ccu8.h"
+ 359              	 .file 7 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc1_scu.h"
+ 360              	 .file 8 "../Dave/Generated/PWM_CCU8/../GLOBAL_CCU8/global_ccu8.h"
+ 361              	 .file 9 "../Dave/Generated/PWM_CCU8/pwm_ccu8.h"
+ 362              	 .file 10 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 363              	 .file 11 "../Dave/Generated/PWM_CCU8/../GLOBAL_CCU8/global_ccu8_extern.h"
+ 364              	 .file 12 "../Dave/Generated/PWM_CCU8/pwm_ccu8_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pwm_ccu8_conf.c
+    {standard input}:22     .rodata.PWMOutSin_timer_handle:00000000 PWMOutSin_timer_handle
+    {standard input}:19     .rodata.PWMOutSin_timer_handle:00000000 $d
+    {standard input}:39     .rodata.PWMOutSin_event0_config:00000000 PWMOutSin_event0_config
+    {standard input}:36     .rodata.PWMOutSin_event0_config:00000000 $d
+    {standard input}:49     .rodata.PWMOutSin_event1_config:00000000 PWMOutSin_event1_config
+    {standard input}:46     .rodata.PWMOutSin_event1_config:00000000 $d
+    {standard input}:59     .rodata.PWMOutSin_event2_config:00000000 PWMOutSin_event2_config
+    {standard input}:56     .rodata.PWMOutSin_event2_config:00000000 $d
+    {standard input}:69     .rodata.PWMOutSin_dt_config:00000000 PWMOutSin_dt_config
+    {standard input}:66     .rodata.PWMOutSin_dt_config:00000000 $d
+    {standard input}:76     .rodata.PWMOutSin_ch1_out0_config:00000000 PWMOutSin_ch1_out0_config
+    {standard input}:73     .rodata.PWMOutSin_ch1_out0_config:00000000 $d
+    {standard input}:86     .rodata.PWMOutSin_config_handle:00000000 PWMOutSin_config_handle
+    {standard input}:83     .rodata.PWMOutSin_config_handle:00000000 $d
+    {standard input}:168    .data.PWMOutSin:00000000 PWMOutSin
+    {standard input}:165    .data.PWMOutSin:00000000 $d
+    {standard input}:189    .rodata.PWMOutCos_timer_handle:00000000 PWMOutCos_timer_handle
+    {standard input}:186    .rodata.PWMOutCos_timer_handle:00000000 $d
+    {standard input}:206    .rodata.PWMOutCos_event0_config:00000000 PWMOutCos_event0_config
+    {standard input}:203    .rodata.PWMOutCos_event0_config:00000000 $d
+    {standard input}:216    .rodata.PWMOutCos_event1_config:00000000 PWMOutCos_event1_config
+    {standard input}:213    .rodata.PWMOutCos_event1_config:00000000 $d
+    {standard input}:226    .rodata.PWMOutCos_event2_config:00000000 PWMOutCos_event2_config
+    {standard input}:223    .rodata.PWMOutCos_event2_config:00000000 $d
+    {standard input}:236    .rodata.PWMOutCos_dt_config:00000000 PWMOutCos_dt_config
+    {standard input}:233    .rodata.PWMOutCos_dt_config:00000000 $d
+    {standard input}:243    .rodata.PWMOutCos_ch1_out0_config:00000000 PWMOutCos_ch1_out0_config
+    {standard input}:240    .rodata.PWMOutCos_ch1_out0_config:00000000 $d
+    {standard input}:253    .rodata.PWMOutCos_config_handle:00000000 PWMOutCos_config_handle
+    {standard input}:250    .rodata.PWMOutCos_config_handle:00000000 $d
+    {standard input}:335    .data.PWMOutCos:00000000 PWMOutCos
+    {standard input}:332    .data.PWMOutCos:00000000 $d
+
+UNDEFINED SYMBOLS
+GLOBAL_CCU8_0

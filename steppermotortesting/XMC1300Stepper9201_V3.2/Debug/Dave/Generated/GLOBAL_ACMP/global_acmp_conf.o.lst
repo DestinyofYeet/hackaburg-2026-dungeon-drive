@@ -1,0 +1,488 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "global_acmp_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.XMC_ACMP_ClearLowPowerMode,"ax",%progbits
+  18              	 .align 2
+  19              	 .code 16
+  20              	 .thumb_func
+  22              	XMC_ACMP_ClearLowPowerMode:
+  23              	.LFB44:
+  24              	 .file 1 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_acmp.h"
+   1:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+   2:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @file xmc_acmp.h
+   3:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @date 2015-09-02
+   4:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+   5:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @cond
+   6:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+   7:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMClib v2.1.8 - XMC Peripheral Driver Library 
+   8:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+   9:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  10:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * All rights reserved.                        
+  11:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                                             
+  12:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * following conditions are met:   
+  14:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                                                                              
+  15:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * disclaimer.                        
+  17:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 
+  18:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 
+  21:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                                                                              
+  24:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                                                                              
+  32:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+  35:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+  36:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Change History
+  37:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * --------------
+  38:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+  39:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2014-12-10:
+  40:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Initial version
+  41:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2015-02-20:
+  42:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Removed unused declarations<br> 
+  43:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2015-05-08:
+  44:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Fixed sequence problem of low power mode in XMC_ACMP_Init() API<br>
+  45:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Fixed wrong register setting in XMC_ACMP_SetInput() API<br> 
+  46:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Removed return type variable and by default comparator enable from XMC_ACMP_Init() API. <b
+  47:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *       Additional call to XMC_ACMP_EnableComparator() API needed to start Comparator after Init.<
+  48:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2015-06-04:
+  49:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Removed return type variable and by default comparator enable from XMC_ACMP_Init() API. <b
+  50:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Divided XMC_ACMP_SetInput into two 3 APIs to reduce the code size and complexity as stated
+  51:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *       (a)XMC_ACMP_EnableReferenceDivider <br>
+  52:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *       (b)XMC_ACMP_DisableReferenceDivider <br> 
+  53:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *       (c)XMC_ACMP_SetInput <br> 
+  54:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Optimized enable and disable API's and moved to header file as static inline APIs.
+  55:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - XMC_ACMP_t typedef changed to structure which overrides the standard header file structure
+  56:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2015-06-20: 
+  57:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - Removed version macros and declaration of GetDriverVersion API 
+  58:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2015-06-26: 
+  59:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - API help documentation modified.
+  60:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 2015-09-02: 
+  61:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *     - API help documentation modified for XMC1400 device support.   
+  62:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @endcond 
+  63:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+  64:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+  65:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  
+  66:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #ifndef XMC_ACMP_H
+  67:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #define XMC_ACMP_H
+  68:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  
+  69:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+  70:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+  71:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @addtogroup XMClib XMC Peripheral Library
+  72:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @{
+  73:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+  74:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+  75:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+  76:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @addtogroup ACMP
+  77:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @brief Analog Comparator(ACMP) low level driver for XMC1 family of microcontrollers. <br>
+  78:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+  79:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * The ACMP module consists of minimum of 3 analog comparators. Each analog comparator has two inpu
+  80:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Input INP is compared with input INN in the pad voltage domain.
+  81:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * It generates a digital comparator output signal. The digital comparator output signal is shifted
+  82:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * power supply voltage level to VDDC core voltage level. The ACMP module provides the following fu
+  83:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * -# Monitor external voltage level
+  84:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * -# Operates in low power mode
+  85:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * -# Provides Inverted ouput option\n
+  86:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+  87:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par The ACMP low level driver funtionalities
+  88:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <OL>
+  89:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>Initializes an instance of analog comparator module with the @ref XMC_ACMP_CONFIG_t configur
+  90:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * using the API XMC_ACMP_Init().</LI>
+  91:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>Programs the source of input(INP) specified by @ref XMC_ACMP_INP_SOURCE_t parameter using th
+  92:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMC_ACMP_SetInput(). </LI>
+  93:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>Sets the low power mode of operation using XMC_ACMP_SetLowPowerMode() API.</LI>
+  94:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * </OL>
+  95:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @{
+  96:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+  97:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  
+  98:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**************************************************************************************************
+  99:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * HEADER FILES
+ 100:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+ 101:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #include <xmc_common.h>
+ 102:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 103:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**************************************************************************************************
+ 104:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * MACROS
+ 105:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+ 106:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /* If ACMP is available*/
+ 107:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #if defined (COMPARATOR)
+ 108:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 109:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #define XMC_ACMP0 (XMC_ACMP_t*)COMPARATOR /**< Comparator module base address defined*/
+ 110:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 111:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #if UC_SERIES == XMC14
+ 112:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #define XMC_ACMP_MAX_INSTANCES     (4U) /* Maximum number of Analog Comparators available*/
+ 113:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #else
+ 114:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #define XMC_ACMP_MAX_INSTANCES     (3U) /* Maximum number of Analog Comparators available*/
+ 115:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #endif
+ 116:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 117:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /* Checks if the pointer being passed is valid*/
+ 118:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #define XMC_ACMP_CHECK_MODULE_PTR(PTR)  (((PTR)== (XMC_ACMP_t*)COMPARATOR))
+ 119:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 120:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /* Checks if the instance being addressed is valid*/
+ 121:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #define XMC_ACMP_CHECK_INSTANCE(INST)   (((INST)< XMC_ACMP_MAX_INSTANCES))
+ 122:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 123:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**************************************************************************************************
+ 124:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * ENUMS
+ 125:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+ 126:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 127:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 128:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Defines the return value of an API.
+ 129:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */ 
+ 130:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** typedef enum XMC_ACMP_STATUS
+ 131:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 132:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_STATUS_SUCCESS = 0U, /**< API completes the execution successfully */
+ 133:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_STATUS_ERROR       , /**< API cannot fulfill the request */
+ 134:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** } XMC_ACMP_STATUS_t;
+ 135:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 136:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 137:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Defines the hysteresis voltage levels to reduce noise sensitivity.
+ 138:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */ 
+ 139:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** typedef enum XMC_ACMP_HYSTERESIS
+ 140:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 141:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_HYSTERESIS_OFF = 0U, /**< No hysteresis */
+ 142:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_HYSTERESIS_10     ,  /**< Hysteresis = 10mv */
+ 143:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_HYSTERESIS_15     ,  /**< Hysteresis = 15mv */
+ 144:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_HYSTERESIS_20        /**< Hysteresis = 20mv */
+ 145:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** } XMC_ACMP_HYSTERESIS_t;
+ 146:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 147:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 148:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *  Defines the comparator output status options.
+ 149:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */ 
+ 150:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** typedef enum XMC_ACMP_COMP_OUT
+ 151:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 152:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_COMP_OUT_NO_INVERSION = 0U, /**< ACMP output is HIGH when, Input Positive(INP) greater t
+ 153:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****                                             Negative(INN). Vplus > Vminus */
+ 154:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_COMP_OUT_INVERSION          /**< ACMP output is HIGH when, Input Negative(INN) greater t
+ 155:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****                                             Positive(INP). Vminus > Vplus*/
+ 156:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** } XMC_ACMP_COMP_OUT_t;
+ 157:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 158:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 159:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *  Defines the analog comparator input connection method.
+ 160:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */ 
+ 161:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** typedef enum XMC_ACMP_INP_SOURCE
+ 162:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 163:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_INP_SOURCE_STANDARD_PORT  = 0U,                                          /**< Input is c
+ 164:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ACMP_INP_SOURCE_ACMP1_INP_PORT = (uint16_t)(COMPARATOR_ANACMP0_ACMP0_SEL_Msk) /**< Input is c
+ 165:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****                                                                                      and ACMP1 INP 
+ 166:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** } XMC_ACMP_INP_SOURCE_t;
+ 167:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 168:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**************************************************************************************************
+ 169:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * DATA STRUCTURES
+ 170:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+ 171:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 172:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 173:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /*Anonymous structure/union guard start*/
+ 174:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #if defined(__CC_ARM)
+ 175:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   #pragma push
+ 176:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   #pragma anon_unions
+ 177:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #elif defined(__TASKING__)
+ 178:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   #pragma warning 586
+ 179:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #endif
+ 180:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 181:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 182:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * ACMP module
+ 183:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 184:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** typedef struct {
+ 185:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   __IO uint32_t  ORCCTRL;
+ 186:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   __I  uint32_t  RESERVED[726];
+ 187:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   __IO uint32_t  ANACMP[XMC_ACMP_MAX_INSTANCES];
+ 188:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** } XMC_ACMP_t;
+ 189:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 190:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 191:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *  Structure for initializing the ACMP module. It configures the ANACMP register of the respective
+ 192:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 193:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** typedef struct XMC_ACMP_CONFIG
+ 194:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 195:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   union
+ 196:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   {
+ 197:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****     struct
+ 198:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****     {
+ 199:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****       uint32_t                  : 1;
+ 200:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****       uint32_t filter_disable   : 1; /**< Comparator filter option for removing glitches. By defaul
+ 201:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****                                           is selected in ANACMP register. Setting this option disab
+ 202:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****       uint32_t                  : 1;
+ 203:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****       uint32_t output_invert    : 1; /**< Option to invert the comparator output. Use XMC_@ref XMC_
+ 204:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****       uint32_t hysteresis       : 2; /**< Hysteresis voltage to reduce noise sensitivity. Select th
+ 205:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****                                           from the values defined in @ref XMC_ACMP_HYSTERESIS_t. */
+ 206:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****       uint32_t                  : 26;
+ 207:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****     };
+ 208:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****     uint32_t anacmp;
+ 209:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   };
+ 210:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** } XMC_ACMP_CONFIG_t;
+ 211:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 212:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /*Anonymous structure/union guard end*/
+ 213:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #if defined(__CC_ARM)
+ 214:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   #pragma pop
+ 215:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #elif defined(__TASKING__)
+ 216:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   #pragma warning restore
+ 217:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #endif
+ 218:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 219:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #ifdef __cplusplus
+ 220:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****    extern "C" {
+ 221:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** #endif
+ 222:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 223:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**************************************************************************************************
+ 224:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * API Prototypes
+ 225:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  **************************************************************************************************
+ 226:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 227:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 228:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param peripheral Constant pointer to analog comparator module, of @ref XMC_ACMP_t type. Use @re
+ 229:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param instance ACMP instance number. <BR>
+ 230:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                 Range:<BR> 0 - ACMP0<BR>
+ 231:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            1 - ACMP1<BR>
+ 232:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            2 - ACMP2<BR>
+ 233:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            3 - ACMP3 - Only applicable for XMC1400 devices <BR> 
+ 234:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 235:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param config Pointer to configuration data. Refer data structure @ref XMC_ACMP_CONFIG_t for set
+ 236:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 237:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 238:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 239:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 240:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *  Initializes an instance of analog comparator module.<BR>\n
+ 241:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *  Configures the ANACMP resister with hysteresis, comparator filter and inverted comparator outpu
+ 242:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 243:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 244:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *  None.
+ 245:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 246:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** void XMC_ACMP_Init(XMC_ACMP_t *const peripheral, uint32_t instance, const XMC_ACMP_CONFIG_t *const 
+ 247:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 248:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 249:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param peripheral Constant pointer to analog comparator module, of @ref XMC_ACMP_t type. Use @re
+ 250:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param instance ACMP instance number. <BR>
+ 251:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                 Range:<BR> 0 - ACMP0<BR>
+ 252:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            1 - ACMP1<BR>
+ 253:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            2 - ACMP2<BR>
+ 254:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            3 - ACMP3 - Only applicable for XMC1400 devices <BR>
+ 255:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 256:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 257:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 258:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 259:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Enables an instance of ACMP module.<BR>\n
+ 260:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Starts the comparator by setting CMP_EN bit of respective ANACMP \a instance register. The \a in
+ 261:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * determines which analog comparator to be switched on. Call this API after the successful complet
+ 262:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * initilization and input selection.
+ 263:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 264:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 265:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMC_ACMP_DisableComparator().<BR>
+ 266:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 267:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** __STATIC_INLINE void XMC_ACMP_EnableComparator(XMC_ACMP_t *const peripheral, uint32_t instance)
+ 268:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 269:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ASSERT("XMC_ACMP_EnableComparator:Wrong module pointer", XMC_ACMP_CHECK_MODULE_PTR(peripheral
+ 270:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ASSERT("XMC_ACMP_EnableComparator:Wrong instance number", XMC_ACMP_CHECK_INSTANCE(instance) )
+ 271:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 272:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   peripheral->ANACMP[instance] |= (uint16_t)COMPARATOR_ANACMP0_CMP_EN_Msk;
+ 273:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 274:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** }
+ 275:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 276:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 277:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 278:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param peripheral Constant pointer to analog comparator module, of @ref XMC_ACMP_t type. Use @re
+ 279:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param instance ACMP instance number. <BR>
+ 280:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                 Range:<BR> 0 - ACMP0<BR>
+ 281:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            1 - ACMP1<BR>
+ 282:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            2 - ACMP2<BR>
+ 283:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            3 - ACMP3 - Only applicable for XMC1400 devices <BR> 
+ 284:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 285:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 286:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 287:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Disables an instance of ACMP module.<BR>\n
+ 288:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Stops the comparator by resetting CMP_EN bit of respective ANACMP \a instance register. The \a i
+ 289:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * determines which analog comparator to be switched off.
+ 290:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 291:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 292:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMC_ACMP_EnableComparator().
+ 293:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 294:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** __STATIC_INLINE void XMC_ACMP_DisableComparator(XMC_ACMP_t *const peripheral, uint32_t instance)
+ 295:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 296:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ASSERT("XMC_ACMP_DisableComparator:Wrong module pointer", XMC_ACMP_CHECK_MODULE_PTR(periphera
+ 297:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   XMC_ASSERT("XMC_ACMP_DisableComparator:Wrong instance number", XMC_ACMP_CHECK_INSTANCE(instance) 
+ 298:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 299:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   peripheral->ANACMP[instance] &= (uint16_t)(~((uint32_t)COMPARATOR_ANACMP0_CMP_EN_Msk));
+ 300:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** }
+ 301:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 302:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 303:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param None 
+ 304:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 305:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 306:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 307:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 308:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Enables the reference divider for analog comparator instance 1.<BR>\n
+ 309:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * ACMP1 input INP is driven by an internal reference voltage by setting DIV_EN bit of ANACMP1 regi
+ 310:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Other comparator instances can also share this reference divider option by calling the XMC_ACMP_
+ 311:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * 
+ 312:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 313:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMC_ACMP_SetInput().
+ 314:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 315:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** __STATIC_INLINE void XMC_ACMP_EnableReferenceDivider(void)
+ 316:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 317:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   /* Enable the divider switch and connect the divided reference to ACMP1.INP */
+ 318:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   COMPARATOR->ANACMP1 |= (uint16_t)(COMPARATOR_ANACMP1_REF_DIV_EN_Msk);
+ 319:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** }
+ 320:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 321:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 322:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param None 
+ 323:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 324:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 325:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 326:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 327:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Disables the reference divider for analog comparator instance 1.<BR>\n
+ 328:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * ACMP1 input INP is disconnected from the reference divider. This is achieved by reseting DIV_EN 
+ 329:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * register.
+ 330:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 331:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 332:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * None.
+ 333:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 334:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** __STATIC_INLINE void XMC_ACMP_DisableReferenceDivider(void)
+ 335:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 336:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   /* Disable the divider switch and use ACMP1.INP as standard port*/
+ 337:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   COMPARATOR->ANACMP1 &= (uint16_t)(~(COMPARATOR_ANACMP1_REF_DIV_EN_Msk));
+ 338:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** }
+ 339:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 340:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 341:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param peripheral Constant pointer to analog comparator module, of @ref XMC_ACMP_t type. Use @re
+ 342:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param instance ACMP instance number. <BR>
+ 343:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                 Range:<BR> 0 - ACMP0<BR>
+ 344:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            2 - ACMP2<BR>
+ 345:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            3 - ACMP3 - Only applicable for XMC1400 devices <BR> 
+ 346:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param source ACMP input source selection options.<BR>
+ 347:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                 Range:<BR> XMC_ACMP_INP_SOURCE_STANDARD_PORT  - Input is connected to port<BR>
+ 348:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *                            XMC_ACMP_INP_SOURCE_ACMP1_INP_PORT - Input is connected to port and A
+ 349:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 350:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 351:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 352:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 353:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Sets the analog comparartor input selection for ACMP0, ACMP2 instances.<BR>\n
+ 354:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Apart from ACMP1 instance, each ACMP instances can be connected to its own port and ACMP1 INP.
+ 355:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Calling @ref XMC_ACMP_EnableReferenceDivider() API, after this API can share the reference divid
+ 356:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * comparartor input as explained in the following options.<br>
+ 357:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * The hardware options to set input are listed below.<br>
+ 358:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <OL>
+ 359:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>The comparator inputs aren't connected to other ACMP1 comparator inputs.</LI>
+ 360:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>Can program the comparator-0 to connect ACMP0.INP to ACMP1.INP in XMC1200 AA or XMC1300 AA</
+ 361:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>Can program the comparator-0 to connect ACMP0.INN to ACMP1.INP in XMC1200 AB or XMC1300 AB o
+ 362:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * <LI>Can program the comparator-2 to connect ACMP2.INP to ACMP1.INP</LI>
+ 363:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * </OL><br>
+ 364:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Directly accessed registers are ANACMP0, ANACMP2 according to the availability of instance in th
+ 365:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 366:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 367:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @ref XMC_ACMP_EnableReferenceDivider.<BR>
+ 368:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @ref XMC_ACMP_DisableReferenceDivider. 
+ 369:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 370:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** void XMC_ACMP_SetInput(XMC_ACMP_t *const peripheral, uint32_t instance, const XMC_ACMP_INP_SOURCE_t
+ 371:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 372:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 373:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 374:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param None
+ 375:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 376:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 377:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 378:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 379:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Set the comparartors to operate in low power mode, by setting the LPWR bit of ANACMP0 register.<
+ 380:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * The low power mode is controlled by ACMP0 instance. Low power mode is applicable for all instanc
+ 381:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * comparator. In low power mode, blanking time will be introduced to ensure the stability of compa
+ 382:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * will slow down the comparator operation.
+ 383:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 384:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 385:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMC_ACMP_ClearLowPowerMode().
+ 386:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 387:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** __STATIC_INLINE void XMC_ACMP_SetLowPowerMode(void)
+ 388:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+ 389:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   COMPARATOR->ANACMP0 |= (uint16_t)COMPARATOR_ANACMP0_CMP_LPWR_Msk;
+ 390:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** }
+ 391:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** 
+ 392:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** /**
+ 393:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @param None 
+ 394:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * @return
+ 395:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *    None<BR>
+ 396:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 397:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Description:</b><br>
+ 398:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * Exits the low power mode by reseting LPWR bit of ANACMP0 register.<BR>\n
+ 399:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * The low power mode is controlled by ACMP0 module.  Low power mode is applicable for all instance
+ 400:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * comparator. To re-enable the low power mode, call the related API @ref XMC_ACMP_SetLowPowerMode(
+ 401:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  *
+ 402:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * \par<b>Related APIs:</b><br>
+ 403:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  * XMC_ACMP_SetLowPowerMode().
+ 404:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****  */
+ 405:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** __STATIC_INLINE void XMC_ACMP_ClearLowPowerMode(void)
+ 406:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** {
+  25              	 .loc 1 406 0
+  26              	 .cfi_startproc
+  27 0000 80B5     	 push {r7,lr}
+  28              	.LCFI0:
+  29              	 .cfi_def_cfa_offset 8
+  30              	 .cfi_offset 7,-8
+  31              	 .cfi_offset 14,-4
+  32 0002 00AF     	 add r7,sp,#0
+  33              	.LCFI1:
+  34              	 .cfi_def_cfa_register 7
+ 407:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h ****   COMPARATOR->ANACMP0 &= (uint16_t)(~(uint16_t)COMPARATOR_ANACMP0_CMP_LPWR_Msk);
+  35              	 .loc 1 407 0
+  36 0004 054A     	 ldr r2,.L2
+  37 0006 0549     	 ldr r1,.L2
+  38 0008 054B     	 ldr r3,.L2+4
+  39 000a CB5A     	 ldrh r3,[r1,r3]
+  40 000c 9BB2     	 uxth r3,r3
+  41 000e 0549     	 ldr r1,.L2+8
+  42 0010 0B40     	 and r3,r1
+  43 0012 99B2     	 uxth r1,r3
+  44 0014 024B     	 ldr r3,.L2+4
+  45 0016 D152     	 strh r1,[r2,r3]
+ 408:C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc\xmc_acmp.h **** }
+  46              	 .loc 1 408 0
+  47 0018 BD46     	 mov sp,r7
+  48              	 
+  49 001a 80BD     	 pop {r7,pc}
+  50              	.L3:
+  51              	 .align 2
+  52              	.L2:
+  53 001c 00050140 	 .word 1073808640
+  54 0020 5C0B0000 	 .word 2908
+  55 0024 FFFEFFFF 	 .word -257
+  56              	 .cfi_endproc
+  57              	.LFE44:
+  59              	 .global GLOBAL_ACMP_0
+  60              	 .section .data.GLOBAL_ACMP_0,"aw",%progbits
+  61              	 .align 2
+  64              	GLOBAL_ACMP_0:
+  65 0000 00000000 	 .word XMC_ACMP_ClearLowPowerMode
+  66 0004 00       	 .byte 0
+  67 0005 000000   	 .space 3
+  68              	 .text
+  69              	.Letext0:
+  70              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  71              	 .file 3 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  72              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+  73              	 .file 5 "../Dave/Generated/GLOBAL_ACMP/global_acmp.h"
+  74              	 .file 6 "../Dave/Generated/GLOBAL_ACMP/global_acmp_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 global_acmp_conf.c
+    {standard input}:18     .text.XMC_ACMP_ClearLowPowerMode:00000000 $t
+    {standard input}:22     .text.XMC_ACMP_ClearLowPowerMode:00000000 XMC_ACMP_ClearLowPowerMode
+    {standard input}:53     .text.XMC_ACMP_ClearLowPowerMode:0000001c $d
+    {standard input}:64     .data.GLOBAL_ACMP_0:00000000 GLOBAL_ACMP_0
+    {standard input}:61     .data.GLOBAL_ACMP_0:00000000 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

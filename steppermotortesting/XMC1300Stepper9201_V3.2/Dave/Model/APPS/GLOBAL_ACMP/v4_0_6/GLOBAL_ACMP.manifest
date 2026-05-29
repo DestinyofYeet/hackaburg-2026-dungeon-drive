@@ -1,0 +1,151 @@
+package Model.APPS.GLOBAL_ACMP.v4_0_6;
+
+/*
+Copyright (c) 2015, Infineon Technologies AG
+All rights reserved.                       
+                                           
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+following conditions are met:  
+                                                                            
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+disclaimer.                       
+ 
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided with the distribution.                      
+ 
+Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+products derived from this software without specific prior written permission.                                          
+                                                                            
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                                 
+                                                                            
+To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes with 
+Infineon Technologies AG: dave@infineon.com. */
+
+/*************** Revision History **********************************************
+Version     Date          Description
+
+4.0.2      04-Jun-2015   Initial version for DAVEv4
+4.0.4      31-Jul-2015   Added support for XMC1400 devices.
+4.0.6      25-Apr-2016   APP help documentation, contents page updated for formatting errors. 
+*******************************************************************************/
+import ifx.davex.app.manifest.*
+
+class  GLOBAL_ACMP extends GLOBAL_ACMP_GUI {
+
+    // Note  : Following App properties are mandatory and important
+    // Begin : App property section
+
+    /**
+     * App version
+     * Format: a string with three digit separated by a dot.
+     */
+    def version            = '4.0.6'
+
+    /**
+     * App categories declaration. 
+     * It is list of strings. Subcategories are separated by slash.
+     * No limits on number of categories and subcategories depth.
+     */
+    def categoriesDescription = ["System/~Global Reg Control"]
+
+    /** 
+     * Minimum DAVE version required for this app.
+     * 
+     * It is string with three digit separated by a dot.
+     */
+    def minDaveVersion           = '4.0.0'
+
+    /** 
+     * Keywords used by search feature in Apps selection view
+     * 
+     * It is a list of string.
+     */
+    def keywords      = ['all']
+
+    /** 
+     * softwareIDs is used to declare which devices are compatible with this app.
+     * It is a map with key a string containing a pattern that shall match the SW id of
+     * the device and as value the minimal version of the app.
+     * 
+     * 
+     */
+
+    //Any step, any variant and any packages of XMC1200 and XMC1300
+    def softwareIDs = [
+          "XMC1.2.02.*.*":"1.0.0",
+          "XMC1.2.00.*.*":"1.0.0",
+          "XMC1.3.*.*.*":"1.0.0",
+		  "XMC1.4.02.*.*":"1.0.0",
+		  "XMC1.4.04.*.*":"1.0.0"]
+
+
+    /**
+     * Singleton property:
+     * When it is true the app can be instantiated only once. 
+     */
+    def singleton     = true
+
+
+    /**
+     * initProvider property
+     * It shall be true to add a call to <AppName>_Init() 
+     */
+    def initProvider  = true
+
+    /**
+     * Deprecated app
+     * Set it to true to indicate that the app shall be not used for new projects.
+     */
+    def deprecated    = false
+
+    /**
+     * Sharable property.
+     * It shall be true to allows multiple apps to require the same instance of this app.
+     */
+    def sharable      = true
+
+    /**
+     *  App function description.
+     */
+    def description = "Initializes analog comparator power mode of operation"
+
+    // End   : App property section
+
+    // Begin : User app property section
+    // End   : User app property section
+
+
+    MVirtualResourceGroup hwres_acmp_low_power_mode
+
+    // App Constructor
+    public GLOBAL_ACMP(DaveEnv daveEnv) {
+	/* ---------------------------------------------------------- */
+	/* ------------ Hardware resource consumption block --------- */
+	/* ---------------------------------------------------------- */
+	hwres_acmp_low_power_mode = MVirtualResourceGroup("low power", [
+	    "peripheral",
+	    "scu",
+	    "*",
+	    "cmpcu",
+	    "acmp_powermode"
+	],true)
+    }
+
+    /* -------------------------------------------------------- */
+    /* ------------  File Generation  ------------------------- */
+    /* -------------------------------------------------------- */
+    def generateFiles(){
+	copy("global_acmp.c", "global_acmp.c")
+	copy("global_acmp.h", "global_acmp.h")
+	generate("global_acmp_confc.tmpl", "global_acmp_conf.c")
+	generate("global_acmp_confh.tmpl", "global_acmp_conf.h")
+	generate("global_acmp_extern.tmpl", "global_acmp_extern.h")
+    }
+
+}

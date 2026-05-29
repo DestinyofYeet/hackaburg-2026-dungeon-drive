@@ -1,0 +1,411 @@
+package Model.APPS.ADC_SCAN.v4_0_18;
+
+/*
+Copyright (c) 2016, Infineon Technologies AG
+All rights reserved.                       
+                                           
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+following conditions are met:  
+                                                                            
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+disclaimer.                       
+ 
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided with the distribution.                      
+ 
+Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+products derived from this software without specific prior written permission.                                          
+                                                                            
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                                 
+                                                                            
+To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes with 
+Infineon Technologies AG: dave@infineon.com. */
+
+/*************** Revision History **********************************************
+Version        Date          Description 
+
+  4.0.0       16-Feb-2015   Initial version for DAVEv4.
+  4.0.2       27-Apr-2015   1.Updated the ADC_SCAN_Init() API for consistency.<BR>
+  4.0.4       20-Jun-2015   Updated the copyright section.<BR>         
+  4.0.6       09-Jul-2015   Documentation updated.<BR>      
+  4.0.7       31-Jul-2015   Updated the APP to support new devices.<BR>   
+  4.0.9       01-Oct-2015    Iclass signal is generated.<BR>    
+  4.0.10      08-Oct-2015   Added support for XMC4700/XMC4800 devices.<BR>
+  4.0.12      07-Dec-2015   1.Added support for XMC4300 devices.<BR>
+  							2.Updated the APP to optimize the request source callback.<BR>
+  							3.APIs touched are ADC_SCAN_InsertScanEntry(), ADC_SCAN_ResetListContents(),
+  							  ADC_SCAN_ReqSrcEventHandler().<BR>   
+  4.0.14      19-Jan-2016   Added new APIs ADC_SCAN_EnableArbitration() and ADC_SCAN_DisableArbitration().<BR>
+  4.0.16      03-Apr-2016   Total conversion time now includes post calibration time as well for XMC1x.<BR>
+  4.0.18      18-Aug-2016   Minimum sample time at low frequencies changed to incorporate Errata ADC_AI.H006 and ADC_AI.H007.<BR>
+*******************************************************************************/
+
+import ifx.davex.app.manifest.*
+
+class  ADC_SCAN extends ADC_SCAN_GUI {
+
+	/*-------------------------------Begin: ADC_SCAN property section---------------------------------------*/
+	
+	/**
+	 * APP version
+	 * Format: a string with three digit separated by a dot.
+	 */
+	def version            = '4.0.18'
+	
+	
+	/**
+	 * APP categories declaration.
+	 * It is list of strings. Subcategories are separated by slash.
+	 * No limits on number of categories and subcategories depth.
+	 */
+	def categoriesDescription = ["General Purpose/~Analog to Digital Conversion"]  
+
+	/**
+	 * Minimum DAVE version required for this APP.
+	 *
+	 * It is string with three digit separated by a dot.
+	 */
+	def minDaveVersion           = '4.0.0'
+	
+	/**
+	 * Keywords used by search feature in APPS selection view
+	 *
+	 * It is a list of string.
+	 */
+	def keywords      = ["all"]
+	
+	/**
+	 * softwareIDs is used to declare which devices are compatible with this APP.
+	 * It is a map with key a string containing a pattern that shall match the SW id of
+	 * the device and as value the minimal version of the APP.
+	 */
+	def softwareIDs       = ["XMC1.[2,3,4].*.*.*":"1.0.0", "XMC4.[1,2,3,4,5,7,8].*.*.*":"1.0.0"]
+
+	/**
+	 * Singleton property:
+	 * When it is true the APP can be instantiated only once.
+	 */
+	def singleton     = false
+	
+	/**
+	 * initProvider property
+	 * It shall be true to add a call to <AppName>_Init()
+	 */
+	def initProvider  = true
+	
+	/**
+	 * Deprecated app
+	 * Set it to true to indicate that the APP shall be not used for new projects.
+	 */
+	def deprecated    = false
+		
+	/**
+	 * Shareable property.
+	 * It shall be true to allows multiple APPS to require the same instance of this APP.
+	 */
+	def sharable      = true
+	def ioApp         = false
+
+	/**
+	 *  APP function description.
+	 */ 
+	def description = "Provides configurations for the scan request source of VADC."
+	
+	/*-------------------------------End: ADC_SCAN property section---------------------------------------*/
+	
+	/*-------------------------------Begin: User variable section---------------------------------------*/
+	MRequiredApp appres_global_adc
+	MRequiredApp appres_cpu
+	
+	MVirtualResourceGroup hwres_vadc_scan
+	MVirtualResourceGroup hwres_vadc_sgrpclass
+	MVirtualResourceGroup hwres_nvicnode_srcevt
+	
+	MVirtualSignal vs_adc_scan_scanglobal
+	MVirtualSignal vs_adc_scan_scan2channel
+	MVirtualSignal vs_adc_scan_iclass2channel
+	MVirtualSignal vs_adc_scan_scan2config
+	MVirtualSignal vs_adc_scan_greqtr0sel
+	MVirtualSignal vs_adc_scan_greqgt0sel
+	MVirtualSignal vs_adc_scan_sourceevent
+	MVirtualSignalRA vs_adc_scan_to_global_signal
+	
+	MVirtualSignal vs_nvic_signal_src
+	MVirtualSignal vs_adc_scan_classselect_out
+	MVirtualSignal vs_adc_scan_classselect_in
+	
+	GFloat gfloat_adc_scan_tadci        = GFloat(widgetName:"gfloat_adc_scan_tadci")
+	GFloat gfloat_adc_scan_tadc         = GFloat(widgetName:"gfloat_adc_scan_tadc")
+	GFloat gfloat_peripherial_clk_freq 	= GFloat(widgetName:"gfloat_peripherial_clk_freq")
+	GFloat gfloat_act_analog_clk 		= GFloat(widgetName:"gfloat_act_analog_clk")
+	GFloat gfloat_adc_scan_tsh 			= GFloat(widgetName:"gfloat_adc_scan_tsh")
+	GInteger gint_adc_scan_stc0       	= GInteger(widgetName:"gint_adc_scan_stc0")
+	GInteger gint_adc_scan_temp_dm    	= GInteger(widgetName:"gint_adc_scan_temp_dm")
+	GInteger gint_adc_scan_temp_pc    	= GInteger(widgetName:"gint_adc_scan_temp_pc")
+	GInteger gint_adc_scan_conv_bits 	= GInteger(widgetName:"gint_adc_scan_conv_bits")
+	GInteger gint_adc_scan_sst 			= GInteger(widgetName:"gint_adc_scan_sst")
+	GInteger gint_adc_scan_divs			= GInteger(widgetName:"gint_adc_scan_divs")
+	
+	
+    /*-------------------------------End: User variable section---------------------------------------*/
+
+	// ADC_SCAN Constructor
+	public ADC_SCAN(DaveEnv daveEnv) {
+		
+		/**
+		 *  used in calculating the Conversion time. each element represents the Conversion Bits
+		 */
+		List conv_bits_array=[12,10,8,0];
+		
+		/*This returns the family of the IC that is selected in the dave project*/
+		String family = daveEnv.project.selectedDevice.deviceId.family
+		String series = daveEnv.project.selectedDevice.deviceId.series
+		
+		gmessage_trigger_autoscan_warning.visible= MF({(gcombo_trigger_edge_sel.value != "No External Trigger") && (gcheck_autoscan_enable.value)},Boolean)
+		
+		
+		/* ---------------------------------------------------------- */
+		/* ------------ Hardware resource consumption block --------- */
+		/* ---------------------------------------------------------- */
+		
+		/* Will consume the scan request source HW resource */		
+		hwres_vadc_scan= MVirtualResourceGroup("Scan", ["peripheral","vadc","*","group","*","scan"]) 
+		
+		/* This consumes the Scan class HW resource*/
+		hwres_vadc_sgrpclass =  MVirtualResourceGroup("Scan Class", ["peripheral","vadc","*","group","*","class","*"])
+		
+		/* This consumes the NVIC Node HW resource*/
+		hwres_nvicnode_srcevt =  MVirtualResourceGroup("Source Event Interrupt", ["peripheral","cpu","0","nvic","interrupt","*"], MF({(
+					(gcheck_src_enable_intr.value == true)
+					 )},Boolean))
+		
+		/* ---------------------------------------------------------- */
+		/* ------------ App consumption Block ----------------------- */
+		/* ---------------------------------------------------------- */
+		
+		/* This consumes the GLOBAL_ADC APP Needed for the Conversion Time calculations*/
+		appres_global_adc = MRequiredApp("GLOBAL_ADC","Global",RSHARABLE,"4.0.16")
+				
+		/* for interrupt related configuration ADC_SCAN consumes CPU app*/	
+		if(family =='XMC4')
+		{
+			appres_cpu = MRequiredApp("CPU_CTRL_XMC4","CPU",RSHARABLE,"4.0.2",MF({gcheck_src_enable_intr.value},Boolean))
+		}
+		else
+		{
+			appres_cpu = MRequiredApp("CPU_CTRL_XMC1","CPU",RSHARABLE,"4.0.2",MF({gcheck_src_enable_intr.value},Boolean))
+			glabel_conversion_limitation.visible = false;
+		}
+		
+		/* ---------------------------------------------------------- */
+		/* -------------- APP IO Signals ---------------------------- */
+		/* ---------------------------------------------------------- */
+		/* This creates a virtual signal for the Nvic node */
+		vs_nvic_signal_src =  MVirtualSignal(hwres_nvicnode_srcevt, "sr_interrupt_signal", "signal_in", MF({(
+											(gcheck_src_enable_intr.value == true)
+											 )},Boolean), true) /* required{}, exposeToUser{} */
+		
+		/*Signal For Queue Connection to class*/
+		vs_adc_scan_classselect_in = MVirtualSignal(hwres_vadc_sgrpclass,"scan_iclass_select", "scan_class_sel",  true ,false)
+		
+		vs_adc_scan_classselect_out = MVirtualSignal(hwres_vadc_scan,"class_select", "class_sel",  true ,false)
+		
+		/*Signal For Input Class Connection to channel*/
+		vs_adc_scan_iclass2channel = MVirtualSignal(hwres_vadc_sgrpclass,"iclass_select", "ch_class_sel",  true ,true)
+		
+		/* This creates a Virtual signal for Scan Connection to channel */
+ 		vs_adc_scan_scan2channel = MVirtualSignal(hwres_vadc_scan,"scan_select", "select",  true ,true)
+		 
+		 /* This creates a Virtual signal for Scan Connection to Group*/
+		vs_adc_scan_scan2config  = MVirtualSignal(hwres_vadc_scan,"group_selection",  "req",  true ,true)
+		
+		/* This creates a Virtual signal for Scan Connection to Global Signal*/
+		vs_adc_scan_scanglobal   = MVirtualSignal(hwres_vadc_scan,"scan_to_global",  "global_signal",  true ,true)
+		
+		/* This creates a Virtual signal for Scan Trigger selection*/
+		vs_adc_scan_greqtr0sel    = MVirtualSignal(hwres_vadc_scan,"trigger_input",  "greqtr1sel",  true ,true)
+		
+		/* This creates a Virtual signal for scan Gating selection*/
+		vs_adc_scan_greqgt0sel    = MVirtualSignal(hwres_vadc_scan,"gating_input",  "greqgt1sel",  true ,true)
+		
+		/* This creates a Virtual signal for Scan Source Event Signal*/
+		vs_adc_scan_sourceevent   = MVirtualSignal(hwres_vadc_scan,"event_scan_source",  "sev",  true ,true)
+		
+		vs_adc_scan_to_global_signal = MVirtualSignalRA(appres_global_adc,"vs_global_adc_global")
+		
+		
+		/* This creates a Constraint between the nvic virtual signal and the scan source event signal*/
+		addConnectionConstraint (vs_adc_scan_sourceevent,vs_nvic_signal_src, MF({(
+			(gcheck_src_enable_intr.value == true)
+			   )},Boolean))
+		
+		/*Connection between queue resource to class resource*/
+		addConnectionConstraint (vs_adc_scan_classselect_out,vs_adc_scan_classselect_in, true)
+		
+		addConnectionConstraint(vs_adc_scan_to_global_signal,vs_adc_scan_scanglobal)
+		
+		/* ------------------------------------------------------------------ */
+		/* ------------ APP Configuration ----------------------------------- */
+		/* ------------------------------------------------------------------ */
+		/* ------ TAB : Scan Class Configuration related configuration ------ */
+		
+		/*-------------------------------Begin: Time Calculations---------------------------------------*/
+		
+		/* This holds the clock frequency. this is got from the GLOBAL_ADC app.*/
+		gfloat_peripherial_clk_freq.value         = MF({appres_global_adc.getVal(["gfloat_peripherial_clk_freq", "value"])}, Float)
+		
+		/* this holds the Actual Analog clock frequency (fADCI). This is got from the GLOBAL_ADC app. */
+		gfloat_act_analog_clk.value    = MF({appres_global_adc.getVal(["gfloat_act_analog_clk", "value"])}, Float)
+		
+		/*ActDigClk.value        = MF({appres_global_adc.getVal(["gfloat_ActDigClk", "value"])}, Float)*/
+	
+		gfloat_des_sampleT.maxValue = MF({258*gfloat_adc_scan_tadci.value},Float)
+		
+				
+		/* Calculating the time period of the analog clock*/
+		gfloat_adc_scan_tadci.value = MF({1000/gfloat_act_analog_clk.value},Float)	
+		
+		/*Sample time coding value. This will add additional sample time by dividing the clock */
+		gint_adc_scan_stc0.value = MF({
+			Float arg = ((gfloat_des_sampleT.value/gfloat_adc_scan_tadci.value)-2)
+			if(arg < 0) {0}
+			else if (arg > 256) {31}
+			else if ((arg > 16) && (arg <= 256) ) {(int)((Math.round(arg/16)) + 15 )}
+			else {(int)(Math.round(arg))}
+		},Integer)
+		
+		
+		/*This will calculate the actual sample time that is possible*/
+		gfloat_actual_sampleT.value = MF({
+			Float arg = ((gfloat_des_sampleT.value/gfloat_adc_scan_tadci.value)-2)
+			if(arg < 0) {arg=0}
+			else if (arg > 256) {arg=256}
+			else if ((arg > 16) && (arg <= 256) ) {arg=((Math.round(arg/16))*16)}
+			else { arg=Math.round(arg)}
+		   ((2 +arg)*gfloat_adc_scan_tadci.value)                      /*This is actual sampling time for class0 standard conversion mode */
+		  },Float)
+		
+		/*Get the result width N needed for normal conversion.*/
+		gint_adc_scan_conv_bits.value = MF({conv_bits_array[(gcombo_conv_mode.options.indexOf(gcombo_conv_mode.value))]},Integer)
+		
+		
+		if(family =='XMC4')
+		{
+			if((family+series == "XMC48") || (family+series == "XMC47") || (family+series == "XMC43"))
+			{
+				gfloat_des_sampleT.value = 70;
+			}
+			else if((family+series == "XMC42") || (family+series == "XMC41") )
+			{
+				gfloat_des_sampleT.value = 75;
+			}
+			else
+			{
+				gfloat_des_sampleT.value = 67;
+			}
+			
+			gfloat_des_sampleT.minValue = MF({2*gfloat_adc_scan_tadci.value},Float)
+			
+			/*Calculating the time period of the clock*/
+			gfloat_adc_scan_tadc.value  = MF({((2000)/gfloat_peripherial_clk_freq.value)},Float)
+			
+			/* Enable the post calibration time */
+			gint_adc_scan_temp_pc.value = 2
+			
+			/*
+			 * The conversion time is the sum of sample time, conversion steps, and synchronization.
+			 * It can be computed with the following formulas:
+			 * Standard conversions: tCN = (2 + STC + N + DM + PC) × tADCI + 2 × tADC
+			 * Fast compare mode: tCN = (2 + STC + 2) × tADCI + 2 × tADC
+			 */
+			gfloat_coversion_time.value = MF({
+			  Integer arg
+			  if(gint_adc_scan_stc0.value > 30) {arg=256}
+			  else if (gint_adc_scan_stc0.value < 0) {arg=0}
+			  else if ((gint_adc_scan_stc0.value > 16) && (gint_adc_scan_stc0.value < 31)) { arg= 16+(gint_adc_scan_stc0.value-16)*16 }
+			  else {arg=gint_adc_scan_stc0.value}
+			  
+			  if (gcombo_conv_mode.value == "10 Bit Fast Conversion") {
+				((2+arg+2)*gfloat_adc_scan_tadci.value + gfloat_adc_scan_tadc.value)  /*This is standard conversion time for class0 in fast compare mode*/
+			  } else {
+				((2+arg+gint_adc_scan_conv_bits.value+gint_adc_scan_temp_dm.value+gint_adc_scan_temp_pc.value)*gfloat_adc_scan_tadci.value + gfloat_adc_scan_tadc.value) /*This is standard conversion time for class0*/
+			  }
+			},Float)
+		
+		}
+		else
+		{
+		/* For Accelerated Mode in XMC1X devices*/
+			/* fconv for XMC1x is fixed at 32MHz*/
+			Float fconv = 32.0
+			
+			gfloat_des_sampleT.minValue = MF({
+				Float divs_min_value = (Float)(4*(1000/32)*(gint_adc_scan_divs.value+1)).toDouble()
+				Float diva_min_value = 2*gfloat_adc_scan_tadci.value
+			(divs_min_value>diva_min_value?divs_min_value:diva_min_value)},Float)
+			
+			/* getting tadc value in nsec from the clk freq */
+			gfloat_adc_scan_tadc.value = MF({((1000)/gfloat_peripherial_clk_freq.value)},Float)
+
+			/* Divider for the accelerated mode*/
+			gint_adc_scan_divs.value = MF({appres_global_adc.getVal(["gint_global_adc_divs", "value"])},Integer)
+			
+			/* Converter clock time period using SHSCFG value */
+			gfloat_adc_scan_tsh.value = MF({ (((gint_adc_scan_divs.value+1)*(1000))/fconv)},Float)
+						
+			/*
+			 * conversion time for accelerated mode is given by this formula
+			 * tCN = (2+ STC) * tADCI +(4 * tSH)+ (N+ 8) * tSH +(5 * tADC)
+			 */
+			gfloat_coversion_time.value = MF({
+				if (gcombo_conv_mode.value == "10 Bit Fast Conversion") {
+				  (2*gfloat_adc_scan_tadci.value) + gfloat_actual_sampleT.value
+				} else {
+				(gfloat_actual_sampleT.value + ((12 + gint_adc_scan_conv_bits.value ) * gfloat_adc_scan_tsh.value) + (5 * gfloat_adc_scan_tadc.value) + (12 * gfloat_adc_scan_tsh.value))
+				}
+			},Float)
+		}
+		
+		gfloat_actual_sampleT.maxValue = MF({gfloat_des_sampleT.maxValue},Float)
+		
+		/*-------------------------------End: Time Calculations---------------------------------------*/
+		/* ------------------------------------------------------------------ */
+		/* ------------ APP Configuration ----------------------------------- */
+		/* ------------------------------------------------------------------ */
+		/* ------ TAB : Interrupt Configuration ----------------------------- */
+		
+		if (family =='XMC1')
+		{
+			ginterruptprio_request_src_intr.subPriorityVisible= false;
+			ginterruptprio_request_src_intr.priorityValue = 3;
+			gfloat_des_sampleT.value = 125;
+		}
+		if (family =='XMC4')
+		{
+			ginterruptprio_request_src_intr.maxSubPriority = MF({if(gcheck_src_enable_intr.value){appres_cpu.getVal(["gint_maxInterruptSubPriority", "value"])}else 63},Integer)
+			ginterruptprio_request_src_intr.priorityValue = 63;
+		}
+		ginterruptprio_request_src_intr.maxPriority = MF({if(gcheck_src_enable_intr.value){appres_cpu.getVal(["gint_maxInterruptPreemptPriority", "value"])}else 63},Integer)
+		ginterruptprio_request_src_intr.enabled = MF({gcheck_src_enable_intr.value},Boolean)
+		/* ------END of  TAB : Interrupt Configuration ----------------------------------------------- */
+		
+	}
+	
+	/* File Generation*/
+	def generateFiles(){
+
+		copy("adc_scan.c", "adc_scan.c")
+		copy("adc_scan.h", "adc_scan.h")
+		generate("adc_scan_confc.tmpl", "adc_scan_conf.c")
+		generate("adc_scan_confh.tmpl", "adc_scan_conf.h")
+		generate("adc_scan_externh.tmpl", "adc_scan_extern.h")
+	}
+
+
+}

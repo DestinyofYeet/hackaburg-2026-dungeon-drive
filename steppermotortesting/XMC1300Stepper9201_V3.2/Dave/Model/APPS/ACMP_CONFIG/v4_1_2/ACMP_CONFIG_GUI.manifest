@@ -1,0 +1,29 @@
+package Model.APPS.ACMP_CONFIG.v4_1_2;
+
+// Import statements
+import ifx.davex.app.manifest.*
+
+abstract class ACMP_CONFIG_GUI extends AppManifest {
+	/* Begin : UI variable section */
+	 public GTab gtab_general_settings;
+	 public GCombo gcombo_hysteresis;
+	 public GCheck gcheck_enable_comparator;
+	 public GCheck gcheck_invert_comparator;
+	 public GCheck gcheck_disable_anti_glitch_filter;
+	 public GLabel glabel_hysteresis;
+	 public GGroup ggroup_analog_comparator;
+
+	 public ACMP_CONFIG_GUI(DaveEnv daveEnv){
+
+	 gtab_general_settings = GTab(widgetName:"gtab_general_settings", text:"General Settings", enabled:true, visible:true)
+	 gcombo_hysteresis = GCombo(widgetName:"gcombo_hysteresis", options:["No Hysteresis","10mV Hysteresis","15mV Hysteresis","20mV Hysteresis"], value:"No Hysteresis", enabled:true, visible:true, isMandatoryValue:false)
+	 gcheck_enable_comparator = GCheck(widgetName:"gcheck_enable_comparator", value:false, enabled:true, visible:true)
+	 gcheck_invert_comparator = GCheck(widgetName:"gcheck_invert_comparator", value:false, enabled:true, visible:true)
+	 gcheck_disable_anti_glitch_filter = GCheck(widgetName:"gcheck_disable_anti_glitch_filter", value:false, enabled:true, visible:true)
+	 glabel_hysteresis = GLabel(widgetName:"glabel_hysteresis", text:"Hysteresis:", enabled:true, visible:true)
+	 ggroup_analog_comparator = GGroup(widgetName:"ggroup_analog_comparator", text:"Analog Comparator ", enabled:true, visible:true)
+
+
+	 }
+	/* End : UI variable section */
+}

@@ -1,0 +1,85 @@
+<p1:Tab  xmlns="http://www.eclipse.org/xwt/presentation" xmlns:x="http://www.eclipse.org/xwt" xmlns:p1="clr-namespace:com.ifx.davex.ui.controls.app" x:Class="e">
+	<p1:Tab.layout>
+		<GridLayout/>
+	</p1:Tab.layout>
+	<p1:TabFolder>
+		<p1:TabFolder.layoutData>
+			<GridData heightHint="747"/>
+		</p1:TabFolder.layoutData>
+		<p1:GTab text="Channel Settings" visible="true" enabled="true" manifestObj="true" widgetName="gtab_chanconfig">
+			<p1:GTab.control>
+				<p1:Tab widgetName="composite_6" layout="{x:Null}">
+						<p1:GFloat description="&lt;UL&gt;&lt;LI&gt;Enter the time in which the intensity changes are expected to be seen by a linar walk function&lt;/UL&gt;&lt;/LI&gt;" format="*,6" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="1000000" minValue="0" toolTipText="Set prescaler to get desired transition time." value="0.0" widgetName="gfloat_desired_initial_linear_walk_time" x:Style="BORDER" bounds="325, 152, 55, 21"/>
+						<p1:GCheck description="&lt;UL&gt;&lt;LI&gt;Select if Packer fucntion is desired. &lt;/LI&gt;&#13;&#10;&lt;LI&gt;The main purpose of the packer is to decrease the average rate of switching of the output signal to decrease the load on external switching circuits and improve EMC behaviour.&lt;/LI&gt;&#13;&#10;&lt;/UL&gt;" manifestObj="true" toolTipText="Groups ON-bits together to lower &#13;&#10;average rate of switching." widgetName="gcheck_enable_packer_selection" bounds="694, 189, 15, 15"/>
+						<p1:GInteger description="&lt;UL&gt;&lt;LI&gt;Can be written when the channel is disabled (CHEN.ECHy is 0), otherwise write accesses are ignored.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;" format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="255" minValue="0" toolTipText="Enter number of OFF-bits. This introduces a phase shift &#13;&#10;between different channels to void identical behavour." value="0" widgetName="ginteger_initial_off_bit_counter_value" bounds="774, 55, 43, 23" enabled="false"/>
+						<p1:GInteger description="&lt;UL&gt;&lt;LI&gt;When the On-time counter in the packer reaches this value, the measured On-time and Off-time of the output of the sigma-delta modulator are stored; and the counters reset to 0.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;" format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="255" minValue="0" toolTipText="Set the On-time packer compare value." value="39" widgetName="ginteger_number_of_on_bits_grouped_together" bounds="774, 82, 43, 23" enabled="false"/>
+						<p1:GInteger description="&lt;UL&gt;&lt;LI&gt;When the Off-time counter in the packer reaches this value, the measured On-time and Off-time of the output of the sigma-delta modulator are stored; and the counters reset to 0.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;" format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="255" minValue="0" toolTipText="Set the Off-time packer compare value." value="255" widgetName="ginteger_number_of_off_bits_grouped_together" bounds="774, 112, 43, 23" enabled="false"/>
+						<p1:GInteger description="&lt;UL&gt;&lt;LI&gt;Can be written when the channel is disabled (CHEN.ECHy is 0), otherwise write accesses are ignored.&lt;/UL&gt;&lt;/LI&gt;" format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="255" minValue="0" toolTipText="Enter number of ON-bits. This introduces a phase shift &#13;&#10;between different channels to avoid identical behavour." value="0" widgetName="ginteger_initial_on_bit_counter_value" bounds="774, 26, 43, 23" enabled="false"/>
+						<p1:GCheck bounds="548, 187, 15, 15" description="&lt;UL&gt;&lt;LI&gt;If enabled, limits the number of consecutive zeroes at the sigmadelta modulator output according to GLOBCON.WDMBN&lt;/UL&gt;&lt;/LI&gt;" manifestObj="true" toolTipText="Inserts an ON-bit if the output has been &#13;&#10;passive for too long, to enforce a transition. &#13;&#10;Configurable in the GLOBAL_BCCU app." widgetName="gcheck_flicker_watchdog_enable" text="Enable Flicker WD "/>
+						<p1:GCheck bounds="835, 159, 15, 15" description="&lt;UL&gt;&lt;LI&gt;Fast control schemes like peak-current control can be enabled with the help of BCCU.INy inputs which are enabled by selection of the output gating.&lt;/UL&gt;&lt;/LI&gt;" manifestObj="true" toolTipText="When enabled, PDM output is modulated by gating input." widgetName="gcheck_output_gating_enable" text="Enable Gating "/>
+						<p1:GCheck bounds="929, 204, 15, 15" description="&lt;UL&gt;&lt;LI&gt;Trap function on channel is enabled, the output goes to passive level when trap occurs.&lt;/UL&gt;&lt;/LI&gt;" manifestObj="true" toolTipText="When enabled, the output goes passive &#13;&#10;when a trap occurs. Connect trap signal &#13;&#10;to GLOBAL_BCCU app." widgetName="gcheck_trap_enable" text="Enable Trap "/>
+						<p1:GCheck bounds="929, 298, 15, 15" description="&lt;UL&gt;&#13;&#10;&lt;LI&gt;Channel trigger is enabled&lt;/LI&gt;&#13;&#10;&lt;/UL&gt;&#13;&#10;" manifestObj="true" toolTipText="The channel generates a trigger pulse for the &#13;&#10;ADC when there is a rising or falling edge on &#13;&#10;the output. All channel triggers are aggregated &#13;&#10;in the GLOBAL_BCCU APP." widgetName="gcheck_trigger_enable" text="Enable Trigger "/>
+						<p1:GCheck bounds="634, 297, 15, 15" description="&lt;UL&gt;&lt;LI&gt;If enabled, The trigger generator generates a trigger if the output of the sigma-delta modulator hasn&apos;t changed state for 256 bit times; only takes effect if the packer is disabled (PEN=0)&lt;/UL&gt;&lt;/LI&gt;" manifestObj="true" toolTipText="Enable to generate trigger pulses even when &#13;&#10;the output is stable with no transitions." widgetName="gcheck_forced_trigger_enable" text="Enable Forced trigger "/>
+						<p1:GCheck bounds="34, 91, 15, 15" description="&lt;UL&gt;&lt;LI&gt;If enabled no dimming input is used, channel brightness determined by the channel intensity. If not selected channel brightness is the product of the selected dimming input and the channel intensity.&lt;/UL&gt;&lt;/LI&gt;" manifestObj="true" toolTipText="Disable to use dimming level, and channel &#13;&#10;brightness is only determined by the channel &#13;&#10;intensity." widgetName="gcheck_dimming_input_bypass" value="true" text="Enable Bypass dimming input"/>
+						<p1:GCheck bounds="33, 25, 15, 15" description="&lt;UL&gt;&lt;LI&gt;Selected to enable channel at initialization. If not selected, the initialization has to be made by the APP developer.&lt;/UL&gt;&lt;/LI&gt;" manifestObj="true" toolTipText="Select to enable channel at Initialization." widgetName="gcheck_enable_channel" value="true" text="Enable channel at initialization"/>
+						<p1:GInteger description="&lt;UL&gt;&lt;LI&gt;Choose channel Intensity at the time of initialization.&lt;/UL&gt;&lt;/LI&gt;" format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="4095" minValue="0" toolTipText="" value="4095" widgetName="ginteger_channel_initial_intensity" bounds="468, 149, 48, 23"/>
+						<p1:GFloat description="&lt;UL&gt;&lt;LI&gt;Actual linear walk transition time.&lt;/UL&gt;&lt;/LI&gt;" enabled="false" format="*,6" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="1000000" minValue="0" toolTipText="Actual linear walk transition time." value="0" widgetName="gfloat_actual_initial_linear_walk_time" bounds="482, 24, 55, 21" x:Style="BORDER"/>
+						<p1:GInteger description="&lt;UL&gt;&lt;LI&gt;Linear walker clock prescaler value.&lt;/UL&gt;&lt;/LI&gt;" enabled="false" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="1023" minValue="0" toolTipText="Linear walker clock prescaler value." value="0" widgetName="ginteger_linpres" bounds="485, 50, 52, 23"/>
+						<p1:GCombo description="&lt;UL&gt;&lt;LI&gt;Selects an active high or active low channel output.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;&lt;OL&gt;&#13;&#10;&lt;LI&gt;Active High: An active high channel output&lt;/LI&gt;&#13;&#10;&lt;LI&gt;Active Low: An activelow channel output&lt;/LI&gt;&#13;&#10;&lt;/OL&gt;" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" options="Active High&#13;&#10;Active Low" toolTipText="Select the channel output passive level." value="Active High" widgetName="gcombo_output_passive_level_selection" bounds="960, 110, 91, 21"/>
+						<p1:GCombo description="&lt;UL&gt;&#13;&#10;&lt;LI&gt;Selects the Trigger output channel&lt;/LI&gt; &#13;&#10;&lt;LI&gt;When a trigger has been generated the channel pointer will point to the next channel to generate the trigger.&lt;/LI&gt; &#13;&#10;&lt;/UL&gt;&#13;&#10;&lt;OL&gt;&#13;&#10;&lt;LI&gt;Line 0: Trigger Out 0&lt;/LI&gt;&#13;&#10;&lt;LI&gt;Line 1: Trigger Out 1&lt;/LI&gt;&#13;&#10;&lt;/OL&gt;&#13;&#10;&lt;/OL&gt;" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" options="Line 0&#13;&#10;Line 1" toolTipText="Select which trigger line the channel trigger appears on, in trigger mode 1." value="Line 0" widgetName="gcombo_trigger_output_selection" bounds="776, 335, 69, 21"/>
+						<p1:GCombo description="&lt;UL&gt;&lt;LI&gt;Select edge&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;&lt;OL&gt;&#13;&#10;&lt;LI&gt;Rising : Channel triggers occur on channel output from  passive to active level&lt;/LI&gt;&#13;&#10;&lt;LI&gt;Falling : Channel triggers occur on channel output from active to passive  level&lt;/LI&gt;&#13;&#10;&lt;/OL&gt;" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" options="Rising&#13;&#10;Falling" toolTipText="" value="Rising" widgetName="gcombo_trigger_edge_selection" bounds="673, 335, 69, 21"/>
+						<p1:GImage bounds="0, -10, 1087, 379" manifestObj="true" path="doc/UI-Channel_Configuration_bypass.png" widgetName="gimage_channelconfig_bypass">
+					</p1:GImage>
+						<p1:GImage visible="true" manifestObj="true" widgetName="gimage_channelconfig" bounds="0, -10, 1087, 379" path="doc/UI-Channel_Configuration.png">
+					</p1:GImage>
+						<p1:GImage visible="true" manifestObj="true" widgetName="gimage_flickerwd" bounds="3, 375, 587, 131" path="doc/UI-Flicker_Watchdog_image.png"/>
+						<p1:GImage manifestObj="true" path="doc/UI-Packer_image.png" widgetName="gimage_packer" bounds="3, 509, 587, 131"/>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+		<p1:GTab text="Pin Settings" visible="true" enabled="true" widgetName="gtab_pin_configuration">
+			<p1:GTab.control>
+				<p1:Tab widgetName="composite5">
+					<p1:Tab.layout>
+						<GridLayout/>
+					</p1:Tab.layout>
+					<p1:GGroup text="Direct Output Pin Configuration" widgetName="gGroup_direct_output_pin_configuration">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2"/>
+						</p1:GGroup.layout>
+						<p1:GCheck text="Enable output" manifestObj="true" widgetName="gcheck_output_enable" toolTipText="Enables the Direct Output Pin and Consumes the Pin.&#13;&#10;If not enabled then Port Pin is not consumed" description="&lt;UL&gt;&lt;LI&gt;Enable BCCU Channel output to a GPIO pin.&lt;/UL&gt;&lt;/LI&gt;" value="true"/>
+						<Label/>
+						<p1:GLabel text="Output characteristics:" visible="true" widgetName="glabel_output_characteristics" toolTipText="Select Pad Output characteristics for Direct Output Pin"/>
+						<p1:GCombo mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" widgetName="gcombo_output_characteristics" value="Push Pull" options="Push Pull&#13;&#10;Open Drain" toolTipText="Select Pad Output characteristics for Direct Output Pin" description="&lt;UL&gt;&lt;LI&gt;Select Push Pull or Open Drain. &lt;/UL&gt;&lt;/LI&gt;&#13;&#10;&lt;OL&gt;&#13;&#10;&lt;LI&gt;Push Pull: Can drive both low and high voltages. No external pull up is nedded&lt;/LI&gt;&#13;&#10;&lt;LI&gt;Open Drain: Can drive only low voltage. Needs an external pull up resistor&lt;/LI&gt;&#13;&#10;&lt;/OL&gt;">
+							<p1:GCombo.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="97"/>
+							</p1:GCombo.layoutData>
+						</p1:GCombo>
+					</p1:GGroup>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+		<p1:GTab text="dummy" visible="true" enabled="true" manifestObj="true" widgetName="gtab_dummy">
+			<p1:GTab.control>
+				<p1:Tab widgetName="composite_1">
+					<p1:Tab.layout>
+						<GridLayout/>
+					</p1:Tab.layout>
+					<p1:GLabel visible="true" widgetName="glabel_initial_on_bit_counter_value" text="Initial on bit counter value"/>
+					<p1:GLabel text="Edge selection" visible="true" widgetName="glabel_trigger_edge_selection"/>
+					<p1:GLabel text="Trigger ouput " visible="true" widgetName="glabel_trigger_output_selection"/>
+					<p1:GLabel text="Ouput passive level" visible="true" widgetName="glabel_output_passive_level_selection"/>
+					<p1:GLabel text="Linear prescaler" visible="true" widgetName="glabel_linpres" toolTipText=""/>
+					<p1:GLabel text="Actual initial linear walk time" visible="true" widgetName="glabel_actual_initial_linear_walk_time"/>
+					<p1:GLabel text="Channel initial intensity" visible="true" widgetName="glabel_channel_initial_intensity"/>
+					<p1:GLabel text="Number of off bits grouped together" visible="true" widgetName="glabel_number_of_off_bits_grouped_together"/>
+					<p1:GLabel text="Initial off bit counter value" visible="true" widgetName="glabel_initial_off_bit_counter_value"/>
+					<p1:GLabel text="Enable packer selection" visible="true" widgetName="glabel_enable_packer_selection"/>
+					<p1:GLabel text="Desired initial linear walk time" visible="true" widgetName="glabel_gfloat_desired_initial_linear_walk_time"/>
+					<p1:GLabel text="Number of on bits grouped together" visible="true" widgetName="glabel_number_of_on_bits_grouped_together"/>
+					<p1:GLabel text="Desired initial linear walk time" visible="true" widgetName="glabel_desired_initial_linear_walk_time"/>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+	</p1:TabFolder>
+</p1:Tab>

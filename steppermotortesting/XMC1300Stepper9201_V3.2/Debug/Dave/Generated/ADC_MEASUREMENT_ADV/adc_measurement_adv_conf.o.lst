@@ -1,0 +1,262 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "adc_measurement_adv_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_ch_config,"a",%progbits
+  18              	 .align 2
+  21              	ADC_MEASUREMENT_ADV_0_CH2_ICos_ch_config:
+  22 0000 00       	 .byte 0
+  23 0001 00       	 .byte 0
+  24 0002 2A       	 .byte 42
+  25 0003 00       	 .byte 0
+  26 0004 00000000 	 .word 0
+  27 0008 00000000 	 .space 4
+  28 000c 01       	 .byte 1
+  29 000d FF       	 .byte -1
+  30 000e 0000     	 .space 2
+  31              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_res_config,"a",%progbits
+  32              	 .align 2
+  35              	ADC_MEASUREMENT_ADV_0_CH2_ICos_res_config:
+  36 0000 00000000 	 .space 4
+  37              	 .global ADC_MEASUREMENT_ADV_0_CH2_ICos_handle
+  38              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_handle,"a",%progbits
+  39              	 .align 2
+  42              	ADC_MEASUREMENT_ADV_0_CH2_ICos_handle:
+  43 0000 00000000 	 .word ADC_MEASUREMENT_ADV_0_CH2_ICos_ch_config
+  44 0004 00000000 	 .word ADC_MEASUREMENT_ADV_0_CH2_ICos_res_config
+  45 0008 01       	 .byte 1
+  46 0009 01       	 .byte 1
+  47 000a 0000     	 .space 2
+  48              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_ch_config,"a",%progbits
+  49              	 .align 2
+  52              	ADC_MEASUREMENT_ADV_0_CHRef_Sin_ch_config:
+  53 0000 00       	 .byte 0
+  54 0001 00       	 .byte 0
+  55 0002 2B       	 .byte 43
+  56 0003 00       	 .byte 0
+  57 0004 00000000 	 .word 0
+  58 0008 00000000 	 .space 4
+  59 000c 01       	 .byte 1
+  60 000d FF       	 .byte -1
+  61 000e 0000     	 .space 2
+  62              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_res_config,"a",%progbits
+  63              	 .align 2
+  66              	ADC_MEASUREMENT_ADV_0_CHRef_Sin_res_config:
+  67 0000 00000000 	 .space 4
+  68              	 .global ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle
+  69              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle,"a",%progbits
+  70              	 .align 2
+  73              	ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle:
+  74 0000 00000000 	 .word ADC_MEASUREMENT_ADV_0_CHRef_Sin_ch_config
+  75 0004 00000000 	 .word ADC_MEASUREMENT_ADV_0_CHRef_Sin_res_config
+  76 0008 01       	 .byte 1
+  77 0009 00       	 .byte 0
+  78 000a 0000     	 .space 2
+  79              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_scan_entry_0,"a",%progbits
+  80              	 .align 2
+  83              	ADC_MEASUREMENT_ADV_0_CH2_ICos_scan_entry_0:
+  84 0000 01       	 .byte 1
+  85 0001 00       	 .byte 0
+  86 0002 00       	 .byte 0
+  87 0003 00       	 .space 1
+  88 0004 00000000 	 .word 0
+  89              	 .section .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_scan_entry_1,"a",%progbits
+  90              	 .align 2
+  93              	ADC_MEASUREMENT_ADV_0_CHRef_Sin_scan_entry_1:
+  94 0000 00000000 	 .space 8
+  94      00000000 
+  95              	 .section .data.ADC_MEASUREMENT_ADV_0_scan_entries,"aw",%progbits
+  96              	 .align 2
+  99              	ADC_MEASUREMENT_ADV_0_scan_entries:
+ 100 0000 00000000 	 .word ADC_MEASUREMENT_ADV_0_CH2_ICos_scan_entry_0
+ 101 0004 00000000 	 .word ADC_MEASUREMENT_ADV_0_CHRef_Sin_scan_entry_1
+ 102              	 .section .data.ADC_MEASUREMENT_ADV_0_channel_array,"aw",%progbits
+ 103              	 .align 2
+ 106              	ADC_MEASUREMENT_ADV_0_channel_array:
+ 107 0000 00000000 	 .word ADC_MEASUREMENT_ADV_0_CH2_ICos_handle
+ 108 0004 00000000 	 .word ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle
+ 109              	 .section .data.ADC_MEASUREMENT_ADV_0_initialization_status,"aw",%progbits
+ 112              	ADC_MEASUREMENT_ADV_0_initialization_status:
+ 113 0000 02       	 .byte 2
+ 114              	 .global ADC_MEASUREMENT_ADV_0
+ 115              	 .section .rodata.ADC_MEASUREMENT_ADV_0,"a",%progbits
+ 116              	 .align 2
+ 119              	ADC_MEASUREMENT_ADV_0:
+ 120 0000 00000000 	 .word ADC_MEASUREMENT_ADV_0_channel_array
+ 121 0004 00000000 	 .word ADC_MEASUREMENT_ADV_0_scan_entries
+ 122 0008 00000000 	 .word 0
+ 123 000c 00000000 	 .word ADC_SCAN_0
+ 124 0010 00000000 	 .word ADC_MEASUREMENT_ADV_0_initialization_status
+ 125 0014 00       	 .byte 0
+ 126 0015 01       	 .byte 1
+ 127 0016 02       	 .byte 2
+ 128 0017 02       	 .byte 2
+ 129 0018 01       	 .byte 1
+ 130 0019 000000   	 .space 3
+ 131              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_ch_config,"a",%progbits
+ 132              	 .align 2
+ 135              	ADC_MEASUREMENT_ADV_1_CH1_ISin_ch_config:
+ 136 0000 00       	 .byte 0
+ 137 0001 00       	 .byte 0
+ 138 0002 27       	 .byte 39
+ 139 0003 00       	 .byte 0
+ 140 0004 00000000 	 .word 0
+ 141 0008 00000000 	 .space 4
+ 142 000c 01       	 .byte 1
+ 143 000d 02       	 .byte 2
+ 144 000e 0000     	 .space 2
+ 145              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_res_config,"a",%progbits
+ 146              	 .align 2
+ 149              	ADC_MEASUREMENT_ADV_1_CH1_ISin_res_config:
+ 150 0000 00000000 	 .space 4
+ 151              	 .global ADC_MEASUREMENT_ADV_1_CH1_ISin_handle
+ 152              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_handle,"a",%progbits
+ 153              	 .align 2
+ 156              	ADC_MEASUREMENT_ADV_1_CH1_ISin_handle:
+ 157 0000 00000000 	 .word ADC_MEASUREMENT_ADV_1_CH1_ISin_ch_config
+ 158 0004 00000000 	 .word ADC_MEASUREMENT_ADV_1_CH1_ISin_res_config
+ 159 0008 00       	 .byte 0
+ 160 0009 01       	 .byte 1
+ 161 000a 0000     	 .space 2
+ 162              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_ch_config,"a",%progbits
+ 163              	 .align 2
+ 166              	ADC_MEASUREMENT_ADV_1_CHRef_Cos_ch_config:
+ 167 0000 00       	 .byte 0
+ 168 0001 00       	 .byte 0
+ 169 0002 29       	 .byte 41
+ 170 0003 00       	 .byte 0
+ 171 0004 00000000 	 .word 0
+ 172 0008 00000000 	 .space 4
+ 173 000c 01       	 .byte 1
+ 174 000d FF       	 .byte -1
+ 175 000e 0000     	 .space 2
+ 176              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_res_config,"a",%progbits
+ 177              	 .align 2
+ 180              	ADC_MEASUREMENT_ADV_1_CHRef_Cos_res_config:
+ 181 0000 00000000 	 .space 4
+ 182              	 .global ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle
+ 183              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle,"a",%progbits
+ 184              	 .align 2
+ 187              	ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle:
+ 188 0000 00000000 	 .word ADC_MEASUREMENT_ADV_1_CHRef_Cos_ch_config
+ 189 0004 00000000 	 .word ADC_MEASUREMENT_ADV_1_CHRef_Cos_res_config
+ 190 0008 00       	 .byte 0
+ 191 0009 00       	 .byte 0
+ 192 000a 0000     	 .space 2
+ 193              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_scan_entry_0,"a",%progbits
+ 194              	 .align 2
+ 197              	ADC_MEASUREMENT_ADV_1_CH1_ISin_scan_entry_0:
+ 198 0000 01       	 .byte 1
+ 199 0001 00       	 .byte 0
+ 200 0002 00       	 .byte 0
+ 201 0003 00       	 .space 1
+ 202 0004 00000000 	 .word 0
+ 203              	 .section .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_scan_entry_1,"a",%progbits
+ 204              	 .align 2
+ 207              	ADC_MEASUREMENT_ADV_1_CHRef_Cos_scan_entry_1:
+ 208 0000 00000000 	 .space 8
+ 208      00000000 
+ 209              	 .section .data.ADC_MEASUREMENT_ADV_1_scan_entries,"aw",%progbits
+ 210              	 .align 2
+ 213              	ADC_MEASUREMENT_ADV_1_scan_entries:
+ 214 0000 00000000 	 .word ADC_MEASUREMENT_ADV_1_CH1_ISin_scan_entry_0
+ 215 0004 00000000 	 .word ADC_MEASUREMENT_ADV_1_CHRef_Cos_scan_entry_1
+ 216              	 .section .data.ADC_MEASUREMENT_ADV_1_channel_array,"aw",%progbits
+ 217              	 .align 2
+ 220              	ADC_MEASUREMENT_ADV_1_channel_array:
+ 221 0000 00000000 	 .word ADC_MEASUREMENT_ADV_1_CH1_ISin_handle
+ 222 0004 00000000 	 .word ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle
+ 223              	 .section .data.ADC_MEASUREMENT_ADV_1_initialization_status,"aw",%progbits
+ 226              	ADC_MEASUREMENT_ADV_1_initialization_status:
+ 227 0000 02       	 .byte 2
+ 228              	 .global ADC_MEASUREMENT_ADV_1
+ 229              	 .section .rodata.ADC_MEASUREMENT_ADV_1,"a",%progbits
+ 230              	 .align 2
+ 233              	ADC_MEASUREMENT_ADV_1:
+ 234 0000 00000000 	 .word ADC_MEASUREMENT_ADV_1_channel_array
+ 235 0004 00000000 	 .word ADC_MEASUREMENT_ADV_1_scan_entries
+ 236 0008 00000000 	 .word 0
+ 237 000c 00000000 	 .word ADC_SCAN_1
+ 238 0010 00000000 	 .word ADC_MEASUREMENT_ADV_1_initialization_status
+ 239 0014 00       	 .byte 0
+ 240 0015 00       	 .byte 0
+ 241 0016 02       	 .byte 2
+ 242 0017 02       	 .byte 2
+ 243 0018 01       	 .byte 1
+ 244 0019 000000   	 .space 3
+ 245              	 .text
+ 246              	.Letext0:
+ 247              	 .file 1 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 248              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 249              	 .file 3 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 250              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_vadc.h"
+ 251              	 .file 5 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Dave/Generated/GLOBAL_ADC/global_adc.h"
+ 252              	 .file 6 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Dave/Generated/ADC_SCAN/adc_scan.h"
+ 253              	 .file 7 "../Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 254              	 .file 8 "../Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv_conf.c"
+ 255              	 .file 9 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 256              	 .file 10 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Dave/Generated/ADC_SCAN/ADC_SCAN_Extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 adc_measurement_adv_conf.c
+    {standard input}:18     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_ch_config:00000000 $d
+    {standard input}:21     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_ch_config:00000000 ADC_MEASUREMENT_ADV_0_CH2_ICos_ch_config
+    {standard input}:32     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_res_config:00000000 $d
+    {standard input}:35     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_res_config:00000000 ADC_MEASUREMENT_ADV_0_CH2_ICos_res_config
+    {standard input}:42     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_handle:00000000 ADC_MEASUREMENT_ADV_0_CH2_ICos_handle
+    {standard input}:39     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_handle:00000000 $d
+    {standard input}:49     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_ch_config:00000000 $d
+    {standard input}:52     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_ch_config:00000000 ADC_MEASUREMENT_ADV_0_CHRef_Sin_ch_config
+    {standard input}:63     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_res_config:00000000 $d
+    {standard input}:66     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_res_config:00000000 ADC_MEASUREMENT_ADV_0_CHRef_Sin_res_config
+    {standard input}:73     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle:00000000 ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle
+    {standard input}:70     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_handle:00000000 $d
+    {standard input}:80     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_scan_entry_0:00000000 $d
+    {standard input}:83     .rodata.ADC_MEASUREMENT_ADV_0_CH2_ICos_scan_entry_0:00000000 ADC_MEASUREMENT_ADV_0_CH2_ICos_scan_entry_0
+    {standard input}:90     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_scan_entry_1:00000000 $d
+    {standard input}:93     .rodata.ADC_MEASUREMENT_ADV_0_CHRef_Sin_scan_entry_1:00000000 ADC_MEASUREMENT_ADV_0_CHRef_Sin_scan_entry_1
+    {standard input}:96     .data.ADC_MEASUREMENT_ADV_0_scan_entries:00000000 $d
+    {standard input}:99     .data.ADC_MEASUREMENT_ADV_0_scan_entries:00000000 ADC_MEASUREMENT_ADV_0_scan_entries
+    {standard input}:103    .data.ADC_MEASUREMENT_ADV_0_channel_array:00000000 $d
+    {standard input}:106    .data.ADC_MEASUREMENT_ADV_0_channel_array:00000000 ADC_MEASUREMENT_ADV_0_channel_array
+    {standard input}:112    .data.ADC_MEASUREMENT_ADV_0_initialization_status:00000000 ADC_MEASUREMENT_ADV_0_initialization_status
+    {standard input}:119    .rodata.ADC_MEASUREMENT_ADV_0:00000000 ADC_MEASUREMENT_ADV_0
+    {standard input}:116    .rodata.ADC_MEASUREMENT_ADV_0:00000000 $d
+    {standard input}:132    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_ch_config:00000000 $d
+    {standard input}:135    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_ch_config:00000000 ADC_MEASUREMENT_ADV_1_CH1_ISin_ch_config
+    {standard input}:146    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_res_config:00000000 $d
+    {standard input}:149    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_res_config:00000000 ADC_MEASUREMENT_ADV_1_CH1_ISin_res_config
+    {standard input}:156    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_handle:00000000 ADC_MEASUREMENT_ADV_1_CH1_ISin_handle
+    {standard input}:153    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_handle:00000000 $d
+    {standard input}:163    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_ch_config:00000000 $d
+    {standard input}:166    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_ch_config:00000000 ADC_MEASUREMENT_ADV_1_CHRef_Cos_ch_config
+    {standard input}:177    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_res_config:00000000 $d
+    {standard input}:180    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_res_config:00000000 ADC_MEASUREMENT_ADV_1_CHRef_Cos_res_config
+    {standard input}:187    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle:00000000 ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle
+    {standard input}:184    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_handle:00000000 $d
+    {standard input}:194    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_scan_entry_0:00000000 $d
+    {standard input}:197    .rodata.ADC_MEASUREMENT_ADV_1_CH1_ISin_scan_entry_0:00000000 ADC_MEASUREMENT_ADV_1_CH1_ISin_scan_entry_0
+    {standard input}:204    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_scan_entry_1:00000000 $d
+    {standard input}:207    .rodata.ADC_MEASUREMENT_ADV_1_CHRef_Cos_scan_entry_1:00000000 ADC_MEASUREMENT_ADV_1_CHRef_Cos_scan_entry_1
+    {standard input}:210    .data.ADC_MEASUREMENT_ADV_1_scan_entries:00000000 $d
+    {standard input}:213    .data.ADC_MEASUREMENT_ADV_1_scan_entries:00000000 ADC_MEASUREMENT_ADV_1_scan_entries
+    {standard input}:217    .data.ADC_MEASUREMENT_ADV_1_channel_array:00000000 $d
+    {standard input}:220    .data.ADC_MEASUREMENT_ADV_1_channel_array:00000000 ADC_MEASUREMENT_ADV_1_channel_array
+    {standard input}:226    .data.ADC_MEASUREMENT_ADV_1_initialization_status:00000000 ADC_MEASUREMENT_ADV_1_initialization_status
+    {standard input}:233    .rodata.ADC_MEASUREMENT_ADV_1:00000000 ADC_MEASUREMENT_ADV_1
+    {standard input}:230    .rodata.ADC_MEASUREMENT_ADV_1:00000000 $d
+
+UNDEFINED SYMBOLS
+ADC_SCAN_0
+ADC_SCAN_1

@@ -1,0 +1,65 @@
+package Model.APPS.ADC_SCAN.v4_0_18;
+
+// Import statements
+import ifx.davex.app.manifest.*
+
+abstract class ADC_SCAN_GUI extends AppManifest {
+	/* Begin : UI variable section */
+	 public GTab gtab_GeneralConfigurations;
+	 public GTab gtab_interrupt_configuration;
+	 public GCombo gcombo_trigger_edge_sel;
+	 public GCombo gcombo_gate_sel;
+	 public GCombo gcombo_rs_priority;
+	 public GCombo gcombo_adc_start_mode;
+	 public GCombo gcombo_conv_mode;
+	 public GFloat gfloat_des_sampleT;
+	 public GFloat gfloat_actual_sampleT;
+	 public GFloat gfloat_coversion_time;
+	 public GCheck gcheck_autoscan_enable;
+	 public GCheck gcheck_src_enable_intr;
+	 public GLabel glabel_trigger_edge_sel;
+	 public GLabel glabel_gate_sel;
+	 public GLabel glabel_rs_priority;
+	 public GLabel glabel_adc_start_mode;
+	 public GLabel glabel_conv_mode;
+	 public GLabel glabel_des_sampleT;
+	 public GLabel glabel_actual_sampleT;
+	 public GLabel glabel_coversion_time;
+	 public GLabel glabel_conversion_limitation;
+	 public GGroup ggroup_Configuration;
+	 public GGroup ggroup_class_configuration;
+	 public GInterruptPrio ginterruptprio_request_src_intr;
+	 public GMessage gmessage_trigger_autoscan_warning;
+
+	 public ADC_SCAN_GUI(DaveEnv daveEnv){
+
+	 gtab_GeneralConfigurations = GTab(widgetName:"gtab_GeneralConfigurations", text:"General Settings", enabled:true, visible:true)
+	 gtab_interrupt_configuration = GTab(widgetName:"gtab_interrupt_configuration", text:"Interrupt Settings", enabled:true, visible:true)
+	 gcombo_trigger_edge_sel = GCombo(widgetName:"gcombo_trigger_edge_sel", options:["No External Trigger","External Trigger Upon Rising Edge","External Trigger Upon Falling Edge","External Trigger Upon Both The Edge"], value:"No External Trigger", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_gate_sel = GCombo(widgetName:"gcombo_gate_sel", options:["No Conversion Request is Issued","All Conversion Requests are Issued","Conversion Request Issued When Gate is High","Conversion Request Issued When Gate is Low"], value:"All Conversion Requests are Issued", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_rs_priority = GCombo(widgetName:"gcombo_rs_priority", options:["Priority-0  (Lowest Priority)","Priority-1","Priority-2","Priority-3 (Highest Priority)"], value:"Priority-0  (Lowest Priority)", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_adc_start_mode = GCombo(widgetName:"gcombo_adc_start_mode", options:["Wait For Start Mode","Cancel Inject Repeat Mode","Cancel Inject With Cancel Mode"], value:"Wait For Start Mode", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_conv_mode = GCombo(widgetName:"gcombo_conv_mode", options:["12 Bit Conversion","10 Bit Conversion","8 Bit Conversion","10 Bit Fast Conversion"], value:"12 Bit Conversion", enabled:true, visible:true, isMandatoryValue:false)
+	 gfloat_des_sampleT = GFloat(widgetName:"gfloat_des_sampleT", value:100, minValue:0, maxValue:8000, enabled:true, visible:true, isMandatoryValue:false)
+	 gfloat_actual_sampleT = GFloat(widgetName:"gfloat_actual_sampleT", value:0.0, minValue:0, maxValue:8067, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_coversion_time = GFloat(widgetName:"gfloat_coversion_time", value:0.0, minValue:0, maxValue:Double.POSITIVE_INFINITY, enabled:false, visible:true, isMandatoryValue:false)
+	 gcheck_autoscan_enable = GCheck(widgetName:"gcheck_autoscan_enable", value:false, enabled:true, visible:true)
+	 gcheck_src_enable_intr = GCheck(widgetName:"gcheck_src_enable_intr", value:false, enabled:true, visible:true)
+	 glabel_trigger_edge_sel = GLabel(widgetName:"glabel_trigger_edge_sel", text:"Trigger edge selection:", enabled:true, visible:true)
+	 glabel_gate_sel = GLabel(widgetName:"glabel_gate_sel", text:"Gating selection:", enabled:true, visible:true)
+	 glabel_rs_priority = GLabel(widgetName:"glabel_rs_priority", text:"Priority of scan source:", enabled:true, visible:true)
+	 glabel_adc_start_mode = GLabel(widgetName:"glabel_adc_start_mode", text:"Conversion start mode:", enabled:true, visible:true)
+	 glabel_conv_mode = GLabel(widgetName:"glabel_conv_mode", text:"Conversion mode:", enabled:true, visible:true)
+	 glabel_des_sampleT = GLabel(widgetName:"glabel_des_sampleT", text:"Desired sample time [nsec]:", enabled:true, visible:true)
+	 glabel_actual_sampleT = GLabel(widgetName:"glabel_actual_sampleT", text:"Actual sample time [nsec]:", enabled:true, visible:true)
+	 glabel_coversion_time = GLabel(widgetName:"glabel_coversion_time", text:"Total conversion time [nsec]:", enabled:true, visible:true)
+	 glabel_conversion_limitation = GLabel(widgetName:"glabel_conversion_limitation", text:"Note: Total conversion time is always calculated with post calibration enabled.", enabled:true, visible:true)
+	 ggroup_Configuration = GGroup(widgetName:"ggroup_Configuration", text:"Scan Settings", enabled:true, visible:true)
+	 ggroup_class_configuration = GGroup(widgetName:"ggroup_class_configuration", text:"Class Settings", enabled:true, visible:true)
+	 ginterruptprio_request_src_intr = GInterruptPrio(widgetName:"ginterruptprio_request_src_intr", priorityValue:3, minPriority:0, maxPriority:63, subPriorityValue:0, minSubPriority:0, maxSubPriority:63, subPriorityVisible:true, enabled:true, visible:true)
+	 gmessage_trigger_autoscan_warning = GMessage(widgetName:"gmessage_trigger_autoscan_warning", text:"External trigger and continuous conversion mode is enabled. This mode is not supported by the APP.", isError:false, visible:true)
+
+
+	 }
+	/* End : UI variable section */
+}

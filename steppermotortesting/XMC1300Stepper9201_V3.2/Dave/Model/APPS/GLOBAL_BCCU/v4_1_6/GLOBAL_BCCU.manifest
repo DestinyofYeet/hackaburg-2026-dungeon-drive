@@ -1,0 +1,407 @@
+package Model.APPS.GLOBAL_BCCU.v4_1_6;
+
+/*
+ *  Copyright (c) 2015, Infineon Technologies AG
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
+ * following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, this list of conditions and the  following
+ *   disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *   following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *   Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+ *   products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes
+ * with Infineon Technologies AG (dave@infineon.com).
+ */
+
+/*************** Revision History **********************************************
+Version        Date          Description 
+
+  4.0.0       16-Feb-2015   Initial version for DAVEv4.<br>
+  4.0.1       20-Feb-2015   1). APP Help documentation improved.<br>
+                            2). XMC_ASSERT bug fixed.<br>
+  4.1.0       07-May-2015   1). APP owner feedbacks are fixed.<br>
+                            2). Manifest code is optimized.<br>
+                            3). Actual time[bit time] & Longest OFF-time at modulator output GUI widget changed to
+                                float.<br>
+                            4).  XMC_ASSERT debug statement is added in all API's.<br>
+
+ 4.1.2       20-Jun-2015    Version check added for XMCLib dependency.<br>
+ 4.1.4       14-Jul-2015    Added support for XMC14xx devices.<br>
+ 4.1.6       15-Jul-2016    Added support for XMC14xx_T38 and Q40 devices.<br>
+                                           			    
+*******************************************************************************/
+/* Import statements */
+import ifx.davex.app.manifest.*
+
+class GLOBAL_BCCU extends GLOBAL_BCCU_GUI {
+
+/* ----------------------------------------------- Begin : APP Properties -------------------------------------------------------------- */
+	/**
+	 * App version
+	 * Format: a string with three digit separated by a dot.
+	 */
+	def version            = '4.1.6'
+	
+	/**
+	 * App categories declaration. 
+	 * It is list of strings. Subcategories are separated by slash.
+	 * No limits on number of categories and subcategories depth.
+	 */
+	def categoriesDescription = ["System/~Global Reg Control"] 
+
+	/** 
+	 * Minimum DAVE version required for this app.
+	 * 
+	 * It is string with three digit separated by a dot.
+	 */
+	def minDaveVersion           = '4.0.0'
+	
+	/** 
+	 * Keywords used by search feature in Apps selection view
+	 * 
+	 * It is a list of string.
+	 */
+	def keywords      = [
+	   'ALL'
+	    ]
+	
+	/** 
+	 * softwareIDs is used to declare which devices are compatible with this app.
+	 * It is a map with key a string containing a pattern that shall match the SW id of
+	 * the device and as value the minimal version of the app.
+	 * 
+	 * 
+	 */
+	def softwareIDs       = [
+		"XMC1.2.00.T038.*":"1.0.0", 
+		"XMC1.2.02.(T028|T016|Q024|Q040).*":"1.0.0", 
+		"XMC1.3.02.(T016|T038|Q024|Q040).*":"1.0.0",
+		"XMC1.4.02.*.*":"1.0.0",
+		"XMC1.4.04.*.*":"1.0.0",
+		]
+
+	/**
+	 * Singleton property:
+	 * When it is true the app can be instantiated only once. 
+	 */
+	def singleton     = true
+	
+	/**
+	 * initProvider property
+	 * It shall be true to add a call to <AppName>_Init() 
+	 */
+	def initProvider  = true
+	
+	/**
+	 * Deprecated app
+	 * Set it to true to indicate that the app shall be not used for new projects.
+	 */
+	def deprecated    = false
+	
+	/**
+	 * Sharable property.
+	 * It shall be true to allows multiple apps to require the same instance of this app.
+	 */
+	def sharable      = true
+	
+	/**
+	 *  App function description.
+	 */ 
+	def description = "GLOBAL_BCCU APP configures the global registers of the \nBrightness and Color Control Unit (BCCU). \nThe configured parameters are clock frequencies, \ntrap functionality, triggering, channel passive levels \nand interrupts. The APP provides dynamic APIs \nto high level APPs such as event flag \nconfiguration, interrupt configuration and trap configuration."
+
+/* --------------------------------------------------------- End: APP Properties ------------------------------------------------------------- */
+
+/* ----------------------- Begin : User Variables for hardware resources and virtual signals ------------------------------------------------- */
+
+	/* virtual resource group for GLOBAL_BCCU */
+	MVirtualResourceGroup hwres_bccu
+	MVirtualResourceGroup hwres_trap
+	MVirtualResourceGroup hwres_trigger
+	MVirtualResourceGroup hwres_packer_fifo_event
+	MVirtualResourceGroup hwres_global
+	
+	MVirtualSignal vs_trap_out
+	MVirtualSignal vs_trap_in  
+	MVirtualSignal vs_trigger_out0
+	MVirtualSignal vs_trigger_out1
+	MVirtualSignal vs_event_full
+	MVirtualSignal vs_event_empty	
+	MVirtualSignal vs_global_dimming_engine
+	
+	
+	/* Required APP consumption for GLOBAL_BCCU */
+	MRequiredApp appres_clock /* CLOCK app consumption for  XMC1xxx device */
+	
+	/* dummy variable to hold actual system frequency value  */
+	GFloat pclock = GFloat(widgetName:"pclock")	
+	GFloat desired_fclk = GFloat(widgetName:"desired_fclk")
+	GFloat desired_dclk = GFloat(widgetName:"desired_dclk")
+	GFloat min_cal = GFloat(widgetName:"min_cal")
+	GInteger WDMBN = GInteger(widgetName:"WDMBN")
+	
+/*----------------------- End : User Variables for hardware resources and virtual signals ---------------------------------------------------- */
+	
+/*------------------------------------------------------- Begin : APP Constructor and Logic -------------------------------------------------*/
+	public GLOBAL_BCCU(DaveEnv daveEnv) {
+		
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                          					App consumption Block                                                        */
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+		appres_clock =  MRequiredApp("CLOCK_XMC1","Clock APP", RSHARABLE, "4.0.2") /* leaf level APP(CLOCK_XMC1) is consumed to configure global
+		                                                                              bccu clock */
+				
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------	Hardware resource consumption block -----------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+																					  
+		hwres_trap =  MVirtualResourceGroup("Trap", ["peripheral", "bccu", "*", "trap"], true)  /*  Trap input signal  */
+		hwres_trigger =  MVirtualResourceGroup("Trigger", ["peripheral", "bccu", "*", "trigger"], true)  /* Trigger output */
+		hwres_packer_fifo_event =  MVirtualResourceGroup("Packer", ["peripheral", "bccu", "*", "packer_fifo_event"], true)/* Packer FIFO full / empty */
+		hwres_global =  MVirtualResourceGroup("Global", ["peripheral", "bccu", "*", "global"], true) /* BCCU kernel */
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                                 Virtual Signals Definitions                                                                               */
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+		
+		vs_trap_out   =  MVirtualSignal(hwres_trap, "event_trap_output", "trap_out", true, true)
+		vs_trap_in   =  MVirtualSignal(hwres_trap, "trap_input", "trap_in", true, true)
+		vs_trigger_out0  =  MVirtualSignal(hwres_trigger, "event_trigout0 ", "trigger_out0", true, true)
+		vs_trigger_out1  =  MVirtualSignal(hwres_trigger, "event_trigout1", "trigger_out1", true, true)
+		vs_event_full  =  MVirtualSignal(hwres_packer_fifo_event, "event_fifo_full", "event_full", true, true)
+		vs_event_empty  =  MVirtualSignal(hwres_packer_fifo_event, "event_fifo_empty", "event_empty", true, true)
+		vs_global_dimming_engine  =  MVirtualSignal(hwres_global, "global_dimming_level", "globdimout", true, true)
+		
+		pclock.value = MF({appres_clock.getVal(["gfloat_pclkactfrq", "value"])}, Float)  /* peripheral clock from Clock APP*/
+		desired_fclk.value   = MF({(gfloat_desired_fast_clock_freq.value )}, Float)  /* fast clock from GUI */
+		desired_dclk.value   = MF({(gfloat_desired_dimming_clock_freq.value)}, Float)  /* Dimming Engine clock from GUI */
+		WDMBN.value   = MF({(ginteger_on_bit_insertion_threshold.value)}, Integer)
+		
+		min_cal.value = MF({(pclock.value / 4095)},Float)
+		
+		/* Updating fast clock max value based on peripheral clock */
+		gfloat_desired_fast_clock_freq.maxValue = MF({
+			 pclock.value 
+			
+		  }, Float)
+		/* Updating fast clock min value based on peripheral clock. Here prescaler value is 12-bit*/
+		gfloat_desired_fast_clock_freq.minValue = MF({
+			min_cal.value
+			
+		  }, Float)
+		
+		/* Calculating fast clock prescaler value using peripheral clock and Desired fast clock */
+		ginteger_fast_clock_prescaler_factor.value = MF({
+			Math.round(pclock.value / desired_fclk.value)
+		  }, Integer)
+
+		/* Calculating actual fast clock value based on fast clock prescaler value. fBCCUfclk = (1/FCLKPS) * fBCCUclk */
+		gfloat_actual_fast_clock_freq.value = MF({
+				(pclock.value / (float)(pclock.value / desired_fclk.value))
+			
+		  }, Float)
+						
+		gfloat_actual_fast_clock_freq.maxValue = MF({
+			 pclock.value.round(2)
+		  }, Float)
+				
+		gfloat_actual_fast_clock_freq.minValue = MF({
+			double actual_fast_clock_freq_min
+			int actual_fast_clock_freq_fp
+			actual_fast_clock_freq_fp = min_cal.value * 100
+			actual_fast_clock_freq_min = actual_fast_clock_freq_fp / 100.0
+			return(actual_fast_clock_freq_min)
+			 
+		  }, Float)
+		
+
+		/* Normal mode: BCLK = FCLK/4, fast mode :BCLK = FCLK, fBCCUbclk = (fBCCUclk/(FLCKPS * 4) */
+		gfloat_actual_bit_clock_freq.value =MF({
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+			   return((pclock.value / ((pclock.value / desired_fclk.value))) / 4)	
+			}else
+		    	{
+			   return(pclock.value / ((pclock.value / desired_fclk.value)))	
+			}		
+		  }, Float)	
+		
+		/* 	Fast clock prescaler value is 1 */	
+		gfloat_actual_bit_clock_freq.maxValue = MF({
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+				return((pclock.value / 4))
+			}else
+			{
+				return(pclock.value)
+			}
+		  }, Float)
+			
+		/* 	Fast clock prescaler value is 4095 */
+		gfloat_actual_bit_clock_freq.minValue = MF({
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+				return(( pclock.value / 16380))   /*(4095 * 4)*/
+			}else
+			{
+				return(min_cal.value)
+			}
+		  }, Float)
+		
+		/* Calculating actual bit clock time */
+		gfloat_actual_bit_clock_time.value =  MF({
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+				 return((1 /desired_fclk.value) * 4)
+			}else
+			{
+				return(1 /desired_fclk.value)
+			}
+		  }, Float)
+		
+		gfloat_actual_bit_clock_time.maxValue = MF({
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+				return((1 /pclock.value) * 16380) /* (4095 * 4) */
+			}else
+			{
+				return((1 /pclock.value) * 4095)
+			}
+		  }, Float)
+				
+		gfloat_actual_bit_clock_time.minValue = MF({
+			
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+				return(((1 /pclock.value) * 4).round(2))
+			}else
+			{
+				return((1 /pclock.value).round(2))
+			}
+		  }, Float)			
+				
+		/* calculating dimming clock prescaler */
+		ginteger_dimming_clock_prescaler_factor.value = MF({
+			Math.round(pclock.value / desired_dclk.value)
+		  }, Integer)
+		
+		gfloat_desired_dimming_clock_freq.maxValue = MF({
+			 pclock.value 
+		  }, Float)
+		
+		gfloat_desired_dimming_clock_freq.minValue = MF({
+			 min_cal.value 
+		  }, Float)
+		
+		/* calculating actual dimming clock : fBCCUdclk = fBCCUclk/DCLKPS */
+		gfloat_actual_dimming_clock_freq.value = MF({
+			(pclock.value / (float)(pclock.value / desired_dclk.value))
+			
+		 }, Float)
+		
+		gfloat_actual_dimming_clock_freq.maxValue = MF({
+		  pclock.value 
+		 }, Float)
+		
+		gfloat_actual_dimming_clock_freq.minValue = MF({
+		   min_cal.value
+		 }, Float)
+
+					
+		/* calculating longest off time. WDMBN : On bit insertion threshold */
+		gfloat_longest_off_time.value =  MF({
+			
+			(WDMBN.value -1) * gfloat_actual_bit_clock_time.value
+		  }, Float)
+		
+		gfloat_longest_off_time.minValue =  MF({
+		   /* To align with UI values(controlling 3 fractional digits)*/
+			double longest_off_time_min
+			int longest_off_time_min_fp
+			longest_off_time_min_fp = gfloat_actual_bit_clock_time.value * 100
+			longest_off_time_min = longest_off_time_min_fp/100.0
+			return (longest_off_time_min)
+		}, Float)
+		
+		gfloat_longest_off_time.maxValue =  MF({
+			/* To align with UI values(controlling 3 fractional digits)*/ 
+			return((4094 * gfloat_actual_bit_clock_time.value).round(2))
+		}, Float)
+		
+		/* calculating lowest frequency */
+		gfloat_lowest_frequency.value =  MF({
+			float actbitvalue = 0
+			if (gcombo_bit_clock_mode.value != "Fast Mode (BCLK = FCLK)")
+			{
+				actbitvalue = ((1 /desired_fclk.value) * 4)
+			}else
+			{
+				actbitvalue = (1 /desired_fclk.value)
+			}
+			return(1000000 /(WDMBN.value * actbitvalue))
+		  }, Float)
+		
+		gfloat_lowest_frequency.maxValue =  MF({
+			
+			return((1000000 /(2 * (float)gfloat_actual_bit_clock_time.value)).round(2))
+		  }, Float)
+		
+		gfloat_lowest_frequency.minValue =  MF({	
+			/* To align with UI values(controlling 3 fractional digits)*/
+			double lowest_frequency_min
+			int lowest_frequency_min_fp
+			lowest_frequency_min_fp = (1000000 /(4095 * (float)gfloat_actual_bit_clock_time.value)) * 100
+			lowest_frequency_min = lowest_frequency_min_fp/100.0
+			return(lowest_frequency_min)
+		  }, Float)
+		
+		gfloat_minimum_brightness.value =  MF({			
+			((100.00 / (float)WDMBN.value))
+		  }, Float)
+		
+		
+		gimage_bclk_mode_normal.visible = MF({gcombo_bit_clock_mode.value == "Normal Mode (BCLK = FCLK/4)"}, Boolean)
+		gimage_bclk_mode_fast.visible = MF({gcombo_bit_clock_mode.value == "Fast Mode (BCLK = FCLK)"}, Boolean)
+		
+		gimage_trigmode_0.visible = MF({gcombo_trigger_mode_select.value == "Mode 0: Trigger On Any Channel"}, Boolean)		
+		gimage_trigmode_1.visible = MF({gcombo_trigger_mode_select.value == "Mode 1: Trigger On Active Channel"}, Boolean)
+		
+		/* This delay is only functional if BCCU_bclk is generated in normal mode */
+ 		gcombo_trigger_delay_select.enabled = MF({gcombo_bit_clock_mode.value == "Normal Mode (BCLK = FCLK/4)"}, Boolean)
+		
+
+	}
+/*------------------------------------------------------- End : APP Constructor and Logic -------------------------------------------------*/
+	/* File Generation */
+	def generateFiles(){
+	
+		/* Copy global_bccu.c static file as it is */
+		copy("global_bccu.c", "global_bccu.c")
+		/* Copy global_bccu.h static file as it is */
+		copy("global_bccu.h", "global_bccu.h")
+		/* generate global_bccu_confh.h file dynamically according to user configuration */
+		generate("global_bccu_confh.tmpl", "global_bccu_conf.h")
+		/* generate global_bccu.c file dynamically according to user configuration */
+		generate("global_bccu_confc.tmpl", "global_bccu_conf.c")
+		/* generate global_bccu.h file for extern declaration*/
+		generate("global_bccu_externh.tmpl", "global_bccu_extern.h")
+	}
+	
+	
+}

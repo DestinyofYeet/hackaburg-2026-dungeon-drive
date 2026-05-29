@@ -1,0 +1,21 @@
+package Model.APPS.GLOBAL_ACMP.v4_0_6;
+
+// Import statements
+import ifx.davex.app.manifest.*
+
+abstract class GLOBAL_ACMP_GUI extends AppManifest {
+	// Begin : UI variable section
+	 public GTab tab_1;
+	 public GCheck gcheck_enable_low_power_mode;
+	 public GGroup ggroup_power_mode_selection;
+
+	 public GLOBAL_ACMP_GUI(DaveEnv daveEnv){
+
+	 tab_1 = GTab(widgetName:"tab_1", text:"General Settings", enabled:true, visible:true)
+	 gcheck_enable_low_power_mode = GCheck(widgetName:"gcheck_enable_low_power_mode", value:false, enabled:true, visible:true)
+	 ggroup_power_mode_selection = GGroup(widgetName:"ggroup_power_mode_selection", text:"Power Mode Selection", enabled:true, visible:true)
+
+
+	 }
+	// End : UI variable section
+}

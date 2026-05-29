@@ -1,0 +1,215 @@
+package Model.APPS.PDM_BCCU.v4_1_8.Templates;
+
+import Model.APPS.PDM_BCCU.v4_1_8.PDM_BCCU
+
+out.print("""
+/**
+ * @cond
+ ***********************************************************************************************************************
+ *
+ * Copyright (c) 2015, Infineon Technologies AG
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
+ * following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, this list of conditions and the  following
+ *   disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *   following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *   Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+ *   products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes
+ * with Infineon Technologies AG (dave@infineon.com).
+ ***********************************************************************************************************************
+ *
+ * Change History
+ * --------------
+ *
+ * 2015-02-16:
+ *     - Initial version<br>
+ * 2015-05-07
+ *      - Maps are used to reduce the if-else statements to assign combo options.<br>
+ *      - Local variable names are changed to lower case.<br>
+ *      - code comments added.<br>
+ *      - Template coding guidelines ensured.<br>
+ *
+ * @endcond
+ *
+ */
+/***********************************************************************************************************************
+ * HEADER FILES
+ **********************************************************************************************************************/
+#include "pdm_bccu.h"
+""");
+
+/* Variable declaration */
+String pdmbccuLabel  = null;
+String port = null;
+String pinNo = null;
+List pdmbccumappedUri = null;
+List iomappedUri = null;
+String channelNo = null;
+String mode = null;
+
+/* To identify the number of instances created in the project */
+for (PDM_BCCU pdmbccutInst : appInstancesList ) {
+	pdmbccuLabel = pdmbccutInst.getInstanceLabel()
+	pdmbccumappedUri = pdmbccutInst.hwres_bccu.getSolverUri()
+	iomappedUri = pdmbccutInst.hwres_io.getSolverUri()
+	
+    if (pdmbccumappedUri) {
+	   
+      if (pdmbccutInst.gcheck_output_enable.value == true) {
+	     port  = iomappedUri[-3]
+		 pinNo = iomappedUri[-1]
+      }
+   
+   channelNo =  pdmbccumappedUri[-1] 
+
+
+/* Local variables which holds GUI check box actions */
+   
+   int channel_initial_intensity = pdmbccutInst.ginteger_channel_initial_intensity.value; /* target intensity from GUI */
+   int desired_initial_linear_walk_time = pdmbccutInst.ginteger_linpres.value; /* Linear prescaler value from manifest */
+   boolean enb_dimming = pdmbccutInst.gcheck_dimming_input_bypass.value; /* Bypass input status from GUI */
+   boolean flicker_wdt_en = pdmbccutInst.gcheck_flicker_watchdog_enable.value; /* Bypass input status from GUI */
+   boolean packer_en = pdmbccutInst.gcheck_enable_packer_selection.value; /* Packer selection from GUI */
+   int number_of_off_bits_grouped_together = pdmbccutInst.ginteger_number_of_off_bits_grouped_together.value; /* No of OFF bits grouped from GUI */
+   int number_of_on_bits_grouped_together = pdmbccutInst.ginteger_number_of_on_bits_grouped_together.value; /* No of ON bits grouped from GUI */
+   int initial_off_bit_counter_value = pdmbccutInst.ginteger_initial_off_bit_counter_value.value; /* OFF bit counter value from GUI */
+   int initial_on_bit_counter_value = pdmbccutInst.ginteger_initial_on_bit_counter_value.value; /* ON bit counter value from GUI */
+   int packer_fifo_depth = 2;
+   boolean output_en = pdmbccutInst.gcheck_output_enable.value; /* Output enable status from GUI */
+   boolean trigger_en = pdmbccutInst.gcheck_trigger_enable.value; /* Trigger enable status from GUI */
+   boolean trap_en = pdmbccutInst.gcheck_trap_enable.value; /* Trap enable status from GUI */
+   boolean forced_trigger_en = pdmbccutInst.gcheck_forced_trigger_enable.value; /* Forced trigger enable status from GUI */
+   boolean output_gating_en = pdmbccutInst.gcheck_output_gating_enable.value; /* Output gatting enable status from GUI */
+   int output_enable
+   int alternate_output
+  	
+   String dummy_read
+   
+   if(pdmbccutInst.hwres_io.getRegValue("", "pdisc_pdis") != null)
+   {
+	 dummy_read = pdmbccutInst.hwres_io.getRegValue("", "pdisc_pdis")
+   }
+   if(pdmbccutInst.hwres_io.getRegValue("", "hwsel_hw") != null)
+   {
+	 pdmbccutInst.hwres_io.getRegValue("", "hwsel_hw")
+   }
+   
+
+   if (pdmbccutInst.gcheck_output_enable.value == true) 
+   {
+	  /* alternate outputs from solver */
+	  alternate_output = pdmbccutInst.hwres_io.getRegValue("", "iocr_pcr")
+	  /* output enable value from solver */
+	  output_enable = pdmbccutInst.hwres_io.getRegValue("", "iocr_oe")
+     if(output_enable == 1)
+	 {
+	   if(alternate_output >= 1)
+	   {
+	     if(pdmbccutInst.gcombo_output_characteristics.value == "Push Pull")
+	     {
+		   mode = "XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT" + alternate_output
+	     }
+	   else
+	   {
+		  mode = "XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT" + alternate_output
+	    }
+	  }
+    }
+  }
+
+
+ /* Assiging values to the BCCU channel data structure parameters */ 
+out.print("""
+XMC_BCCU_CH_CONFIG_t ${pdmbccuLabel}_config =
+{
+  .pack_thresh = ${packer_fifo_depth}U,
+  .pack_en = ${packer_en},
+  .dim_sel = ${pdmbccutInst.hwres_bccu.getRegValue("chconfig","chconfig_dsel")}U,
+  .dim_bypass = ${enb_dimming},
+  .gate_en = ${output_gating_en},
+  .flick_wd_en = ${flicker_wdt_en},""");
+out.print("""  
+  .trig_edge = (XMC_BCCU_CH_TRIG_EDGE_t)${["XMC_BCCU_CH_TRIG_EDGE_PASS_TO_ACT,",
+     
+		"XMC_BCCU_CH_TRIG_EDGE_ACT_TO_PASS,"
+			      
+	       ][pdmbccutInst.gcombo_trigger_edge_selection.options.indexOf(pdmbccutInst.gcombo_trigger_edge_selection.value)]}""");
+out.print("""
+  .force_trig_en = ${forced_trigger_en},
+  .pack_offcmp_lev = ${number_of_off_bits_grouped_together}U,
+  .pack_oncmp_lev = ${number_of_on_bits_grouped_together}U,
+  .pack_offcnt_val = ${initial_off_bit_counter_value}U,
+  .pack_oncnt_val = ${initial_on_bit_counter_value}U
+};
+""");
+
+/* Assiging values to the GPIO data structure parameters */
+if (pdmbccutInst.gcheck_output_enable.value == true) {
+out.print("""
+XMC_GPIO_CONFIG_t ${pdmbccuLabel}_gpio_config = 
+{
+  .mode = ${mode}
+};
+""");
+}
+/* Assiging values to the APP data structure parameters */
+out.print("""
+PDM_BCCU_t  ${pdmbccuLabel} =
+{
+  .bccu_regs = BCCU0, /* BCCU Global Register Pointer */
+  .bccu_ch = BCCU0_CH${channelNo}, /* Channel specific register set */
+  .channel_no = ${channelNo}U, /* channel Number */
+  .config = &${pdmbccuLabel}_config,  /* Reference to hardware channel configuration */  
+  .global_bccu_handleptr = (GLOBAL_BCCU_t *)&${pdmbccutInst.appres_global_bccu.getInstanceLabel()},  /* GLOBAL_BCCU APP Handle Pointer */
+  .channel_enable_at_init = """); 
+if(pdmbccutInst.gcheck_enable_channel.value == false){ out.print("""  PDM_BCCU_ENABLE_AT_INIT_FALSE""");} 
+else if(pdmbccutInst.gcheck_enable_channel.value == true){ out.print("""PDM_BCCU_ENABLE_AT_INIT_TRUE""");}
+out.print(""" , /* Enable channel at initialization */
+  .linear_walk_time = ${desired_initial_linear_walk_time}U, /* initial linear walk time */
+  .intensity = ${channel_initial_intensity}U, /* channel initial intensity */
+  .output_pin_enable = ${output_en}, /* Output Enable */
+  .trap_enable = ${trap_en},/* trap enable */
+  .output_level = ${["XMC_BCCU_CH_ACTIVE_LEVEL_HIGH,",
+    
+	             "XMC_BCCU_CH_ACTIVE_LEVEL_LOW,"
+			     
+	            ][pdmbccutInst.gcombo_output_passive_level_selection.options.indexOf(pdmbccutInst.gcombo_output_passive_level_selection.value)]}""");
+
+out.print("""
+  .trigger_en = ${trigger_en}""");
+
+out.print(""" , /* Channel trigger Edge */
+  .trigger_line = ${["XMC_BCCU_CH_TRIGOUT0,",
+    
+	             "XMC_BCCU_CH_TRIGOUT1,"
+			     
+	            ][pdmbccutInst.gcombo_trigger_output_selection.options.indexOf(pdmbccutInst.gcombo_trigger_output_selection.value)]}""");
+
+if (pdmbccutInst.gcheck_output_enable.value == true) {
+out.print("""
+  .gpio_port = XMC_GPIO_PORT${port}, /* GPIO Port Number */
+  .gpio_pin  = ${pinNo}U, /* GPIO Pin Number */
+  .gpio_config = &${pdmbccuLabel}_gpio_config /* GPIO input/output Characteristics */ """);
+  }
+out.print("""
+};
+""");
+
+  }	   
+}

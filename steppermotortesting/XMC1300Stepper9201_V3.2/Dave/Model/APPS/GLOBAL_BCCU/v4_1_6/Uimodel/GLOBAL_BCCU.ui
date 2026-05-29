@@ -1,0 +1,189 @@
+<p1:Tab  xmlns="http://www.eclipse.org/xwt/presentation" xmlns:x="http://www.eclipse.org/xwt" xmlns:p1="clr-namespace:com.ifx.davex.ui.controls.app" x:Class="e">
+	<p1:Tab.layout>
+		<GridLayout/>
+	</p1:Tab.layout>
+	<p1:TabFolder>
+		<p1:TabFolder.layoutData>
+			<GridData widthHint="783"/>
+		</p1:TabFolder.layoutData>
+		<p1:GTab text="Clock Settings" widgetName="gtab_global_clock_config" visible="true" enabled="true">
+			<p1:GTab.control>
+				<p1:Tab layout="{x:Null}">
+					<p1:GGroup text="Fast Clock (FCLK)" widgetName="ggroup_fast_clock_freq" bounds="5, 5, 395, 121">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2"/>
+						</p1:GGroup.layout>
+						<p1:GLabel text="Desired frequency [MHz]:" visible="true" widgetName="glabel_desired_fast_clock_freq">
+							<p1:GLabel.layoutData>
+								<GridData widthHint="170"/>
+							</p1:GLabel.layoutData>
+						</p1:GLabel>
+						<p1:GFloat format="*,6" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="32.0" minValue="0.007814" toolTipText="" value="0.8" widgetName="gfloat_desired_fast_clock_freq" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Allows user to configure desired Fast Clock Frequency(FCLK). &lt;/LI&gt;&lt;br&gt;&#13;&#10;&lt;LI&gt;This decides the value of fast clock prescalar factor(FCLK_PS) and Bit Clock(BCLK). By default 800KHz is set.&lt;/LI&gt;&lt;/UL&gt;">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="57"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Actual frequency [MHz]:" visible="true" widgetName="glabel_actual_fast_clock_freq"/>
+						<p1:GFloat format="*,2" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="32.0" minValue="0.007814" toolTipText="Reflecting actual fast clock frequency (FCLK)." value="0.8" widgetName="gfloat_actual_fast_clock_freq" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Reflects actual Fast Clock Frequency(FCLK) and it  is calculated as follows.&lt;/UL&gt;&lt;/LI&gt; &#13;&#10;Actual Fast Clock Frequency = (PCLK Frequency / FCLK_PS)" enabled="false">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="57"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Prescaler factor (FCLK_PS) [hex]:" visible="true" widgetName="glabel_fast_clock_prescaler_factor"/>
+						<p1:GInteger x:Style="NONE" minValue="0" maxValue="4095" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" format="(com.ifx.davex.ui.controls.util.AppUiConstants).HEX" manifestObj="true" widgetName="ginteger_fast_clock_prescaler_factor" value="200" toolTipText="Reflecting prescaler factor (FCLK_PS) of fast clock." enabled="false" description="&lt;UL&gt;&lt;LI&gt;Reflects prescaler factor (FCLK_PS) of fast clock and it is calculated as follows.&lt;/UL&gt;&lt;/LI&gt; &#13;&#10;Prescaler factor(FCLK_PS) = (PCLK Frequency / Desired FCLK).">
+							<p1:GInteger.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="70"/>
+							</p1:GInteger.layoutData>
+						</p1:GInteger>
+					</p1:GGroup>
+					<p1:GGroup text="Bit Clock (BCLK)" widgetName="ggroup_bit_clock_freq" bounds="5, 136, 395, 117">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2"/>
+						</p1:GGroup.layout>
+						<p1:GLabel text="Mode:" visible="true" widgetName="glabel_bit_clock_mode">
+							<p1:GLabel.layoutData>
+								<GridData widthHint="170"/>
+							</p1:GLabel.layoutData>
+						</p1:GLabel>
+						<p1:GCombo mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" widgetName="gcombo_bit_clock_mode" options="Normal Mode (BCLK = FCLK/4)&#13;&#10;Fast Mode (BCLK = FCLK)" value="Normal Mode (BCLK = FCLK/4)" toolTipText="*Note: BCCU trigger delay is not functional if &#13;&#10;fast mode is selected." description="Select the Bit Clock(BCLK). &#13;&#10;&lt;OL&gt;&lt;LI&gt; Normal Mode: BCLK is generated from BCCU_fclk by a division of 4.&lt;/LI&gt;&#13;&#10;&lt;LI&gt;Fast Mode: BCCU_bclk is the same as BCCU_fclk.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;">
+							<p1:GCombo.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="190"/>
+							</p1:GCombo.layoutData>
+						</p1:GCombo>
+						<p1:GLabel text="Actual frequency [MHz]:" visible="true" widgetName="glabel_actual_bit_clock_freq"/>
+						<p1:GFloat enabled="false" format="*,6" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="64.0" minValue="0.000015" toolTipText="Reflecting actual bit clock frequency (BCLK)." value="0.2" widgetName="gfloat_actual_bit_clock_freq" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Reflects actual bit clock frequency (BCLK)and it is calculated based on bit clock mode and desired fast clock frequency.&lt;/LI&gt;&lt;/UL&gt;">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="183"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Actual time [us]:" visible="true" widgetName="glabel_actual_bit_clock_time"/>
+						<p1:GFloat x:Style="BORDER" minValue="0.015" maxValue="66" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" format="*,2" manifestObj="true" widgetName="gfloat_actual_bit_clock_time" toolTipText="Reflecting actual bit clock time (BCLK)." value="5" description="&lt;UL&gt;&lt;LI&gt;Reflects actual bit clock time (BCLK) and it is calculated based on actual bit clock frequency.&lt;/UL&gt;&lt;/LI&gt;" enabled="false">
+							<p1:GFloat.layoutData>
+								<GridData widthHint="183" grabExcessHorizontalSpace="true"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+					</p1:GGroup>
+					<p1:GGroup text="Dimming Engine Clock (DCLK)" widgetName="ggroup_dimming_engine_clock_freq" toolTipText="Reflecting actual dimming engine clock frequency (DCLK)." bounds="5, 263, 395, 119">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2"/>
+						</p1:GGroup.layout>
+						<p1:GLabel text="Desired frequency [MHz]:" visible="true" widgetName="glabel_desired_dimming_clock_freq">
+							<p1:GLabel.layoutData>
+								<GridData widthHint="170"/>
+							</p1:GLabel.layoutData>
+						</p1:GLabel>
+						<p1:GFloat format="*,6" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="32.0" minValue="0.007814" toolTipText="" value="0.292237" widgetName="gfloat_desired_dimming_clock_freq" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Configure desired Dimming Engine Clock Frequency(DCLK). &lt;/LI&gt;&lt;br&gt;&#13;&#10;&lt;LI&gt;This decides the value of dimming engine clock prescalar factor(DCLK_PS) . By default 292.237KHz is set.&lt;/LI&gt;&lt;/UL&gt;">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Actual frequency [MHz]:" visible="true" widgetName="glabel_actual_dimming_clock_freq"/>
+						<p1:GFloat enabled="false" format="*,2" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="32.0" minValue="0.007814" toolTipText="Reflecting actual dimming clock frequency (DCLK)." value="0.292237" widgetName="gfloat_actual_dimming_clock_freq" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Reflects actual Dimming Engine Clock Frequency(DCLK) and it is calculated as follows.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;Actual Dimming Engine Clock Frequency = (PCLK Frequency / DCLK_PS).">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="46"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Prescaler factor (DCLK_PS) [hex]:" visible="true" widgetName="glabel_dimming_clock_prescaler_factor"/>
+						<p1:GInteger x:Style="NONE" minValue="0" maxValue="4095" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" format="(com.ifx.davex.ui.controls.util.AppUiConstants).HEX" manifestObj="true" widgetName="ginteger_dimming_clock_prescaler_factor" toolTipText="Reflecting prescaler factor (DCLK_PS) of dimming engine clock." value="110" enabled="false" description="&lt;UL&gt;&lt;LI&gt;Reflects prescaler factor (DCLK_PS) of dimming engine clock and it is calculated as follows &lt;/UL&gt;&lt;/LI&gt;&#13;&#10;Prescaler factor (DCLK_PS) = (PCLK Frequency / Desired DCLK).">
+							<p1:GInteger.layoutData>
+								<GridData widthHint="57"/>
+							</p1:GInteger.layoutData>
+						</p1:GInteger>
+					</p1:GGroup>
+					<p1:GImage visible="true" manifestObj="true" widgetName="gimage_bclk_mode_normal" bounds="409, 13, 363, 366" path="doc/UI-Clock_Configuration_normal_mode.png"/>
+					<p1:GImage manifestObj="true" path="doc/UI-Clock_Configuration_fast_mode.png" widgetName="gimage_bclk_mode_fast" bounds="409, 13, 363, 366"/>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+		<p1:GTab text="Functional Settings" visible="true" enabled="true" widgetName="gtab_global_functional_config">
+			<p1:GTab.control>
+				<p1:Tab widgetName="composite3" layout="{x:Null}">
+					<p1:GLabel text="  Initial global dimming level [dec]:" visible="true" widgetName="glabel_global_dimming_level" bounds="5, 8, 188, 15"/>
+					<p1:GInteger format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="4095" minValue="0" toolTipText="*Note: at least one dimming engine has to be enabled for global &#13;&#10;dimming level to take effect, see application hint BCCU_CM.H005 &#13;&#10;in the errata sheet." value="0" widgetName="ginteger_global_dimming_level" description="&lt;UL&gt;&lt;LI&gt;Configure dimming intensity level of Global dimming engine at initialization.&lt;/LI&gt;&lt;/UL&gt;" bounds="203, 5, 136, 23"/>
+					<p1:GGroup text="Trigger / Trap Configuration" widgetName="ggroup_trigger_trap_config" bounds="5, 36, 428, 111">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2"/>
+						</p1:GGroup.layout>
+						<p1:GLabel text="Trigger mode selection:" visible="true" widgetName="glabel_trigger_mode_select"/>
+						<p1:GCombo mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" options="Mode 0: Trigger On Any Channel&#13;&#10;Mode 1: Trigger On Active Channel" toolTipText="" value="Mode 0: Trigger On Any Channel" widgetName="gcombo_trigger_mode_select" description="Select Trigger mode.&lt;br&gt; &#13;&#10;&lt;OL&gt;&lt;LI&gt;Mode 0: BCCU trigger occurs if there is any channel trigger (OR logic). &lt;/LI&gt;&#13;&#10;&lt;LI&gt;Mode 1: BCCU trigger occurs if there is a channel trigger event on the active channel.&lt;/OL&gt;&lt;/LI&gt;&#13;&#10;&lt;UL&gt;&lt;LI&gt; When this happens, the next trigger-enabled channel will be active following the round robin.&lt;/UL&gt;&lt;/LI&gt;&#13;&#10;">
+							<p1:GCombo.layoutData>
+								<GridData horizontalAlignment="FILL"/>
+							</p1:GCombo.layoutData>
+						</p1:GCombo>
+						<p1:GLabel text="Trigger delay selection:" visible="true" widgetName="glabel_trigger_delay_select"/>
+						<p1:GCombo mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" options="BCCU Trigger On Channel Trigger&#13;&#10;BCCU Trigger Delayed By 1/4 Bit Time&#13;&#10;BCCU Trigger Delayed By 1/2 Bit Time" toolTipText="Select either zero, quarter or half bit time trigger delay." value="BCCU Trigger On Channel Trigger" widgetName="gcombo_trigger_delay_select" description="Select trigger delay.&lt;br&gt; &#13;&#10;&lt;OL&gt;&lt;LI&gt; BCCU Trigger On Channel Trigger : Channel triggers occur on  zero.&lt;/LI&gt;&#13;&#10;&lt;LI&gt;BCCU Trigger Delayed By 1/4 Bit Time :Channel triggers occur on  half bit time trigger delay.&lt;/LI&gt;&#13;&#10;&lt;LI&gt; BCCU Trigger Delayed By 1/2 Bit Time : Channel triggers occur on  quarter bit  time trigger delay.&lt;/LI&gt;&lt;/OL&gt;&#13;&#10;*Note: This delay is only functional if Bit Clock(BCLK) is in normal mode."/>
+						<p1:GLabel text="Trap edge selection:" visible="true" widgetName="glabel_trap_edge_select"/>
+						<p1:GCombo mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" options="Rising Edge&#13;&#10;Falling Edge" toolTipText="Select trap edge either rising edge or falling edge." value="Rising Edge" widgetName="gcombo_trap_edge_select" description="Select trap edge. &lt;br&gt;The trap functionality allows the BCCU outputs to react to a state of an input pin.&lt;br&gt; &#13;&#10;&lt;OL&gt;&lt;LI&gt;Rising Edge : BCCU reacts to input state transition either from passive to active level.&lt;/LI&gt;&#13;&#10;&lt;LI&gt;Falling Edge : BCCU reacts to input state transition either from active to passive level.&lt;/LI&gt;&#13;&#10;&lt;/OL&gt;">
+							<p1:GCombo.layoutData>
+								<GridData horizontalAlignment="FILL"/>
+							</p1:GCombo.layoutData>
+						</p1:GCombo>
+					</p1:GGroup>
+					<p1:GGroup text="Flicker Watchdog Settings" widgetName="ggroup_flicker_watchdog_setting" bounds="5, 157, 428, 142">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2"/>
+						</p1:GGroup.layout>
+						<p1:GLabel text="ON-bit insertion threshold [dec]:" visible="true" widgetName="glabel_on_bit_insertion_threshold">
+							<p1:GLabel.layoutData>
+								<GridData widthHint="246"/>
+							</p1:GLabel.layoutData>
+						</p1:GLabel>
+						<p1:GInteger format="(com.ifx.davex.ui.controls.util.AppUiConstants).DEC" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="4095" minValue="2" toolTipText="Enter the maximum number of consecutive zeroes &#13;&#10;allowed at the output of the sigma-delta modulators. " value="800" widgetName="ginteger_on_bit_insertion_threshold" description="&lt;UL&gt;&lt;LI&gt;Allows user to configure the number of consecutive off-bits (0) at the output to avoid visible flickering. The maximum number of off-bits allowed is determined by BCCU_GLOBCON.WDMBN.&lt;/LI&gt;&#13;&#10;&lt;LI&gt; If the number of consecutive off-bits reaches this threshold, an on-bit (1) is inserted into the bitstream.&lt;/UL&gt;&lt;/LI&gt;">
+							<p1:GInteger.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="129"/>
+							</p1:GInteger.layoutData>
+						</p1:GInteger>
+						<p1:GLabel text="Minimum brightness [%]:" visible="true" widgetName="glabel_minimum_brightness"/>
+						<p1:GFloat enabled="false" format="*,2" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="100.00" minValue="0.00" toolTipText="Reflecting miminum brightness at modulator output = 100 / ON-bit insertion threshold." value="80" widgetName="gfloat_minimum_brightness" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Reflects miminum brightness at modulator output = 100 / ON-bit insertion threshold.&lt;/UL&gt;&lt;/LI&gt;">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="116"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Longest OFF-time at modulator output [us]:" visible="true" widgetName="glabel_longest_off_time"/>
+						<p1:GFloat x:Style="BORDER" minValue="0" maxValue="270270" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" format="*,2" manifestObj="true" widgetName="gfloat_longest_off_time" toolTipText="Reflecting allowable longest OFF-time at modulator output = WDMBN * actual bit time." value="4000" enabled="false">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="116"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+						<p1:GLabel text="Lowest frequency at modulator output [Hz]:" visible="true" widgetName="glabel_lowest_frequency"/>
+						<p1:GFloat enabled="false" format="*,2" mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" maxValue="64000000" minValue="1" toolTipText="Reflecting allowable lowest frequency at modulator output = ( 1 / ((1+WDMBN) )*actual bit time." value="250" widgetName="gfloat_lowest_frequency" x:Style="BORDER" description="&lt;UL&gt;&lt;LI&gt;Reflects allowable lowest frequency at modulator output = ( 1 / ((1+WDMBN) )*actual bit time.&lt;/UL&gt;&lt;/LI&gt;">
+							<p1:GFloat.layoutData>
+								<GridData grabExcessHorizontalSpace="true" widthHint="116"/>
+							</p1:GFloat.layoutData>
+						</p1:GFloat>
+					</p1:GGroup>
+					<p1:GImage visible="true" manifestObj="true" widgetName="gimage_trigmode_0" bounds="439, 4, 337, 188" path="doc/UI-Global_Configuration_mode_0.png"/>
+					<p1:GImage manifestObj="true" widgetName="gimage_trigmode_1" path="doc/UI-Global_Configuration_mode_1.png" bounds="439, 4, 337, 188"/>
+					<p1:GImage visible="true" manifestObj="true" widgetName="gimage_watchdog" bounds="439, 198, 337, 101" path="doc/UI-Global_Configuration_watchdog.png"/>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+		<p1:GTab text="Event Settings" visible="true" enabled="true" widgetName="gtab_global_interrupt_config">
+			<p1:GTab.control>
+				<p1:Tab widgetName="composite11">
+					<p1:Tab.layout>
+						<GridLayout/>
+					</p1:Tab.layout>
+					<p1:GGroup text="Interrupt Configuration" widgetName="ggroup_bccu_interrupt_config">
+						<p1:GGroup.layout>
+							<GridLayout numColumns="2" makeColumnsEqualWidth="true"/>
+						</p1:GGroup.layout>
+						<p1:GGroup.layoutData>
+							<GridData grabExcessHorizontalSpace="true" heightHint="84" widthHint="450"/>
+						</p1:GGroup.layoutData>
+						<p1:GCheck manifestObj="true" text="Enable trigger 0 interrupt" toolTipText="" widgetName="gcheck_enable_trigger0_interrupt" description="&lt;UL&gt;&lt;LI&gt;Configures trigger 0 interrupt.&lt;/UL&gt;&lt;/LI&gt;"/>
+						<p1:GCheck manifestObj="true" text="Enable trigger 1 interrupt" toolTipText="" widgetName="gcheck_enable_trigger1_interrupt" description="&lt;UL&gt;&lt;LI&gt;Configures trigger 1 interrupt.&lt;/UL&gt;&lt;/LI&gt;">
+							<p1:GCheck.layoutData>
+								<GridData grabExcessHorizontalSpace="true"/>
+							</p1:GCheck.layoutData>
+						</p1:GCheck>
+						<p1:GCheck manifestObj="true" text="Enable FIFO full interrupt" toolTipText="" widgetName="gcheck_enable_fifo_full_interrupt" description="&lt;UL&gt;&lt;LI&gt;Configures FIFO full interrupt.&lt;/UL&gt;&lt;/LI&gt;"/>
+						<p1:GCheck manifestObj="true" text="Enable FIFO empty interrupt" toolTipText="" widgetName="gcheck_enable_fifo_empty_interrupt" description="&lt;UL&gt;&lt;LI&gt;Configures FIFO empty interrupt.&lt;/UL&gt;&lt;/LI&gt;"/>
+						<p1:GCheck manifestObj="true" text="Enable TRAP interrupt" toolTipText="" widgetName="gcheck_enable_trap_interrupt" description="&lt;UL&gt;&lt;LI&gt;Configures TRAP interrupt.&lt;/UL&gt;&lt;/LI&gt;"/>
+						<Label/>
+					</p1:GGroup>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+	</p1:TabFolder>
+</p1:Tab>

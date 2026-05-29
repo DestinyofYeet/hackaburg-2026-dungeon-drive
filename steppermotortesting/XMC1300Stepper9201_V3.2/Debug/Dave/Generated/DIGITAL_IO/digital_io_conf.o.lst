@@ -1,0 +1,218 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "digital_io_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global Input_DIS
+  18              	 .section .rodata.Input_DIS,"a",%progbits
+  19              	 .align 2
+  22              	Input_DIS:
+  23 0000 00000440 	 .word 1074003968
+  24 0004 08       	 .byte 8
+  25 0005 00       	 .byte 0
+  26 0006 00000000 	 .space 6
+  26      0000
+  27 000c 06       	 .byte 6
+  28 000d 00       	 .byte 0
+  29 000e 0000     	 .space 2
+  30              	 .global Input_DIR
+  31              	 .section .rodata.Input_DIR,"a",%progbits
+  32              	 .align 2
+  35              	Input_DIR:
+  36 0000 00000440 	 .word 1074003968
+  37 0004 08       	 .byte 8
+  38 0005 00       	 .byte 0
+  39 0006 00000000 	 .space 6
+  39      0000
+  40 000c 03       	 .byte 3
+  41 000d 00       	 .byte 0
+  42 000e 0000     	 .space 2
+  43              	 .global DisablePwrBridges
+  44              	 .section .rodata.DisablePwrBridges,"a",%progbits
+  45              	 .align 2
+  48              	DisablePwrBridges:
+  49 0000 00000440 	 .word 1074003968
+  50 0004 80       	 .byte -128
+  51 0005 000000   	 .space 3
+  52 0008 01000000 	 .word 1
+  53 000c 07       	 .byte 7
+  54 000d 00       	 .byte 0
+  55 000e 0000     	 .space 2
+  56              	 .global DIRSin
+  57              	 .section .rodata.DIRSin,"a",%progbits
+  58              	 .align 2
+  61              	DIRSin:
+  62 0000 00000440 	 .word 1074003968
+  63 0004 80       	 .byte -128
+  64 0005 000000   	 .space 3
+  65 0008 00000100 	 .word 65536
+  66 000c 0C       	 .byte 12
+  67 000d 00       	 .byte 0
+  68 000e 0000     	 .space 2
+  69              	 .global DIRCos
+  70              	 .section .rodata.DIRCos,"a",%progbits
+  71              	 .align 2
+  74              	DIRCos:
+  75 0000 00000440 	 .word 1074003968
+  76 0004 80       	 .byte -128
+  77 0005 000000   	 .space 3
+  78 0008 00000100 	 .word 65536
+  79 000c 08       	 .byte 8
+  80 000d 00       	 .byte 0
+  81 000e 0000     	 .space 2
+  82              	 .global DigIn_GateTimeSin
+  83              	 .section .rodata.DigIn_GateTimeSin,"a",%progbits
+  84              	 .align 2
+  87              	DigIn_GateTimeSin:
+  88 0000 00020440 	 .word 1074004480
+  89 0004 10       	 .byte 16
+  90 0005 00       	 .byte 0
+  91 0006 00000000 	 .space 6
+  91      0000
+  92 000c 02       	 .byte 2
+  93 000d 00       	 .byte 0
+  94 000e 0000     	 .space 2
+  95              	 .global DigIn_GateTimeCos
+  96              	 .section .rodata.DigIn_GateTimeCos,"a",%progbits
+  97              	 .align 2
+ 100              	DigIn_GateTimeCos:
+ 101 0000 00020440 	 .word 1074004480
+ 102 0004 10       	 .byte 16
+ 103 0005 00       	 .byte 0
+ 104 0006 00000000 	 .space 6
+ 104      0000
+ 105 000c 03       	 .byte 3
+ 106 000d 00       	 .byte 0
+ 107 000e 0000     	 .space 2
+ 108              	 .global DigIn_StartGateTimeCos
+ 109              	 .section .rodata.DigIn_StartGateTimeCos,"a",%progbits
+ 110              	 .align 2
+ 113              	DigIn_StartGateTimeCos:
+ 114 0000 00000440 	 .word 1074003968
+ 115 0004 00       	 .byte 0
+ 116 0005 00       	 .byte 0
+ 117 0006 00000000 	 .space 6
+ 117      0000
+ 118 000c 02       	 .byte 2
+ 119 000d 00       	 .byte 0
+ 120 000e 0000     	 .space 2
+ 121              	 .global DigIn_StartGateTimeSin
+ 122              	 .section .rodata.DigIn_StartGateTimeSin,"a",%progbits
+ 123              	 .align 2
+ 126              	DigIn_StartGateTimeSin:
+ 127 0000 00000440 	 .word 1074003968
+ 128 0004 00       	 .byte 0
+ 129 0005 00       	 .byte 0
+ 130 0006 00000000 	 .space 6
+ 130      0000
+ 131 000c 09       	 .byte 9
+ 132 000d 00       	 .byte 0
+ 133 000e 0000     	 .space 2
+ 134              	 .global BridgeErrorSin
+ 135              	 .section .rodata.BridgeErrorSin,"a",%progbits
+ 136              	 .align 2
+ 139              	BridgeErrorSin:
+ 140 0000 00010440 	 .word 1074004224
+ 141 0004 80       	 .byte -128
+ 142 0005 000000   	 .space 3
+ 143 0008 00000100 	 .word 65536
+ 144 000c 05       	 .byte 5
+ 145 000d 00       	 .byte 0
+ 146 000e 0000     	 .space 2
+ 147              	 .global BridgeErrorCos
+ 148              	 .section .rodata.BridgeErrorCos,"a",%progbits
+ 149              	 .align 2
+ 152              	BridgeErrorCos:
+ 153 0000 00010440 	 .word 1074004224
+ 154 0004 00       	 .byte 0
+ 155 0005 00       	 .byte 0
+ 156 0006 00000000 	 .space 6
+ 156      0000
+ 157 000c 04       	 .byte 4
+ 158 000d 00       	 .byte 0
+ 159 000e 0000     	 .space 2
+ 160              	 .global Input_STEPviaBCCUTrap
+ 161              	 .section .rodata.Input_STEPviaBCCUTrap,"a",%progbits
+ 162              	 .align 2
+ 165              	Input_STEPviaBCCUTrap:
+ 166 0000 00000440 	 .word 1074003968
+ 167 0004 08       	 .byte 8
+ 168 0005 00       	 .byte 0
+ 169 0006 00000000 	 .space 6
+ 169      0000
+ 170 000c 00       	 .byte 0
+ 171 000d 00       	 .byte 0
+ 172 000e 0000     	 .space 2
+ 173              	 .global TestOutput
+ 174              	 .section .rodata.TestOutput,"a",%progbits
+ 175              	 .align 2
+ 178              	TestOutput:
+ 179 0000 00000440 	 .word 1074003968
+ 180 0004 80       	 .byte -128
+ 181 0005 000000   	 .space 3
+ 182 0008 00000100 	 .word 65536
+ 183 000c 0B       	 .byte 11
+ 184 000d 00       	 .byte 0
+ 185 000e 0000     	 .space 2
+ 186              	 .global DiagLED
+ 187              	 .section .rodata.DiagLED,"a",%progbits
+ 188              	 .align 2
+ 191              	DiagLED:
+ 192 0000 00010440 	 .word 1074004224
+ 193 0004 80       	 .byte -128
+ 194 0005 000000   	 .space 3
+ 195 0008 01000000 	 .word 1
+ 196 000c 01       	 .byte 1
+ 197 000d 00       	 .byte 0
+ 198 000e 0000     	 .space 2
+ 199              	 .text
+ 200              	.Letext0:
+ 201              	 .file 1 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 202              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 203              	 .file 3 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_gpio.h"
+ 204              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc1_gpio.h"
+ 205              	 .file 5 "../Dave/Generated/DIGITAL_IO/digital_io.h"
+ 206              	 .file 6 "../Dave/Generated/DIGITAL_IO/digital_io_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 digital_io_conf.c
+    {standard input}:22     .rodata.Input_DIS:00000000 Input_DIS
+    {standard input}:19     .rodata.Input_DIS:00000000 $d
+    {standard input}:35     .rodata.Input_DIR:00000000 Input_DIR
+    {standard input}:32     .rodata.Input_DIR:00000000 $d
+    {standard input}:48     .rodata.DisablePwrBridges:00000000 DisablePwrBridges
+    {standard input}:45     .rodata.DisablePwrBridges:00000000 $d
+    {standard input}:61     .rodata.DIRSin:00000000 DIRSin
+    {standard input}:58     .rodata.DIRSin:00000000 $d
+    {standard input}:74     .rodata.DIRCos:00000000 DIRCos
+    {standard input}:71     .rodata.DIRCos:00000000 $d
+    {standard input}:87     .rodata.DigIn_GateTimeSin:00000000 DigIn_GateTimeSin
+    {standard input}:84     .rodata.DigIn_GateTimeSin:00000000 $d
+    {standard input}:100    .rodata.DigIn_GateTimeCos:00000000 DigIn_GateTimeCos
+    {standard input}:97     .rodata.DigIn_GateTimeCos:00000000 $d
+    {standard input}:113    .rodata.DigIn_StartGateTimeCos:00000000 DigIn_StartGateTimeCos
+    {standard input}:110    .rodata.DigIn_StartGateTimeCos:00000000 $d
+    {standard input}:126    .rodata.DigIn_StartGateTimeSin:00000000 DigIn_StartGateTimeSin
+    {standard input}:123    .rodata.DigIn_StartGateTimeSin:00000000 $d
+    {standard input}:139    .rodata.BridgeErrorSin:00000000 BridgeErrorSin
+    {standard input}:136    .rodata.BridgeErrorSin:00000000 $d
+    {standard input}:152    .rodata.BridgeErrorCos:00000000 BridgeErrorCos
+    {standard input}:149    .rodata.BridgeErrorCos:00000000 $d
+    {standard input}:165    .rodata.Input_STEPviaBCCUTrap:00000000 Input_STEPviaBCCUTrap
+    {standard input}:162    .rodata.Input_STEPviaBCCUTrap:00000000 $d
+    {standard input}:178    .rodata.TestOutput:00000000 TestOutput
+    {standard input}:175    .rodata.TestOutput:00000000 $d
+    {standard input}:191    .rodata.DiagLED:00000000 DiagLED
+    {standard input}:188    .rodata.DiagLED:00000000 $d
+
+NO UNDEFINED SYMBOLS

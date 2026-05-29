@@ -1,0 +1,772 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "XMC1000_tseRoutine.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .comm tse_k1_ptr,4,4
+  18              	 .comm tse_k3_ptr,4,4
+  19              	 .comm tse_k2_ptr,4,4
+  20              	 .comm tse_min_ptr,4,4
+  21              	 .comm tse_max_ptr,4,4
+  22              	 .comm tse_corrdata_ptr,4,4
+  23              	 .section .text.sqrt_5,"ax",%progbits
+  24              	 .align 2
+  25              	 .global sqrt_5
+  26              	 .code 16
+  27              	 .thumb_func
+  29              	sqrt_5:
+  30              	.LFB34:
+  31              	 .file 1 "../XMC1000_tseRoutine.c"
+   1:../XMC1000_tseRoutine.c **** /******************************************************************************
+   2:../XMC1000_tseRoutine.c **** File:			TIMM1_UserRoutines.c
+   3:../XMC1000_tseRoutine.c **** 
+   4:../XMC1000_tseRoutine.c **** 	===========================================================================
+   5:../XMC1000_tseRoutine.c **** 	Copyright (C) 2012 � Infineon Technologies AG (IFX).
+   6:../XMC1000_tseRoutine.c **** 	All rights reserved.
+   7:../XMC1000_tseRoutine.c **** 	This document contains proprietary information belonging to IFX here.
+   8:../XMC1000_tseRoutine.c **** 	Passing on and copying of this document, and communication of its
+   9:../XMC1000_tseRoutine.c **** 	contents is not permitted without prior written authorisation.
+  10:../XMC1000_tseRoutine.c **** 	===========================================================================
+  11:../XMC1000_tseRoutine.c **** 
+  12:../XMC1000_tseRoutine.c **** 
+  13:../XMC1000_tseRoutine.c **** *//** @file
+  14:../XMC1000_tseRoutine.c **** @brief      Implementation of the firmware routines in BootROM available to user.
+  15:../XMC1000_tseRoutine.c **** ******************************************************************************/
+  16:../XMC1000_tseRoutine.c **** #include <XMC1300.h>
+  17:../XMC1000_tseRoutine.c **** 
+  18:../XMC1000_tseRoutine.c **** // fast square root algorithm taken from 
+  19:../XMC1000_tseRoutine.c **** // Otto Peter: Prozessor zieht Wurzel, c't 1990, Heft 1, page 300-306
+  20:../XMC1000_tseRoutine.c **** #define N_BITS 32
+  21:../XMC1000_tseRoutine.c **** #define MAX_BIT ((N_BITS + 1) / 2 - 1)
+  22:../XMC1000_tseRoutine.c **** 
+  23:../XMC1000_tseRoutine.c **** #define TRUE 1
+  24:../XMC1000_tseRoutine.c **** #define FALSE 0
+  25:../XMC1000_tseRoutine.c **** 
+  26:../XMC1000_tseRoutine.c **** uint32_t *tse_k1_ptr;
+  27:../XMC1000_tseRoutine.c **** uint32_t *tse_k3_ptr;
+  28:../XMC1000_tseRoutine.c **** uint32_t *tse_k2_ptr;
+  29:../XMC1000_tseRoutine.c **** uint16_t *tse_min_ptr;
+  30:../XMC1000_tseRoutine.c **** uint16_t *tse_max_ptr;
+  31:../XMC1000_tseRoutine.c **** int8_t *tse_corrdata_ptr;
+  32:../XMC1000_tseRoutine.c **** 
+  33:../XMC1000_tseRoutine.c **** /**************************************************************************//**
+  34:../XMC1000_tseRoutine.c **** Purpose:        Implemetation of fast square root algorithm after Otto Peter's 
+  35:../XMC1000_tseRoutine.c ****                 (Otto Peter: Prozessor zieht Wurzel, c't 1990, Heft 1, page 300-306)
+  36:../XMC1000_tseRoutine.c ****  
+  37:../XMC1000_tseRoutine.c **** @requirements   None   
+  38:../XMC1000_tseRoutine.c **** @param          uint32_t    integer number unsigned
+  39:../XMC1000_tseRoutine.c **** @return         square root
+  40:../XMC1000_tseRoutine.c **** ******************************************************************************/
+  41:../XMC1000_tseRoutine.c **** uint32_t sqrt_5(uint32_t x)
+  42:../XMC1000_tseRoutine.c **** {
+  32              	 .loc 1 42 0
+  33              	 .cfi_startproc
+  34 0000 80B5     	 push {r7,lr}
+  35              	.LCFI0:
+  36              	 .cfi_def_cfa_offset 8
+  37              	 .cfi_offset 7,-8
+  38              	 .cfi_offset 14,-4
+  39 0002 86B0     	 sub sp,sp,#24
+  40              	.LCFI1:
+  41              	 .cfi_def_cfa_offset 32
+  42 0004 00AF     	 add r7,sp,#0
+  43              	.LCFI2:
+  44              	 .cfi_def_cfa_register 7
+  45 0006 7860     	 str r0,[r7,#4]
+  43:../XMC1000_tseRoutine.c ****     uint32_t xroot, m2, x2;
+  44:../XMC1000_tseRoutine.c **** 
+  45:../XMC1000_tseRoutine.c ****     xroot = 0;
+  46              	 .loc 1 45 0
+  47 0008 0023     	 mov r3,#0
+  48 000a 7B61     	 str r3,[r7,#20]
+  46:../XMC1000_tseRoutine.c ****     m2 = 1 << MAX_BIT * 2;
+  49              	 .loc 1 46 0
+  50 000c 8023     	 mov r3,#128
+  51 000e DB05     	 lsl r3,r3,#23
+  52 0010 3B61     	 str r3,[r7,#16]
+  53              	.L3:
+  47:../XMC1000_tseRoutine.c ****     do
+  48:../XMC1000_tseRoutine.c ****     {
+  49:../XMC1000_tseRoutine.c **** 		x2 = xroot + m2;
+  54              	 .loc 1 49 0
+  55 0012 7A69     	 ldr r2,[r7,#20]
+  56 0014 3B69     	 ldr r3,[r7,#16]
+  57 0016 D318     	 add r3,r2,r3
+  58 0018 FB60     	 str r3,[r7,#12]
+  50:../XMC1000_tseRoutine.c **** 		xroot >>= 1;
+  59              	 .loc 1 50 0
+  60 001a 7B69     	 ldr r3,[r7,#20]
+  61 001c 5B08     	 lsr r3,r3,#1
+  62 001e 7B61     	 str r3,[r7,#20]
+  51:../XMC1000_tseRoutine.c **** 		if(x2<=x)
+  63              	 .loc 1 51 0
+  64 0020 FA68     	 ldr r2,[r7,#12]
+  65 0022 7B68     	 ldr r3,[r7,#4]
+  66 0024 9A42     	 cmp r2,r3
+  67 0026 07D8     	 bhi .L2
+  52:../XMC1000_tseRoutine.c **** 		{
+  53:../XMC1000_tseRoutine.c **** 			x -= x2; xroot += m2;
+  68              	 .loc 1 53 0
+  69 0028 7A68     	 ldr r2,[r7,#4]
+  70 002a FB68     	 ldr r3,[r7,#12]
+  71 002c D31A     	 sub r3,r2,r3
+  72 002e 7B60     	 str r3,[r7,#4]
+  73 0030 7A69     	 ldr r2,[r7,#20]
+  74 0032 3B69     	 ldr r3,[r7,#16]
+  75 0034 D318     	 add r3,r2,r3
+  76 0036 7B61     	 str r3,[r7,#20]
+  77              	.L2:
+  54:../XMC1000_tseRoutine.c **** 		}
+  55:../XMC1000_tseRoutine.c ****     }while (m2 >>= 2);
+  78              	 .loc 1 55 0
+  79 0038 3B69     	 ldr r3,[r7,#16]
+  80 003a 9B08     	 lsr r3,r3,#2
+  81 003c 3B61     	 str r3,[r7,#16]
+  82 003e 3B69     	 ldr r3,[r7,#16]
+  83 0040 002B     	 cmp r3,#0
+  84 0042 E6D1     	 bne .L3
+  56:../XMC1000_tseRoutine.c **** 
+  57:../XMC1000_tseRoutine.c ****     if(xroot < x) return xroot + 1;		// rounding, necessary
+  85              	 .loc 1 57 0
+  86 0044 7A69     	 ldr r2,[r7,#20]
+  87 0046 7B68     	 ldr r3,[r7,#4]
+  88 0048 9A42     	 cmp r2,r3
+  89 004a 02D2     	 bcs .L4
+  90              	 .loc 1 57 0 is_stmt 0 discriminator 1
+  91 004c 7B69     	 ldr r3,[r7,#20]
+  92 004e 0133     	 add r3,r3,#1
+  93 0050 00E0     	 b .L5
+  94              	.L4:
+  58:../XMC1000_tseRoutine.c **** 
+  59:../XMC1000_tseRoutine.c ****     return xroot;
+  95              	 .loc 1 59 0 is_stmt 1
+  96 0052 7B69     	 ldr r3,[r7,#20]
+  97              	.L5:
+  60:../XMC1000_tseRoutine.c **** }
+  98              	 .loc 1 60 0
+  99 0054 181C     	 mov r0,r3
+ 100 0056 BD46     	 mov sp,r7
+ 101 0058 06B0     	 add sp,sp,#24
+ 102              	 
+ 103 005a 80BD     	 pop {r7,pc}
+ 104              	 .cfi_endproc
+ 105              	.LFE34:
+ 107              	 .global __aeabi_idiv
+ 108              	 .section .text.XMC1000_CalcTemperature,"ax",%progbits
+ 109              	 .align 2
+ 110              	 .global XMC1000_CalcTemperature
+ 111              	 .code 16
+ 112              	 .thumb_func
+ 114              	XMC1000_CalcTemperature:
+ 115              	.LFB35:
+  61:../XMC1000_tseRoutine.c **** 
+  62:../XMC1000_tseRoutine.c **** 
+  63:../XMC1000_tseRoutine.c **** 
+  64:../XMC1000_tseRoutine.c **** #define MIN_TEMP_KELVIN      (233)
+  65:../XMC1000_tseRoutine.c **** #define MAX_TEMP_KELVIN      (398)
+  66:../XMC1000_tseRoutine.c **** #define ZERO_TEMP_KELVIN     (273)
+  67:../XMC1000_tseRoutine.c **** 
+  68:../XMC1000_tseRoutine.c **** /**************************************************************************//**
+  69:../XMC1000_tseRoutine.c **** Purpose:        Implemetation of CalcTemperature function
+  70:../XMC1000_tseRoutine.c ****    
+  71:../XMC1000_tseRoutine.c **** @requirements   None   
+  72:../XMC1000_tseRoutine.c **** @param          None          
+  73:../XMC1000_tseRoutine.c **** @return         uint32_t
+  74:../XMC1000_tseRoutine.c **** 
+  75:../XMC1000_tseRoutine.c **** Detailed description: The function is used to convert the ANATSEMON values to Kelvin. 
+  76:../XMC1000_tseRoutine.c **** 
+  77:../XMC1000_tseRoutine.c **** ******************************************************************************/
+  78:../XMC1000_tseRoutine.c **** uint32_t XMC1000_CalcTemperature(void)
+  79:../XMC1000_tseRoutine.c **** {
+ 116              	 .loc 1 79 0
+ 117              	 .cfi_startproc
+ 118 0000 80B5     	 push {r7,lr}
+ 119              	.LCFI3:
+ 120              	 .cfi_def_cfa_offset 8
+ 121              	 .cfi_offset 7,-8
+ 122              	 .cfi_offset 14,-4
+ 123 0002 8AB0     	 sub sp,sp,#40
+ 124              	.LCFI4:
+ 125              	 .cfi_def_cfa_offset 48
+ 126 0004 00AF     	 add r7,sp,#0
+ 127              	.LCFI5:
+ 128              	 .cfi_def_cfa_register 7
+  80:../XMC1000_tseRoutine.c ****     uint32_t rx;
+  81:../XMC1000_tseRoutine.c ****     int32_t  ik1, ik3, ik2;
+  82:../XMC1000_tseRoutine.c ****     int32_t  h1, h3;
+  83:../XMC1000_tseRoutine.c ****     
+  84:../XMC1000_tseRoutine.c ****     uint16_t tempConfigRecord;
+  85:../XMC1000_tseRoutine.c ****     uint32_t calcTemperature;
+  86:../XMC1000_tseRoutine.c ****     int8_t  tse_corrdata;
+  87:../XMC1000_tseRoutine.c **** 
+  88:../XMC1000_tseRoutine.c ****     tse_k1_ptr = (uint32_t*)0x10000F20;
+ 129              	 .loc 1 88 0
+ 130 0006 4B4B     	 ldr r3,.L12
+ 131 0008 4B4A     	 ldr r2,.L12+4
+ 132 000a 1A60     	 str r2,[r3]
+  89:../XMC1000_tseRoutine.c ****     tse_k3_ptr = (uint32_t*)0x10000F24;
+ 133              	 .loc 1 89 0
+ 134 000c 4B4B     	 ldr r3,.L12+8
+ 135 000e 4C4A     	 ldr r2,.L12+12
+ 136 0010 1A60     	 str r2,[r3]
+  90:../XMC1000_tseRoutine.c ****     tse_k2_ptr = (uint32_t*)0x10000F28;
+ 137              	 .loc 1 90 0
+ 138 0012 4C4B     	 ldr r3,.L12+16
+ 139 0014 4C4A     	 ldr r2,.L12+20
+ 140 0016 1A60     	 str r2,[r3]
+  91:../XMC1000_tseRoutine.c ****     ik1 = (uint32_t) *tse_k1_ptr; //ANA_TSE_k1
+ 141              	 .loc 1 91 0
+ 142 0018 464B     	 ldr r3,.L12
+ 143 001a 1B68     	 ldr r3,[r3]
+ 144 001c 1B68     	 ldr r3,[r3]
+ 145 001e FB61     	 str r3,[r7,#28]
+  92:../XMC1000_tseRoutine.c ****     ik3 = (uint32_t) *tse_k3_ptr; //ANA_TSE_k3
+ 146              	 .loc 1 92 0
+ 147 0020 464B     	 ldr r3,.L12+8
+ 148 0022 1B68     	 ldr r3,[r3]
+ 149 0024 1B68     	 ldr r3,[r3]
+ 150 0026 BB61     	 str r3,[r7,#24]
+  93:../XMC1000_tseRoutine.c ****     ik2 = (uint32_t) *tse_k2_ptr; //ANA_TSE_k2
+ 151              	 .loc 1 93 0
+ 152 0028 464B     	 ldr r3,.L12+16
+ 153 002a 1B68     	 ldr r3,[r3]
+ 154 002c 1B68     	 ldr r3,[r3]
+ 155 002e 7B61     	 str r3,[r7,#20]
+  94:../XMC1000_tseRoutine.c **** 
+  95:../XMC1000_tseRoutine.c ****     rx  = (uint32_t) SCU_ANALOG->ANATSEMON; //SCU_ANATSEMON.TSE_MON;
+ 156              	 .loc 1 95 0
+ 157 0030 464A     	 ldr r2,.L12+24
+ 158 0032 4023     	 mov r3,#64
+ 159 0034 D35A     	 ldrh r3,[r2,r3]
+ 160 0036 9BB2     	 uxth r3,r3
+ 161 0038 7B62     	 str r3,[r7,#36]
+  96:../XMC1000_tseRoutine.c **** 
+  97:../XMC1000_tseRoutine.c ****     /** Check the lower limit, if bellow use configANATSEMON_min as reference value */
+  98:../XMC1000_tseRoutine.c ****     tse_min_ptr = (uint16_t*)0x10000F2C; //ANATSEMON_min
+ 162              	 .loc 1 98 0
+ 163 003a 454B     	 ldr r3,.L12+28
+ 164 003c 454A     	 ldr r2,.L12+32
+ 165 003e 1A60     	 str r2,[r3]
+  99:../XMC1000_tseRoutine.c ****     tempConfigRecord = (uint16_t) *tse_min_ptr;
+ 166              	 .loc 1 99 0
+ 167 0040 434B     	 ldr r3,.L12+28
+ 168 0042 1A68     	 ldr r2,[r3]
+ 169 0044 1223     	 mov r3,#18
+ 170 0046 FB18     	 add r3,r7,r3
+ 171 0048 1288     	 ldrh r2,[r2]
+ 172 004a 1A80     	 strh r2,[r3]
+ 100:../XMC1000_tseRoutine.c ****     if(rx > tempConfigRecord)
+ 173              	 .loc 1 100 0
+ 174 004c 1223     	 mov r3,#18
+ 175 004e FB18     	 add r3,r7,r3
+ 176 0050 1A88     	 ldrh r2,[r3]
+ 177 0052 7B6A     	 ldr r3,[r7,#36]
+ 178 0054 9A42     	 cmp r2,r3
+ 179 0056 03D2     	 bcs .L7
+ 101:../XMC1000_tseRoutine.c ****     {
+ 102:../XMC1000_tseRoutine.c ****         rx = tempConfigRecord;
+ 180              	 .loc 1 102 0
+ 181 0058 1223     	 mov r3,#18
+ 182 005a FB18     	 add r3,r7,r3
+ 183 005c 1B88     	 ldrh r3,[r3]
+ 184 005e 7B62     	 str r3,[r7,#36]
+ 185              	.L7:
+ 103:../XMC1000_tseRoutine.c ****     }
+ 104:../XMC1000_tseRoutine.c **** 
+ 105:../XMC1000_tseRoutine.c ****     /** Check the higher limit, if above use configANATSEMON_max as reverence value */
+ 106:../XMC1000_tseRoutine.c ****     tse_max_ptr = (uint16_t*)0x10000F2E;
+ 186              	 .loc 1 106 0
+ 187 0060 3D4B     	 ldr r3,.L12+36
+ 188 0062 3E4A     	 ldr r2,.L12+40
+ 189 0064 1A60     	 str r2,[r3]
+ 107:../XMC1000_tseRoutine.c ****     tempConfigRecord = (uint16_t) *tse_max_ptr; //ANATSEMON_max;
+ 190              	 .loc 1 107 0
+ 191 0066 3C4B     	 ldr r3,.L12+36
+ 192 0068 1A68     	 ldr r2,[r3]
+ 193 006a 1223     	 mov r3,#18
+ 194 006c FB18     	 add r3,r7,r3
+ 195 006e 1288     	 ldrh r2,[r2]
+ 196 0070 1A80     	 strh r2,[r3]
+ 108:../XMC1000_tseRoutine.c ****     if(rx < tempConfigRecord)
+ 197              	 .loc 1 108 0
+ 198 0072 1223     	 mov r3,#18
+ 199 0074 FB18     	 add r3,r7,r3
+ 200 0076 1A88     	 ldrh r2,[r3]
+ 201 0078 7B6A     	 ldr r3,[r7,#36]
+ 202 007a 9A42     	 cmp r2,r3
+ 203 007c 03D9     	 bls .L8
+ 109:../XMC1000_tseRoutine.c ****     {
+ 110:../XMC1000_tseRoutine.c ****         rx = tempConfigRecord;
+ 204              	 .loc 1 110 0
+ 205 007e 1223     	 mov r3,#18
+ 206 0080 FB18     	 add r3,r7,r3
+ 207 0082 1B88     	 ldrh r3,[r3]
+ 208 0084 7B62     	 str r3,[r7,#36]
+ 209              	.L8:
+ 111:../XMC1000_tseRoutine.c ****     }
+ 112:../XMC1000_tseRoutine.c **** 
+ 113:../XMC1000_tseRoutine.c ****     h1 = rx * ik3;          // 2^44 rx*k3
+ 210              	 .loc 1 113 0
+ 211 0086 BB69     	 ldr r3,[r7,#24]
+ 212 0088 7A6A     	 ldr r2,[r7,#36]
+ 213 008a 5343     	 mul r3,r2
+ 214 008c FB60     	 str r3,[r7,#12]
+ 114:../XMC1000_tseRoutine.c ****     h1 = h1 - ik2;          // 2^42 rx*k3-k2
+ 215              	 .loc 1 114 0
+ 216 008e FA68     	 ldr r2,[r7,#12]
+ 217 0090 7B69     	 ldr r3,[r7,#20]
+ 218 0092 D31A     	 sub r3,r2,r3
+ 219 0094 FB60     	 str r3,[r7,#12]
+ 115:../XMC1000_tseRoutine.c **** 
+ 116:../XMC1000_tseRoutine.c ****     h3 = ik1 * ik1;         // 2^42 k1^2
+ 220              	 .loc 1 116 0
+ 221 0096 FB69     	 ldr r3,[r7,#28]
+ 222 0098 FA69     	 ldr r2,[r7,#28]
+ 223 009a 5343     	 mul r3,r2
+ 224 009c BB60     	 str r3,[r7,#8]
+ 117:../XMC1000_tseRoutine.c ****     h3 = h3 + h1;           // 2^42 k1^2+4*(rx*k3-k2)
+ 225              	 .loc 1 117 0
+ 226 009e BA68     	 ldr r2,[r7,#8]
+ 227 00a0 FB68     	 ldr r3,[r7,#12]
+ 228 00a2 D318     	 add r3,r2,r3
+ 229 00a4 BB60     	 str r3,[r7,#8]
+ 118:../XMC1000_tseRoutine.c **** 
+ 119:../XMC1000_tseRoutine.c ****     h3 = sqrt_5(h3);        // 2^23 sqrt(k1^2+4*(rx*k3-k2))
+ 230              	 .loc 1 119 0
+ 231 00a6 BB68     	 ldr r3,[r7,#8]
+ 232 00a8 181C     	 mov r0,r3
+ 233 00aa FFF7FEFF 	 bl sqrt_5
+ 234 00ae 031C     	 mov r3,r0
+ 235 00b0 BB60     	 str r3,[r7,#8]
+ 120:../XMC1000_tseRoutine.c ****     h3 = h3 - ik1;          // 2^23 sqrt(k1^2+4*(rx*k3-k2))-k1
+ 236              	 .loc 1 120 0
+ 237 00b2 BA68     	 ldr r2,[r7,#8]
+ 238 00b4 FB69     	 ldr r3,[r7,#28]
+ 239 00b6 D31A     	 sub r3,r2,r3
+ 240 00b8 BB60     	 str r3,[r7,#8]
+ 121:../XMC1000_tseRoutine.c ****     h3 <<= 16;              // 2^40 (sqrt(k1^2+4*(rx*k3-k2))-k1)/2
+ 241              	 .loc 1 121 0
+ 242 00ba BB68     	 ldr r3,[r7,#8]
+ 243 00bc 1B04     	 lsl r3,r3,#16
+ 244 00be BB60     	 str r3,[r7,#8]
+ 122:../XMC1000_tseRoutine.c ****     h1 >>= 7;               // 2^39 rx*k3-k2
+ 245              	 .loc 1 122 0
+ 246 00c0 FB68     	 ldr r3,[r7,#12]
+ 247 00c2 DB11     	 asr r3,r3,#7
+ 248 00c4 FB60     	 str r3,[r7,#12]
+ 123:../XMC1000_tseRoutine.c ****     h3 = h3 / h1;           // 2^1  (sqrt(k1^2+4*(rx*k3-k2))-k1)/(2*(rx*k3-k2))
+ 249              	 .loc 1 123 0
+ 250 00c6 B868     	 ldr r0,[r7,#8]
+ 251 00c8 F968     	 ldr r1,[r7,#12]
+ 252 00ca FFF7FEFF 	 bl __aeabi_idiv
+ 253 00ce 031C     	 mov r3,r0
+ 254 00d0 BB60     	 str r3,[r7,#8]
+ 124:../XMC1000_tseRoutine.c **** 	   
+ 125:../XMC1000_tseRoutine.c ****     calcTemperature = (h3>>1)+(h3&0x1);// rounding
+ 255              	 .loc 1 125 0
+ 256 00d2 BB68     	 ldr r3,[r7,#8]
+ 257 00d4 5A10     	 asr r2,r3,#1
+ 258 00d6 BB68     	 ldr r3,[r7,#8]
+ 259 00d8 0121     	 mov r1,#1
+ 260 00da 0B40     	 and r3,r1
+ 261 00dc D318     	 add r3,r2,r3
+ 262 00de 3B62     	 str r3,[r7,#32]
+ 126:../XMC1000_tseRoutine.c **** 
+ 127:../XMC1000_tseRoutine.c ****     /* Apply the temperature correction to compensate the low quality TSE sensor */
+ 128:../XMC1000_tseRoutine.c ****     if(calcTemperature < MIN_TEMP_KELVIN) 
+ 263              	 .loc 1 128 0
+ 264 00e0 3B6A     	 ldr r3,[r7,#32]
+ 265 00e2 E82B     	 cmp r3,#232
+ 266 00e4 01D8     	 bhi .L9
+ 129:../XMC1000_tseRoutine.c ****     {
+ 130:../XMC1000_tseRoutine.c ****         /* If calculated temperature is bellow -45C, no correction can be done */
+ 131:../XMC1000_tseRoutine.c ****     	calcTemperature = MIN_TEMP_KELVIN;
+ 267              	 .loc 1 131 0
+ 268 00e6 E923     	 mov r3,#233
+ 269 00e8 3B62     	 str r3,[r7,#32]
+ 270              	.L9:
+ 132:../XMC1000_tseRoutine.c ****     }
+ 133:../XMC1000_tseRoutine.c ****     if (calcTemperature > MAX_TEMP_KELVIN)
+ 271              	 .loc 1 133 0
+ 272 00ea 3A6A     	 ldr r2,[r7,#32]
+ 273 00ec C723     	 mov r3,#199
+ 274 00ee 5B00     	 lsl r3,r3,#1
+ 275 00f0 9A42     	 cmp r2,r3
+ 276 00f2 02D9     	 bls .L10
+ 134:../XMC1000_tseRoutine.c ****     {
+ 135:../XMC1000_tseRoutine.c ****         /* If calculated temperature is above 125C, no correction can be done */
+ 136:../XMC1000_tseRoutine.c ****     	calcTemperature = MAX_TEMP_KELVIN;
+ 277              	 .loc 1 136 0
+ 278 00f4 C723     	 mov r3,#199
+ 279 00f6 5B00     	 lsl r3,r3,#1
+ 280 00f8 3B62     	 str r3,[r7,#32]
+ 281              	.L10:
+ 137:../XMC1000_tseRoutine.c ****     }
+ 138:../XMC1000_tseRoutine.c **** 
+ 139:../XMC1000_tseRoutine.c ****     /* If the calculated temperature is in the expected range, add the correction and return the va
+ 140:../XMC1000_tseRoutine.c ****     tse_corrdata_ptr = (int8_t*)0x10000F34;
+ 282              	 .loc 1 140 0
+ 283 00fa 194B     	 ldr r3,.L12+44
+ 284 00fc 194A     	 ldr r2,.L12+48
+ 285 00fe 1A60     	 str r2,[r3]
+ 141:../XMC1000_tseRoutine.c ****     tse_corrdata = *tse_corrdata_ptr;
+ 286              	 .loc 1 141 0
+ 287 0100 174B     	 ldr r3,.L12+44
+ 288 0102 1A68     	 ldr r2,[r3]
+ 289 0104 FB1D     	 add r3,r7,#7
+ 290 0106 1278     	 ldrb r2,[r2]
+ 291 0108 1A70     	 strb r2,[r3]
+ 142:../XMC1000_tseRoutine.c ****     tse_corrdata_ptr += calcTemperature - MIN_TEMP_KELVIN;
+ 292              	 .loc 1 142 0
+ 293 010a 154B     	 ldr r3,.L12+44
+ 294 010c 1A68     	 ldr r2,[r3]
+ 295 010e 3B6A     	 ldr r3,[r7,#32]
+ 296 0110 E93B     	 sub r3,r3,#233
+ 297 0112 D218     	 add r2,r2,r3
+ 298 0114 124B     	 ldr r3,.L12+44
+ 299 0116 1A60     	 str r2,[r3]
+ 143:../XMC1000_tseRoutine.c ****     tse_corrdata = *tse_corrdata_ptr;
+ 300              	 .loc 1 143 0
+ 301 0118 114B     	 ldr r3,.L12+44
+ 302 011a 1A68     	 ldr r2,[r3]
+ 303 011c FB1D     	 add r3,r7,#7
+ 304 011e 1278     	 ldrb r2,[r2]
+ 305 0120 1A70     	 strb r2,[r3]
+ 144:../XMC1000_tseRoutine.c ****     return (calcTemperature + tse_corrdata);//TSE_CorrData[calcTemperature - MIN_TEMP_KELVIN]
+ 306              	 .loc 1 144 0
+ 307 0122 FB1D     	 add r3,r7,#7
+ 308 0124 0022     	 mov r2,#0
+ 309 0126 9A56     	 ldrsb r2,[r3,r2]
+ 310 0128 3B6A     	 ldr r3,[r7,#32]
+ 311 012a D318     	 add r3,r2,r3
+ 145:../XMC1000_tseRoutine.c **** }
+ 312              	 .loc 1 145 0
+ 313 012c 181C     	 mov r0,r3
+ 314 012e BD46     	 mov sp,r7
+ 315 0130 0AB0     	 add sp,sp,#40
+ 316              	 
+ 317 0132 80BD     	 pop {r7,pc}
+ 318              	.L13:
+ 319              	 .align 2
+ 320              	.L12:
+ 321 0134 00000000 	 .word tse_k1_ptr
+ 322 0138 200F0010 	 .word 268439328
+ 323 013c 00000000 	 .word tse_k3_ptr
+ 324 0140 240F0010 	 .word 268439332
+ 325 0144 00000000 	 .word tse_k2_ptr
+ 326 0148 280F0010 	 .word 268439336
+ 327 014c 00100140 	 .word 1073811456
+ 328 0150 00000000 	 .word tse_min_ptr
+ 329 0154 2C0F0010 	 .word 268439340
+ 330 0158 00000000 	 .word tse_max_ptr
+ 331 015c 2E0F0010 	 .word 268439342
+ 332 0160 00000000 	 .word tse_corrdata_ptr
+ 333 0164 340F0010 	 .word 268439348
+ 334              	 .cfi_endproc
+ 335              	.LFE35:
+ 337              	 .section .text.XMC1000_CalcTSEVAR,"ax",%progbits
+ 338              	 .align 2
+ 339              	 .global XMC1000_CalcTSEVAR
+ 340              	 .code 16
+ 341              	 .thumb_func
+ 343              	XMC1000_CalcTSEVAR:
+ 344              	.LFB36:
+ 146:../XMC1000_tseRoutine.c **** 
+ 147:../XMC1000_tseRoutine.c **** /**************************************************************************//**
+ 148:../XMC1000_tseRoutine.c **** Purpose:        Implemetation of TIMM1_CalcTSEVAR function
+ 149:../XMC1000_tseRoutine.c ****   
+ 150:../XMC1000_tseRoutine.c **** @requirements   None   
+ 151:../XMC1000_tseRoutine.c **** @param          None
+ 152:../XMC1000_tseRoutine.c **** @return         uint32_t
+ 153:../XMC1000_tseRoutine.c **** 
+ 154:../XMC1000_tseRoutine.c **** Detailed description: The function is used to convert Kelvin temperatures to ANATSEMON values.   
+ 155:../XMC1000_tseRoutine.c **** 
+ 156:../XMC1000_tseRoutine.c **** If the convertion is not possible, the function returns 0x00
+ 157:../XMC1000_tseRoutine.c **** 
+ 158:../XMC1000_tseRoutine.c **** ******************************************************************************/
+ 159:../XMC1000_tseRoutine.c **** uint32_t XMC1000_CalcTSEVAR(uint32_t temperature)
+ 160:../XMC1000_tseRoutine.c **** {
+ 345              	 .loc 1 160 0
+ 346              	 .cfi_startproc
+ 347 0000 80B5     	 push {r7,lr}
+ 348              	.LCFI6:
+ 349              	 .cfi_def_cfa_offset 8
+ 350              	 .cfi_offset 7,-8
+ 351              	 .cfi_offset 14,-4
+ 352 0002 8AB0     	 sub sp,sp,#40
+ 353              	.LCFI7:
+ 354              	 .cfi_def_cfa_offset 48
+ 355 0004 00AF     	 add r7,sp,#0
+ 356              	.LCFI8:
+ 357              	 .cfi_def_cfa_register 7
+ 358 0006 7860     	 str r0,[r7,#4]
+ 161:../XMC1000_tseRoutine.c ****     int32_t h0, h1, h2;
+ 162:../XMC1000_tseRoutine.c ****     int32_t ik1, ik3, ik2;
+ 163:../XMC1000_tseRoutine.c **** 
+ 164:../XMC1000_tseRoutine.c ****     uint32_t searchStatus;
+ 165:../XMC1000_tseRoutine.c ****     uint16_t i;
+ 166:../XMC1000_tseRoutine.c ****     
+ 167:../XMC1000_tseRoutine.c ****     int8_t corrdata;
+ 168:../XMC1000_tseRoutine.c **** 
+ 169:../XMC1000_tseRoutine.c ****     searchStatus = FALSE;
+ 359              	 .loc 1 169 0
+ 360 0008 0023     	 mov r3,#0
+ 361 000a 7B62     	 str r3,[r7,#36]
+ 170:../XMC1000_tseRoutine.c **** 
+ 171:../XMC1000_tseRoutine.c ****     tse_corrdata_ptr = (int8_t*)0x10000F34;
+ 362              	 .loc 1 171 0
+ 363 000c 3F4B     	 ldr r3,.L21
+ 364 000e 404A     	 ldr r2,.L21+4
+ 365 0010 1A60     	 str r2,[r3]
+ 172:../XMC1000_tseRoutine.c **** 
+ 173:../XMC1000_tseRoutine.c ****     /* Lookup for the TSE sensor value coresponding to the real temperature; if nothing is found, u
+ 174:../XMC1000_tseRoutine.c ****     for(i = 0; i <= (MAX_TEMP_KELVIN - MIN_TEMP_KELVIN); i++)
+ 366              	 .loc 1 174 0
+ 367 0012 2223     	 mov r3,#34
+ 368 0014 FB18     	 add r3,r7,r3
+ 369 0016 0022     	 mov r2,#0
+ 370 0018 1A80     	 strh r2,[r3]
+ 371 001a 27E0     	 b .L15
+ 372              	.L18:
+ 175:../XMC1000_tseRoutine.c ****     {
+ 176:../XMC1000_tseRoutine.c ****     	corrdata = (int8_t) *tse_corrdata_ptr;
+ 373              	 .loc 1 176 0
+ 374 001c 3B4B     	 ldr r3,.L21
+ 375 001e 1A68     	 ldr r2,[r3]
+ 376 0020 2123     	 mov r3,#33
+ 377 0022 FB18     	 add r3,r7,r3
+ 378 0024 1278     	 ldrb r2,[r2]
+ 379 0026 1A70     	 strb r2,[r3]
+ 177:../XMC1000_tseRoutine.c ****     	if(temperature == (MIN_TEMP_KELVIN + i + corrdata)) //TSE_CorrData[i]
+ 380              	 .loc 1 177 0
+ 381 0028 2223     	 mov r3,#34
+ 382 002a FB18     	 add r3,r7,r3
+ 383 002c 1B88     	 ldrh r3,[r3]
+ 384 002e E933     	 add r3,r3,#233
+ 385 0030 1A1C     	 mov r2,r3
+ 386 0032 2123     	 mov r3,#33
+ 387 0034 FB18     	 add r3,r7,r3
+ 388 0036 1B78     	 ldrb r3,[r3]
+ 389 0038 5BB2     	 sxtb r3,r3
+ 390 003a D318     	 add r3,r2,r3
+ 391 003c 1A1E     	 sub r2,r3,#0
+ 392 003e 7B68     	 ldr r3,[r7,#4]
+ 393 0040 9A42     	 cmp r2,r3
+ 394 0042 07D1     	 bne .L16
+ 178:../XMC1000_tseRoutine.c ****         {        
+ 179:../XMC1000_tseRoutine.c ****             temperature = MIN_TEMP_KELVIN + i;
+ 395              	 .loc 1 179 0
+ 396 0044 2223     	 mov r3,#34
+ 397 0046 FB18     	 add r3,r7,r3
+ 398 0048 1B88     	 ldrh r3,[r3]
+ 399 004a E933     	 add r3,r3,#233
+ 400 004c 7B60     	 str r3,[r7,#4]
+ 180:../XMC1000_tseRoutine.c ****             searchStatus = TRUE;
+ 401              	 .loc 1 180 0
+ 402 004e 0123     	 mov r3,#1
+ 403 0050 7B62     	 str r3,[r7,#36]
+ 181:../XMC1000_tseRoutine.c ****             break;
+ 404              	 .loc 1 181 0
+ 405 0052 10E0     	 b .L17
+ 406              	.L16:
+ 182:../XMC1000_tseRoutine.c ****         }
+ 183:../XMC1000_tseRoutine.c ****     	tse_corrdata_ptr++;
+ 407              	 .loc 1 183 0 discriminator 2
+ 408 0054 2D4B     	 ldr r3,.L21
+ 409 0056 1B68     	 ldr r3,[r3]
+ 410 0058 5A1C     	 add r2,r3,#1
+ 411 005a 2C4B     	 ldr r3,.L21
+ 412 005c 1A60     	 str r2,[r3]
+ 174:../XMC1000_tseRoutine.c ****     {
+ 413              	 .loc 1 174 0 discriminator 2
+ 414 005e 2223     	 mov r3,#34
+ 415 0060 FB18     	 add r3,r7,r3
+ 416 0062 1A88     	 ldrh r2,[r3]
+ 417 0064 2223     	 mov r3,#34
+ 418 0066 FB18     	 add r3,r7,r3
+ 419 0068 0132     	 add r2,r2,#1
+ 420 006a 1A80     	 strh r2,[r3]
+ 421              	.L15:
+ 174:../XMC1000_tseRoutine.c ****     {
+ 422              	 .loc 1 174 0 is_stmt 0 discriminator 1
+ 423 006c 2223     	 mov r3,#34
+ 424 006e FB18     	 add r3,r7,r3
+ 425 0070 1B88     	 ldrh r3,[r3]
+ 426 0072 A52B     	 cmp r3,#165
+ 427 0074 D2D9     	 bls .L18
+ 428              	.L17:
+ 184:../XMC1000_tseRoutine.c ****     }
+ 185:../XMC1000_tseRoutine.c **** 
+ 186:../XMC1000_tseRoutine.c ****     if(searchStatus == FALSE)
+ 429              	 .loc 1 186 0 is_stmt 1
+ 430 0076 7B6A     	 ldr r3,[r7,#36]
+ 431 0078 002B     	 cmp r3,#0
+ 432 007a 01D1     	 bne .L19
+ 187:../XMC1000_tseRoutine.c ****     {
+ 188:../XMC1000_tseRoutine.c ****         return 0;
+ 433              	 .loc 1 188 0
+ 434 007c 0023     	 mov r3,#0
+ 435 007e 41E0     	 b .L20
+ 436              	.L19:
+ 189:../XMC1000_tseRoutine.c ****     }
+ 190:../XMC1000_tseRoutine.c **** 
+ 191:../XMC1000_tseRoutine.c ****     tse_k1_ptr = (uint32_t*)0x10000F20;
+ 437              	 .loc 1 191 0
+ 438 0080 244B     	 ldr r3,.L21+8
+ 439 0082 254A     	 ldr r2,.L21+12
+ 440 0084 1A60     	 str r2,[r3]
+ 192:../XMC1000_tseRoutine.c ****     tse_k3_ptr = (uint32_t*)0x10000F24;
+ 441              	 .loc 1 192 0
+ 442 0086 254B     	 ldr r3,.L21+16
+ 443 0088 254A     	 ldr r2,.L21+20
+ 444 008a 1A60     	 str r2,[r3]
+ 193:../XMC1000_tseRoutine.c ****     tse_k2_ptr = (uint32_t*)0x10000F28;
+ 445              	 .loc 1 193 0
+ 446 008c 254B     	 ldr r3,.L21+24
+ 447 008e 264A     	 ldr r2,.L21+28
+ 448 0090 1A60     	 str r2,[r3]
+ 194:../XMC1000_tseRoutine.c ****     ik1 = (uint32_t) *tse_k1_ptr; //ANA_TSE_k1
+ 449              	 .loc 1 194 0
+ 450 0092 204B     	 ldr r3,.L21+8
+ 451 0094 1B68     	 ldr r3,[r3]
+ 452 0096 1B68     	 ldr r3,[r3]
+ 453 0098 FB61     	 str r3,[r7,#28]
+ 195:../XMC1000_tseRoutine.c ****     ik3 = (uint32_t) *tse_k3_ptr; //ANA_TSE_k3
+ 454              	 .loc 1 195 0
+ 455 009a 204B     	 ldr r3,.L21+16
+ 456 009c 1B68     	 ldr r3,[r3]
+ 457 009e 1B68     	 ldr r3,[r3]
+ 458 00a0 BB61     	 str r3,[r7,#24]
+ 196:../XMC1000_tseRoutine.c ****     ik2 = (uint32_t) *tse_k2_ptr; //ANA_TSE_k2
+ 459              	 .loc 1 196 0
+ 460 00a2 204B     	 ldr r3,.L21+24
+ 461 00a4 1B68     	 ldr r3,[r3]
+ 462 00a6 1B68     	 ldr r3,[r3]
+ 463 00a8 7B61     	 str r3,[r7,#20]
+ 197:../XMC1000_tseRoutine.c **** 
+ 198:../XMC1000_tseRoutine.c ****     h0 = temperature * temperature;             //      t^2
+ 464              	 .loc 1 198 0
+ 465 00aa 7B68     	 ldr r3,[r7,#4]
+ 466 00ac 7A68     	 ldr r2,[r7,#4]
+ 467 00ae 5343     	 mul r3,r2
+ 468 00b0 3B61     	 str r3,[r7,#16]
+ 199:../XMC1000_tseRoutine.c ****     h0 >>= 2;               // 2^-2 t^2
+ 469              	 .loc 1 199 0
+ 470 00b2 3B69     	 ldr r3,[r7,#16]
+ 471 00b4 9B10     	 asr r3,r3,#2
+ 472 00b6 3B61     	 str r3,[r7,#16]
+ 200:../XMC1000_tseRoutine.c ****     h1 = ik3 * h0;          // 2^28 k3*t^2
+ 473              	 .loc 1 200 0
+ 474 00b8 BB69     	 ldr r3,[r7,#24]
+ 475 00ba 3A69     	 ldr r2,[r7,#16]
+ 476 00bc 5343     	 mul r3,r2
+ 477 00be FB60     	 str r3,[r7,#12]
+ 201:../XMC1000_tseRoutine.c ****     h1 >>= 12;              // 2^16 k3*t^2
+ 478              	 .loc 1 201 0
+ 479 00c0 FB68     	 ldr r3,[r7,#12]
+ 480 00c2 1B13     	 asr r3,r3,#12
+ 481 00c4 FB60     	 str r3,[r7,#12]
+ 202:../XMC1000_tseRoutine.c ****     h2 = ik2 >> 12;         // 2^32 k2
+ 482              	 .loc 1 202 0
+ 483 00c6 7B69     	 ldr r3,[r7,#20]
+ 484 00c8 1B13     	 asr r3,r3,#12
+ 485 00ca BB60     	 str r3,[r7,#8]
+ 203:../XMC1000_tseRoutine.c ****     h2 = h2 * h0;           // 2^30 k2*t^2  
+ 486              	 .loc 1 203 0
+ 487 00cc BB68     	 ldr r3,[r7,#8]
+ 488 00ce 3A69     	 ldr r2,[r7,#16]
+ 489 00d0 5343     	 mul r3,r2
+ 490 00d2 BB60     	 str r3,[r7,#8]
+ 204:../XMC1000_tseRoutine.c ****     h0 = ik1 * temperature;           // 2^21 k1*t
+ 491              	 .loc 1 204 0
+ 492 00d4 FB69     	 ldr r3,[r7,#28]
+ 493 00d6 7A68     	 ldr r2,[r7,#4]
+ 494 00d8 5343     	 mul r3,r2
+ 495 00da 3B61     	 str r3,[r7,#16]
+ 205:../XMC1000_tseRoutine.c ****     h0 <<= 9;               // 2^30 k1*t
+ 496              	 .loc 1 205 0
+ 497 00dc 3B69     	 ldr r3,[r7,#16]
+ 498 00de 5B02     	 lsl r3,r3,#9
+ 499 00e0 3B61     	 str r3,[r7,#16]
+ 206:../XMC1000_tseRoutine.c ****     h0 = h2 - h0;           // 2^30 -k1*t+k2*t^2
+ 500              	 .loc 1 206 0
+ 501 00e2 BA68     	 ldr r2,[r7,#8]
+ 502 00e4 3B69     	 ldr r3,[r7,#16]
+ 503 00e6 D31A     	 sub r3,r2,r3
+ 504 00e8 3B61     	 str r3,[r7,#16]
+ 207:../XMC1000_tseRoutine.c ****     h0 = h0 + (1<<30);      // 2^30 1-k1*t+k2*t^2
+ 505              	 .loc 1 207 0
+ 506 00ea 3B69     	 ldr r3,[r7,#16]
+ 507 00ec 8022     	 mov r2,#128
+ 508 00ee D205     	 lsl r2,r2,#23
+ 509 00f0 9446     	 mov ip,r2
+ 510 00f2 6344     	 add r3,r3,ip
+ 511 00f4 3B61     	 str r3,[r7,#16]
+ 208:../XMC1000_tseRoutine.c ****     h0 = h0 / h1;           // 2^14 (1-k1*t+k2*t^2)/(k3*t^2)
+ 512              	 .loc 1 208 0
+ 513 00f6 3869     	 ldr r0,[r7,#16]
+ 514 00f8 F968     	 ldr r1,[r7,#12]
+ 515 00fa FFF7FEFF 	 bl __aeabi_idiv
+ 516 00fe 031C     	 mov r3,r0
+ 517 0100 3B61     	 str r3,[r7,#16]
+ 209:../XMC1000_tseRoutine.c **** 
+ 210:../XMC1000_tseRoutine.c ****     return h0;
+ 518              	 .loc 1 210 0
+ 519 0102 3B69     	 ldr r3,[r7,#16]
+ 520              	.L20:
+ 211:../XMC1000_tseRoutine.c **** }
+ 521              	 .loc 1 211 0
+ 522 0104 181C     	 mov r0,r3
+ 523 0106 BD46     	 mov sp,r7
+ 524 0108 0AB0     	 add sp,sp,#40
+ 525              	 
+ 526 010a 80BD     	 pop {r7,pc}
+ 527              	.L22:
+ 528              	 .align 2
+ 529              	.L21:
+ 530 010c 00000000 	 .word tse_corrdata_ptr
+ 531 0110 340F0010 	 .word 268439348
+ 532 0114 00000000 	 .word tse_k1_ptr
+ 533 0118 200F0010 	 .word 268439328
+ 534 011c 00000000 	 .word tse_k3_ptr
+ 535 0120 240F0010 	 .word 268439332
+ 536 0124 00000000 	 .word tse_k2_ptr
+ 537 0128 280F0010 	 .word 268439336
+ 538              	 .cfi_endproc
+ 539              	.LFE36:
+ 541              	 .text
+ 542              	.Letext0:
+ 543              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 544              	 .file 3 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 545              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 XMC1000_tseRoutine.c
+                            *COM*:00000004 tse_k1_ptr
+                            *COM*:00000004 tse_k3_ptr
+                            *COM*:00000004 tse_k2_ptr
+                            *COM*:00000004 tse_min_ptr
+                            *COM*:00000004 tse_max_ptr
+                            *COM*:00000004 tse_corrdata_ptr
+    {standard input}:24     .text.sqrt_5:00000000 $t
+    {standard input}:29     .text.sqrt_5:00000000 sqrt_5
+    {standard input}:109    .text.XMC1000_CalcTemperature:00000000 $t
+    {standard input}:114    .text.XMC1000_CalcTemperature:00000000 XMC1000_CalcTemperature
+    {standard input}:321    .text.XMC1000_CalcTemperature:00000134 $d
+    {standard input}:338    .text.XMC1000_CalcTSEVAR:00000000 $t
+    {standard input}:343    .text.XMC1000_CalcTSEVAR:00000000 XMC1000_CalcTSEVAR
+    {standard input}:530    .text.XMC1000_CalcTSEVAR:0000010c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_idiv

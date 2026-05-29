@@ -1,0 +1,529 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pwm_ccu4_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global PWMSinGen_timer_handle
+  18              	 .section .rodata.PWMSinGen_timer_handle,"a",%progbits
+  19              	 .align 2
+  22              	PWMSinGen_timer_handle:
+  23 0000 00000000 	 .space 8
+  23      00000000 
+  24              	 .global PWMSinGen_event0_config
+  25              	 .section .rodata.PWMSinGen_event0_config,"a",%progbits
+  26              	 .align 2
+  29              	PWMSinGen_event0_config:
+  30 0000 00       	 .byte 0
+  31 0001 00       	 .byte 0
+  32 0002 01       	 .byte 1
+  33 0003 00       	 .byte 0
+  34              	 .global PWMSinGen_event1_config
+  35              	 .section .rodata.PWMSinGen_event1_config,"a",%progbits
+  36              	 .align 2
+  39              	PWMSinGen_event1_config:
+  40 0000 00       	 .byte 0
+  41 0001 00       	 .byte 0
+  42 0002 01       	 .byte 1
+  43 0003 00       	 .byte 0
+  44              	 .global PWMSinGen_event2_config
+  45              	 .section .rodata.PWMSinGen_event2_config,"a",%progbits
+  46              	 .align 2
+  49              	PWMSinGen_event2_config:
+  50 0000 00       	 .byte 0
+  51 0001 00       	 .byte 0
+  52 0002 01       	 .byte 1
+  53 0003 00       	 .byte 0
+  54              	 .global PWMSinGen_ch1_out0_config
+  55              	 .section .rodata.PWMSinGen_ch1_out0_config,"a",%progbits
+  56              	 .align 2
+  59              	PWMSinGen_ch1_out0_config:
+  60 0000 A0       	 .byte -96
+  61 0001 00       	 .byte 0
+  62 0002 0000     	 .space 2
+  63 0004 00000100 	 .word 65536
+  64              	 .global PWMSinGen_config_handle
+  65              	 .section .rodata.PWMSinGen_config_handle,"a",%progbits
+  66              	 .align 2
+  69              	PWMSinGen_config_handle:
+  70 0000 00       	 .byte 0
+  71 0001 00       	 .space 1
+  72 0002 CF07     	 .short 1999
+  73 0004 E803     	 .short 1000
+  74 0006 00       	 .byte 0
+  75 0007 00       	 .byte 0
+  76 0008 00       	 .byte 0
+  77 0009 00       	 .byte 0
+  78 000a 00       	 .byte 0
+  79 000b 00       	 .byte 0
+  80 000c 00       	 .byte 0
+  81 000d 00       	 .byte 0
+  82 000e 00       	 .byte 0
+  83 000f 00       	 .byte 0
+  84 0010 00       	 .byte 0
+  85 0011 00       	 .byte 0
+  86 0012 00       	 .byte 0
+  87 0013 00       	 .byte 0
+  88 0014 00000000 	 .word PWMSinGen_event0_config
+  89 0018 00000000 	 .word PWMSinGen_event1_config
+  90 001c 00000000 	 .word PWMSinGen_event2_config
+  91 0020 00       	 .byte 0
+  92 0021 00       	 .byte 0
+  93 0022 00       	 .byte 0
+  94 0023 00       	 .byte 0
+  95 0024 00       	 .byte 0
+  96 0025 00       	 .byte 0
+  97 0026 00       	 .byte 0
+  98 0027 00       	 .byte 0
+  99 0028 00       	 .byte 0
+ 100 0029 00       	 .byte 0
+ 101 002a 00       	 .byte 0
+ 102 002b 00       	 .byte 0
+ 103 002c 00       	 .byte 0
+ 104 002d 00       	 .byte 0
+ 105 002e 00       	 .byte 0
+ 106 002f 01       	 .byte 1
+ 107 0030 00       	 .byte 0
+ 108 0031 000000   	 .space 3
+ 109 0034 00000008 	 .word 134217728
+ 110 0038 00000000 	 .word PWMSinGen_timer_handle
+ 111 003c 01       	 .byte 1
+ 112 003d 000000   	 .space 3
+ 113 0040 00000440 	 .word 1074003968
+ 114 0044 04       	 .byte 4
+ 115 0045 000000   	 .space 3
+ 116 0048 00000000 	 .word PWMSinGen_ch1_out0_config
+ 117 004c 00000000 	 .word GLOBAL_CCU4_0
+ 118              	 .global PWMSinGen
+ 119              	 .section .data.PWMSinGen,"aw",%progbits
+ 120              	 .align 2
+ 123              	PWMSinGen:
+ 124 0000 00000000 	 .word PWMSinGen_config_handle
+ 125 0004 00000448 	 .word 1208221696
+ 126 0008 00020448 	 .word 1208222208
+ 127 000c 00       	 .byte 0
+ 128 000d 01       	 .byte 1
+ 129 000e 0000     	 .space 2
+ 130 0010 10000000 	 .word 16
+ 131 0014 20000000 	 .word 32
+ 132 0018 40000000 	 .word 64
+ 133 001c 00       	 .byte 0
+ 134 001d 00000000 	 .space 7
+ 134      000000
+ 135 0024 88130000 	 .word 5000
+ 136              	 .global PWMCosGen_timer_handle
+ 137              	 .section .rodata.PWMCosGen_timer_handle,"a",%progbits
+ 138              	 .align 2
+ 141              	PWMCosGen_timer_handle:
+ 142 0000 00000000 	 .space 8
+ 142      00000000 
+ 143              	 .global PWMCosGen_event0_config
+ 144              	 .section .rodata.PWMCosGen_event0_config,"a",%progbits
+ 145              	 .align 2
+ 148              	PWMCosGen_event0_config:
+ 149 0000 00       	 .byte 0
+ 150 0001 00       	 .byte 0
+ 151 0002 01       	 .byte 1
+ 152 0003 00       	 .byte 0
+ 153              	 .global PWMCosGen_event1_config
+ 154              	 .section .rodata.PWMCosGen_event1_config,"a",%progbits
+ 155              	 .align 2
+ 158              	PWMCosGen_event1_config:
+ 159 0000 00       	 .byte 0
+ 160 0001 00       	 .byte 0
+ 161 0002 01       	 .byte 1
+ 162 0003 00       	 .byte 0
+ 163              	 .global PWMCosGen_event2_config
+ 164              	 .section .rodata.PWMCosGen_event2_config,"a",%progbits
+ 165              	 .align 2
+ 168              	PWMCosGen_event2_config:
+ 169 0000 00       	 .byte 0
+ 170 0001 00       	 .byte 0
+ 171 0002 01       	 .byte 1
+ 172 0003 00       	 .byte 0
+ 173              	 .global PWMCosGen_ch1_out0_config
+ 174              	 .section .rodata.PWMCosGen_ch1_out0_config,"a",%progbits
+ 175              	 .align 2
+ 178              	PWMCosGen_ch1_out0_config:
+ 179 0000 A0       	 .byte -96
+ 180 0001 00       	 .byte 0
+ 181 0002 0000     	 .space 2
+ 182 0004 00000100 	 .word 65536
+ 183              	 .global PWMCosGen_config_handle
+ 184              	 .section .rodata.PWMCosGen_config_handle,"a",%progbits
+ 185              	 .align 2
+ 188              	PWMCosGen_config_handle:
+ 189 0000 00       	 .byte 0
+ 190 0001 00       	 .space 1
+ 191 0002 CF07     	 .short 1999
+ 192 0004 E803     	 .short 1000
+ 193 0006 00       	 .byte 0
+ 194 0007 00       	 .byte 0
+ 195 0008 00       	 .byte 0
+ 196 0009 00       	 .byte 0
+ 197 000a 00       	 .byte 0
+ 198 000b 00       	 .byte 0
+ 199 000c 00       	 .byte 0
+ 200 000d 00       	 .byte 0
+ 201 000e 00       	 .byte 0
+ 202 000f 00       	 .byte 0
+ 203 0010 00       	 .byte 0
+ 204 0011 00       	 .byte 0
+ 205 0012 00       	 .byte 0
+ 206 0013 00       	 .byte 0
+ 207 0014 00000000 	 .word PWMCosGen_event0_config
+ 208 0018 00000000 	 .word PWMCosGen_event1_config
+ 209 001c 00000000 	 .word PWMCosGen_event2_config
+ 210 0020 00       	 .byte 0
+ 211 0021 00       	 .byte 0
+ 212 0022 00       	 .byte 0
+ 213 0023 00       	 .byte 0
+ 214 0024 00       	 .byte 0
+ 215 0025 00       	 .byte 0
+ 216 0026 00       	 .byte 0
+ 217 0027 00       	 .byte 0
+ 218 0028 00       	 .byte 0
+ 219 0029 00       	 .byte 0
+ 220 002a 00       	 .byte 0
+ 221 002b 00       	 .byte 0
+ 222 002c 00       	 .byte 0
+ 223 002d 00       	 .byte 0
+ 224 002e 00       	 .byte 0
+ 225 002f 01       	 .byte 1
+ 226 0030 00       	 .byte 0
+ 227 0031 000000   	 .space 3
+ 228 0034 00000004 	 .word 67108864
+ 229 0038 00000000 	 .word PWMCosGen_timer_handle
+ 230 003c 01       	 .byte 1
+ 231 003d 000000   	 .space 3
+ 232 0040 00000440 	 .word 1074003968
+ 233 0044 05       	 .byte 5
+ 234 0045 000000   	 .space 3
+ 235 0048 00000000 	 .word PWMCosGen_ch1_out0_config
+ 236 004c 00000000 	 .word GLOBAL_CCU4_0
+ 237              	 .global PWMCosGen
+ 238              	 .section .data.PWMCosGen,"aw",%progbits
+ 239              	 .align 2
+ 242              	PWMCosGen:
+ 243 0000 00000000 	 .word PWMCosGen_config_handle
+ 244 0004 00000448 	 .word 1208221696
+ 245 0008 00010448 	 .word 1208221952
+ 246 000c 00       	 .byte 0
+ 247 000d 00       	 .byte 0
+ 248 000e 0000     	 .space 2
+ 249 0010 01000000 	 .word 1
+ 250 0014 02000000 	 .word 2
+ 251 0018 04000000 	 .word 4
+ 252 001c 00       	 .byte 0
+ 253 001d 00000000 	 .space 7
+ 253      000000
+ 254 0024 88130000 	 .word 5000
+ 255              	 .global NoiseBlankSin_timer_handle
+ 256              	 .section .rodata.NoiseBlankSin_timer_handle,"a",%progbits
+ 257              	 .align 2
+ 260              	NoiseBlankSin_timer_handle:
+ 261 0000 02       	 .byte 2
+ 262 0001 00       	 .byte 0
+ 263 0002 00       	 .byte 0
+ 264 0003 00       	 .byte 0
+ 265 0004 00       	 .byte 0
+ 266 0005 00       	 .byte 0
+ 267 0006 0000     	 .space 2
+ 268              	 .global NoiseBlankSin_event0_config
+ 269              	 .section .rodata.NoiseBlankSin_event0_config,"a",%progbits
+ 270              	 .align 2
+ 273              	NoiseBlankSin_event0_config:
+ 274 0000 01       	 .byte 1
+ 275 0001 01       	 .byte 1
+ 276 0002 01       	 .byte 1
+ 277 0003 00       	 .byte 0
+ 278              	 .global NoiseBlankSin_event1_config
+ 279              	 .section .rodata.NoiseBlankSin_event1_config,"a",%progbits
+ 280              	 .align 2
+ 283              	NoiseBlankSin_event1_config:
+ 284 0000 00       	 .byte 0
+ 285 0001 00       	 .byte 0
+ 286 0002 01       	 .byte 1
+ 287 0003 00       	 .byte 0
+ 288              	 .global NoiseBlankSin_event2_config
+ 289              	 .section .rodata.NoiseBlankSin_event2_config,"a",%progbits
+ 290              	 .align 2
+ 293              	NoiseBlankSin_event2_config:
+ 294 0000 00       	 .byte 0
+ 295 0001 00       	 .byte 0
+ 296 0002 01       	 .byte 1
+ 297 0003 00       	 .byte 0
+ 298              	 .global NoiseBlankSin_ch1_out0_config
+ 299              	 .section .rodata.NoiseBlankSin_ch1_out0_config,"a",%progbits
+ 300              	 .align 2
+ 303              	NoiseBlankSin_ch1_out0_config:
+ 304 0000 90       	 .byte -112
+ 305 0001 00       	 .byte 0
+ 306 0002 0000     	 .space 2
+ 307 0004 00000100 	 .word 65536
+ 308              	 .global NoiseBlankSin_config_handle
+ 309              	 .section .rodata.NoiseBlankSin_config_handle,"a",%progbits
+ 310              	 .align 2
+ 313              	NoiseBlankSin_config_handle:
+ 314 0000 01       	 .byte 1
+ 315 0001 00       	 .space 1
+ 316 0002 7F02     	 .short 639
+ 317 0004 0000     	 .short 0
+ 318 0006 00       	 .byte 0
+ 319 0007 00       	 .byte 0
+ 320 0008 00       	 .byte 0
+ 321 0009 00       	 .byte 0
+ 322 000a 01       	 .byte 1
+ 323 000b 00       	 .byte 0
+ 324 000c 00       	 .byte 0
+ 325 000d 00       	 .byte 0
+ 326 000e 00       	 .byte 0
+ 327 000f 00       	 .byte 0
+ 328 0010 00       	 .byte 0
+ 329 0011 00       	 .byte 0
+ 330 0012 00       	 .byte 0
+ 331 0013 00       	 .byte 0
+ 332 0014 00000000 	 .word NoiseBlankSin_event0_config
+ 333 0018 00000000 	 .word NoiseBlankSin_event1_config
+ 334 001c 00000000 	 .word NoiseBlankSin_event2_config
+ 335 0020 01       	 .byte 1
+ 336 0021 01       	 .byte 1
+ 337 0022 00       	 .byte 0
+ 338 0023 00       	 .byte 0
+ 339 0024 00       	 .byte 0
+ 340 0025 00       	 .byte 0
+ 341 0026 00       	 .byte 0
+ 342 0027 00       	 .byte 0
+ 343 0028 00       	 .byte 0
+ 344 0029 00       	 .byte 0
+ 345 002a 00       	 .byte 0
+ 346 002b 00       	 .byte 0
+ 347 002c 00       	 .byte 0
+ 348 002d 00       	 .byte 0
+ 349 002e 00       	 .byte 0
+ 350 002f 01       	 .byte 1
+ 351 0030 00       	 .byte 0
+ 352 0031 000000   	 .space 3
+ 353 0034 00000020 	 .word 536870912
+ 354 0038 00000000 	 .word NoiseBlankSin_timer_handle
+ 355 003c 01       	 .byte 1
+ 356 003d 000000   	 .space 3
+ 357 0040 00020440 	 .word 1074004480
+ 358 0044 0B       	 .byte 11
+ 359 0045 000000   	 .space 3
+ 360 0048 00000000 	 .word NoiseBlankSin_ch1_out0_config
+ 361 004c 00000000 	 .word GLOBAL_CCU4_0
+ 362              	 .global NoiseBlankSin
+ 363              	 .section .data.NoiseBlankSin,"aw",%progbits
+ 364              	 .align 2
+ 367              	NoiseBlankSin:
+ 368 0000 00000000 	 .word NoiseBlankSin_config_handle
+ 369 0004 00000448 	 .word 1208221696
+ 370 0008 00040448 	 .word 1208222720
+ 371 000c 00       	 .byte 0
+ 372 000d 03       	 .byte 3
+ 373 000e 0000     	 .space 2
+ 374 0010 00100000 	 .word 4096
+ 375 0014 00200000 	 .word 8192
+ 376 0018 00400000 	 .word 16384
+ 377 001c 00       	 .byte 0
+ 378 001d 00000000 	 .space 7
+ 378      000000
+ 379 0024 10270000 	 .word 10000
+ 380              	 .global NoiseBlankCos_timer_handle
+ 381              	 .section .rodata.NoiseBlankCos_timer_handle,"a",%progbits
+ 382              	 .align 2
+ 385              	NoiseBlankCos_timer_handle:
+ 386 0000 02       	 .byte 2
+ 387 0001 00       	 .byte 0
+ 388 0002 00       	 .byte 0
+ 389 0003 00       	 .byte 0
+ 390 0004 00       	 .byte 0
+ 391 0005 00       	 .byte 0
+ 392 0006 0000     	 .space 2
+ 393              	 .global NoiseBlankCos_event0_config
+ 394              	 .section .rodata.NoiseBlankCos_event0_config,"a",%progbits
+ 395              	 .align 2
+ 398              	NoiseBlankCos_event0_config:
+ 399 0000 02       	 .byte 2
+ 400 0001 01       	 .byte 1
+ 401 0002 01       	 .byte 1
+ 402 0003 00       	 .byte 0
+ 403              	 .global NoiseBlankCos_event1_config
+ 404              	 .section .rodata.NoiseBlankCos_event1_config,"a",%progbits
+ 405              	 .align 2
+ 408              	NoiseBlankCos_event1_config:
+ 409 0000 00       	 .byte 0
+ 410 0001 00       	 .byte 0
+ 411 0002 01       	 .byte 1
+ 412 0003 00       	 .byte 0
+ 413              	 .global NoiseBlankCos_event2_config
+ 414              	 .section .rodata.NoiseBlankCos_event2_config,"a",%progbits
+ 415              	 .align 2
+ 418              	NoiseBlankCos_event2_config:
+ 419 0000 00       	 .byte 0
+ 420 0001 00       	 .byte 0
+ 421 0002 01       	 .byte 1
+ 422 0003 00       	 .byte 0
+ 423              	 .global NoiseBlankCos_ch1_out0_config
+ 424              	 .section .rodata.NoiseBlankCos_ch1_out0_config,"a",%progbits
+ 425              	 .align 2
+ 428              	NoiseBlankCos_ch1_out0_config:
+ 429 0000 90       	 .byte -112
+ 430 0001 00       	 .byte 0
+ 431 0002 0000     	 .space 2
+ 432 0004 00000100 	 .word 65536
+ 433              	 .global NoiseBlankCos_config_handle
+ 434              	 .section .rodata.NoiseBlankCos_config_handle,"a",%progbits
+ 435              	 .align 2
+ 438              	NoiseBlankCos_config_handle:
+ 439 0000 01       	 .byte 1
+ 440 0001 00       	 .space 1
+ 441 0002 7F02     	 .short 639
+ 442 0004 0000     	 .short 0
+ 443 0006 00       	 .byte 0
+ 444 0007 00       	 .byte 0
+ 445 0008 00       	 .byte 0
+ 446 0009 00       	 .byte 0
+ 447 000a 00       	 .byte 0
+ 448 000b 00       	 .byte 0
+ 449 000c 00       	 .byte 0
+ 450 000d 00       	 .byte 0
+ 451 000e 00       	 .byte 0
+ 452 000f 00       	 .byte 0
+ 453 0010 00       	 .byte 0
+ 454 0011 00       	 .byte 0
+ 455 0012 00       	 .byte 0
+ 456 0013 00       	 .byte 0
+ 457 0014 00000000 	 .word NoiseBlankCos_event0_config
+ 458 0018 00000000 	 .word NoiseBlankCos_event1_config
+ 459 001c 00000000 	 .word NoiseBlankCos_event2_config
+ 460 0020 01       	 .byte 1
+ 461 0021 01       	 .byte 1
+ 462 0022 00       	 .byte 0
+ 463 0023 00       	 .byte 0
+ 464 0024 00       	 .byte 0
+ 465 0025 00       	 .byte 0
+ 466 0026 00       	 .byte 0
+ 467 0027 00       	 .byte 0
+ 468 0028 00       	 .byte 0
+ 469 0029 00       	 .byte 0
+ 470 002a 00       	 .byte 0
+ 471 002b 00       	 .byte 0
+ 472 002c 00       	 .byte 0
+ 473 002d 00       	 .byte 0
+ 474 002e 00       	 .byte 0
+ 475 002f 01       	 .byte 1
+ 476 0030 00       	 .byte 0
+ 477 0031 000000   	 .space 3
+ 478 0034 00000010 	 .word 268435456
+ 479 0038 00000000 	 .word NoiseBlankCos_timer_handle
+ 480 003c 01       	 .byte 1
+ 481 003d 000000   	 .space 3
+ 482 0040 00020440 	 .word 1074004480
+ 483 0044 0A       	 .byte 10
+ 484 0045 000000   	 .space 3
+ 485 0048 00000000 	 .word NoiseBlankCos_ch1_out0_config
+ 486 004c 00000000 	 .word GLOBAL_CCU4_0
+ 487              	 .global NoiseBlankCos
+ 488              	 .section .data.NoiseBlankCos,"aw",%progbits
+ 489              	 .align 2
+ 492              	NoiseBlankCos:
+ 493 0000 00000000 	 .word NoiseBlankCos_config_handle
+ 494 0004 00000448 	 .word 1208221696
+ 495 0008 00030448 	 .word 1208222464
+ 496 000c 00       	 .byte 0
+ 497 000d 02       	 .byte 2
+ 498 000e 0000     	 .space 2
+ 499 0010 00010000 	 .word 256
+ 500 0014 00020000 	 .word 512
+ 501 0018 00040000 	 .word 1024
+ 502 001c 00       	 .byte 0
+ 503 001d 00000000 	 .space 7
+ 503      000000
+ 504 0024 10270000 	 .word 10000
+ 505              	 .text
+ 506              	.Letext0:
+ 507              	 .file 1 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 508              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 509              	 .file 3 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 510              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_gpio.h"
+ 511              	 .file 5 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc1_gpio.h"
+ 512              	 .file 6 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_ccu4.h"
+ 513              	 .file 7 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc1_scu.h"
+ 514              	 .file 8 "../Dave/Generated/PWM_CCU4/../GLOBAL_CCU4/global_ccu4.h"
+ 515              	 .file 9 "../Dave/Generated/PWM_CCU4/pwm_ccu4.h"
+ 516              	 .file 10 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 517              	 .file 11 "../Dave/Generated/PWM_CCU4/../GLOBAL_CCU4/global_ccu4_extern.h"
+ 518              	 .file 12 "../Dave/Generated/PWM_CCU4/pwm_ccu4_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pwm_ccu4_conf.c
+    {standard input}:22     .rodata.PWMSinGen_timer_handle:00000000 PWMSinGen_timer_handle
+    {standard input}:19     .rodata.PWMSinGen_timer_handle:00000000 $d
+    {standard input}:29     .rodata.PWMSinGen_event0_config:00000000 PWMSinGen_event0_config
+    {standard input}:26     .rodata.PWMSinGen_event0_config:00000000 $d
+    {standard input}:39     .rodata.PWMSinGen_event1_config:00000000 PWMSinGen_event1_config
+    {standard input}:36     .rodata.PWMSinGen_event1_config:00000000 $d
+    {standard input}:49     .rodata.PWMSinGen_event2_config:00000000 PWMSinGen_event2_config
+    {standard input}:46     .rodata.PWMSinGen_event2_config:00000000 $d
+    {standard input}:59     .rodata.PWMSinGen_ch1_out0_config:00000000 PWMSinGen_ch1_out0_config
+    {standard input}:56     .rodata.PWMSinGen_ch1_out0_config:00000000 $d
+    {standard input}:69     .rodata.PWMSinGen_config_handle:00000000 PWMSinGen_config_handle
+    {standard input}:66     .rodata.PWMSinGen_config_handle:00000000 $d
+    {standard input}:123    .data.PWMSinGen:00000000 PWMSinGen
+    {standard input}:120    .data.PWMSinGen:00000000 $d
+    {standard input}:141    .rodata.PWMCosGen_timer_handle:00000000 PWMCosGen_timer_handle
+    {standard input}:138    .rodata.PWMCosGen_timer_handle:00000000 $d
+    {standard input}:148    .rodata.PWMCosGen_event0_config:00000000 PWMCosGen_event0_config
+    {standard input}:145    .rodata.PWMCosGen_event0_config:00000000 $d
+    {standard input}:158    .rodata.PWMCosGen_event1_config:00000000 PWMCosGen_event1_config
+    {standard input}:155    .rodata.PWMCosGen_event1_config:00000000 $d
+    {standard input}:168    .rodata.PWMCosGen_event2_config:00000000 PWMCosGen_event2_config
+    {standard input}:165    .rodata.PWMCosGen_event2_config:00000000 $d
+    {standard input}:178    .rodata.PWMCosGen_ch1_out0_config:00000000 PWMCosGen_ch1_out0_config
+    {standard input}:175    .rodata.PWMCosGen_ch1_out0_config:00000000 $d
+    {standard input}:188    .rodata.PWMCosGen_config_handle:00000000 PWMCosGen_config_handle
+    {standard input}:185    .rodata.PWMCosGen_config_handle:00000000 $d
+    {standard input}:242    .data.PWMCosGen:00000000 PWMCosGen
+    {standard input}:239    .data.PWMCosGen:00000000 $d
+    {standard input}:260    .rodata.NoiseBlankSin_timer_handle:00000000 NoiseBlankSin_timer_handle
+    {standard input}:257    .rodata.NoiseBlankSin_timer_handle:00000000 $d
+    {standard input}:273    .rodata.NoiseBlankSin_event0_config:00000000 NoiseBlankSin_event0_config
+    {standard input}:270    .rodata.NoiseBlankSin_event0_config:00000000 $d
+    {standard input}:283    .rodata.NoiseBlankSin_event1_config:00000000 NoiseBlankSin_event1_config
+    {standard input}:280    .rodata.NoiseBlankSin_event1_config:00000000 $d
+    {standard input}:293    .rodata.NoiseBlankSin_event2_config:00000000 NoiseBlankSin_event2_config
+    {standard input}:290    .rodata.NoiseBlankSin_event2_config:00000000 $d
+    {standard input}:303    .rodata.NoiseBlankSin_ch1_out0_config:00000000 NoiseBlankSin_ch1_out0_config
+    {standard input}:300    .rodata.NoiseBlankSin_ch1_out0_config:00000000 $d
+    {standard input}:313    .rodata.NoiseBlankSin_config_handle:00000000 NoiseBlankSin_config_handle
+    {standard input}:310    .rodata.NoiseBlankSin_config_handle:00000000 $d
+    {standard input}:367    .data.NoiseBlankSin:00000000 NoiseBlankSin
+    {standard input}:364    .data.NoiseBlankSin:00000000 $d
+    {standard input}:385    .rodata.NoiseBlankCos_timer_handle:00000000 NoiseBlankCos_timer_handle
+    {standard input}:382    .rodata.NoiseBlankCos_timer_handle:00000000 $d
+    {standard input}:398    .rodata.NoiseBlankCos_event0_config:00000000 NoiseBlankCos_event0_config
+    {standard input}:395    .rodata.NoiseBlankCos_event0_config:00000000 $d
+    {standard input}:408    .rodata.NoiseBlankCos_event1_config:00000000 NoiseBlankCos_event1_config
+    {standard input}:405    .rodata.NoiseBlankCos_event1_config:00000000 $d
+    {standard input}:418    .rodata.NoiseBlankCos_event2_config:00000000 NoiseBlankCos_event2_config
+    {standard input}:415    .rodata.NoiseBlankCos_event2_config:00000000 $d
+    {standard input}:428    .rodata.NoiseBlankCos_ch1_out0_config:00000000 NoiseBlankCos_ch1_out0_config
+    {standard input}:425    .rodata.NoiseBlankCos_ch1_out0_config:00000000 $d
+    {standard input}:438    .rodata.NoiseBlankCos_config_handle:00000000 NoiseBlankCos_config_handle
+    {standard input}:435    .rodata.NoiseBlankCos_config_handle:00000000 $d
+    {standard input}:492    .data.NoiseBlankCos:00000000 NoiseBlankCos
+    {standard input}:489    .data.NoiseBlankCos:00000000 $d
+
+UNDEFINED SYMBOLS
+GLOBAL_CCU4_0
