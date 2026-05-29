@@ -1,4 +1,5 @@
 mod eventqueue;
+mod motor;
 mod port;
 
 use clap::Parser;
@@ -13,15 +14,12 @@ use rppal::{
     pwm::{Polarity, Pwm},
 };
 
-use crate::port::Serial;
+use crate::{motor::Motor, port::Serial};
 
 #[derive(Parser, Debug)]
 pub struct Args {
     #[arg(short, long)]
     url: Option<String>,
-
-    #[arg(short = 'p', long)]
-    pin: Option<u8>,
 
     #[arg(short = None, long)]
     serial: Option<String>,
@@ -48,20 +46,25 @@ fn main() {
         );
     }
 
-    if let Some(pin) = args.pin {
-        let mut motor = Gpio::new().unwrap().get(pin).unwrap().into_output_low();
-
-        loop {
-            println!("Stepping");
-            for _ in 0..1 {
-                motor.toggle();
-            }
-
-            println!("Done");
-
-            thread::sleep(Duration::from_secs(1));
-        }
+    {
+        let mut motor_x = Motor::new(5, 6);
+        let mut motor_y = Motor::new(23, 24);
     }
+
+    // if let Some(pin) = args.pin {
+    //     let mut motor = Gpio::new().unwrap().get(pin).unwrap().into_output_low();
+
+    //     loop {
+    //         println!("Stepping");
+    //         for _ in 0..1 {
+    //             motor.toggle();
+    //         }
+
+    //         println!("Done");
+
+    //         thread::sleep(Duration::from_secs(1));
+    //     }
+    // }
 
     if args.servo.is_some() {
         let motor = Pwm::new(rppal::pwm::Channel::Pwm0).unwrap();
