@@ -48,9 +48,9 @@ impl Motor {
 
         for _ in 0..do_steps {
             self.step_pin.set_high();
-            thread::sleep(Duration::from_millis(50));
+            thread::sleep(Duration::from_millis(100));
             self.step_pin.set_low();
-            thread::sleep(Duration::from_millis(50));
+            thread::sleep(Duration::from_millis(100));
         }
     }
 }
