@@ -9,30 +9,23 @@ use std::{
 };
 use tungstenite::{connect, Message};
 
-use rppal::{gpio::Gpio, pwm::{Channel, Pwm}};
+use rppal::gpio::Gpio;
 
 use crate::port::Serial;
 
-/// SG90 on hardware PWM0 (GPIO 12, ALT0).
-/// 50 Hz period = 20 ms; pulse width 500–2400 µs maps to 0–180°.
-const SERVO_PERIOD: Duration = Duration::from_millis(20);
-const SERVO_MIN_US: u64 = 500;  // 0°
-const SERVO_MAX_US: u64 = 2400; // 180°
+/// SG90 servo: 50 Hz, duty cycle 2.5% (0°) to 12.5% (180°).
+const SERVO_FREQ_HZ: f64 = 50.0;
+const SERVO_MIN_DUTY: f64 = 2.5;  // 0°
+const SERVO_MAX_DUTY: f64 = 12.5; // 180°
 
-/// Grid width must match the backend board (default 10).
 const GRID_WIDTH: f64 = 10.0;
 
-/// Map 0–180° to pulse width in µs.
-fn angle_to_pulse_us(angle: f64) -> u64 {
-    let angle = angle.clamp(0.0, 180.0);
-    let us = SERVO_MIN_US as f64 + (angle / 180.0) * (SERVO_MAX_US - SERVO_MIN_US) as f64;
-    us.round() as u64
+fn angle_to_duty(angle: f64) -> f64 {
+    SERVO_MIN_DUTY + (angle.clamp(0.0, 180.0) / 180.0) * (SERVO_MAX_DUTY - SERVO_MIN_DUTY)
 }
 
-/// Map grid X (0..GRID_WIDTH-1) to pulse width in µs.
-fn x_to_pulse_us(x: f64) -> u64 {
-    let angle = (x / (GRID_WIDTH - 1.0)) * 180.0;
-    angle_to_pulse_us(angle)
+fn x_to_duty(x: f64) -> f64 {
+    angle_to_duty((x / (GRID_WIDTH - 1.0)) * 180.0)
 }
 
 #[derive(Deserialize, Debug)]
@@ -53,13 +46,16 @@ fn run_servo_driver(ws_url: &str) {
     let (mut socket, _) = connect(ws_url).expect("Failed to connect to backend WebSocket");
     println!("Connected. Waiting for servo/move commands…");
 
-    // Hardware PWM0 is always on GPIO 12 (ALT0) — requires dtoverlay=pwm,pin=12,func=4
-    let servo = Pwm::new(Channel::Pwm0).expect("Failed to open hardware PWM0 (GPIO 12). Is dtoverlay=pwm,pin=12,func=4 set in /boot/firmware/config.txt?");
-    servo.set_period(SERVO_PERIOD).unwrap();
-    let center_us = (SERVO_MIN_US + SERVO_MAX_US) / 2;
-    servo.set_pulse_width(Duration::from_micros(center_us)).unwrap();
-    servo.enable().unwrap();
-    println!("SG90 on hardware PWM0 (GPIO 12), centred at {center_us}µs");
+    let mut pin = Gpio::new()
+        .expect("Failed to init GPIO")
+        .get(17)
+        .expect("Failed to get GPIO 17")
+        .into_output();
+
+    let center_duty = angle_to_duty(90.0);
+    pin.set_pwm_frequency(SERVO_FREQ_HZ, center_duty / 100.0)
+        .expect("Failed to start software PWM");
+    println!("SG90 on GPIO 17 (software PWM), centred at {center_duty:.1}%");
 
     loop {
         match socket.read() {
@@ -71,19 +67,21 @@ fn run_servo_driver(ws_url: &str) {
                 match value.get("type").and_then(|t| t.as_str()) {
                     Some("driver_servo_command") => {
                         if let Ok(cmd) = serde_json::from_value::<DriverServoCommand>(value) {
-                            let pulse_us = angle_to_pulse_us(cmd.angle);
-                            println!("Servo → {:.1}° ({}µs)", cmd.angle, pulse_us);
-                            servo.set_pulse_width(Duration::from_micros(pulse_us)).unwrap();
+                            let duty = angle_to_duty(cmd.angle);
+                            println!("Servo → {:.1}° ({:.2}% duty)", cmd.angle, duty);
+                            pin.set_pwm_frequency(SERVO_FREQ_HZ, duty / 100.0)
+                                .expect("Failed to set PWM");
                         }
                     }
                     Some("driver_move_command") => {
                         if let Ok(cmd) = serde_json::from_value::<DriverMoveCommand>(value) {
-                            let pulse_us = x_to_pulse_us(cmd.x.min(GRID_WIDTH as u64 - 1) as f64);
+                            let duty = x_to_duty(cmd.x.min(GRID_WIDTH as u64 - 1) as f64);
                             println!(
-                                "Moving {} → x={} ({}µs)  [cmd: {}]",
-                                cmd.figure_id, cmd.x, pulse_us, cmd.command_id
+                                "Moving {} → x={} ({:.2}% duty)  [cmd: {}]",
+                                cmd.figure_id, cmd.x, duty, cmd.command_id
                             );
-                            servo.set_pulse_width(Duration::from_micros(pulse_us)).unwrap();
+                            pin.set_pwm_frequency(SERVO_FREQ_HZ, duty / 100.0)
+                                .expect("Failed to set PWM");
                         }
                     }
                     _ => {}
@@ -101,7 +99,7 @@ fn run_servo_driver(ws_url: &str) {
         }
     }
 
-    servo.disable().ok();
+    pin.clear_pwm().ok();
 }
 
 #[derive(Parser, Debug)]
