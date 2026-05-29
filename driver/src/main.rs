@@ -28,6 +28,11 @@ fn x_to_duty(x: f64) -> f64 {
 }
 
 #[derive(Deserialize, Debug)]
+struct DriverServoCommand {
+    angle: f64,
+}
+
+#[derive(Deserialize, Debug)]
 struct DriverMoveCommand {
     figure_id: String,
     x: u64,
@@ -57,6 +62,16 @@ fn run_servo_driver(ws_url: &str, servo_pin: u8) {
                 let Ok(value) = serde_json::from_str::<serde_json::Value>(&text) else {
                     continue;
                 };
+
+                if value.get("type").and_then(|t| t.as_str()) == Some("driver_servo_command") {
+                    if let Ok(cmd) = serde_json::from_value::<DriverServoCommand>(value) {
+                        let duty = SERVO_DUTY_MIN + (cmd.angle / 180.0) * (SERVO_DUTY_MAX - SERVO_DUTY_MIN);
+                        println!("Servo → {:.1}° ({:.2}% duty)", cmd.angle, duty);
+                        pin.set_pwm_frequency(SERVO_FREQ_HZ, duty / 100.0)
+                            .expect("Failed to set PWM duty cycle");
+                    }
+                    continue;
+                }
 
                 if value.get("type").and_then(|t| t.as_str()) != Some("driver_move_command") {
                     continue;

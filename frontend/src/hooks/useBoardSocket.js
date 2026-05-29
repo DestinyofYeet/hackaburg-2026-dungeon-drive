@@ -122,5 +122,12 @@ export function useBoardSocket(socketUrl) {
     return command_id;
   }, []);
 
-  return { boardState, connection, stats, sendMoveCommand };
+  const sendServoCommand = useCallback((angle) => {
+    const socket = socketRef.current;
+    if (!socket || socket.readyState !== WebSocket.OPEN) return false;
+    socket.send(JSON.stringify({ type: 'servo_command', angle }));
+    return true;
+  }, []);
+
+  return { boardState, connection, stats, sendMoveCommand, sendServoCommand };
 }

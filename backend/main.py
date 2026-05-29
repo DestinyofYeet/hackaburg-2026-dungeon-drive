@@ -93,6 +93,17 @@ async def websocket_endpoint(ws: WebSocket) -> None:
                 # Ignore non-JSON messages so malformed clients don't crash the socket.
                 continue
 
+            if message.get("type") == "servo_command":
+                angle = message.get("angle")
+                if isinstance(angle, (int, float)) and 0 <= angle <= 180:
+                    payload = json.dumps({"type": "driver_servo_command", "angle": angle})
+                    for client in list(game_state._connections):
+                        try:
+                            await client.send_text(payload)
+                        except Exception:
+                            pass
+                continue
+
             if message.get("type") != "move_command":
                 # Ignore unknown message types.
                 continue

@@ -14,7 +14,8 @@ export default function App() {
   const [draftUrl, setDraftUrl] = useState(DEFAULT_SOCKET_URL);
   const [selectedId, setSelectedId] = useState('enemy_1');
   const [commandStatus, setCommandStatus] = useState('');
-  const { boardState, connection, stats, sendMoveCommand } = useBoardSocket(socketUrl);
+  const [servoAngle, setServoAngle] = useState(90);
+  const { boardState, connection, stats, sendMoveCommand, sendServoCommand } = useBoardSocket(socketUrl);
 
   const selected = useMemo(() => {
     return boardState.figures?.find((figure) => figure.id === selectedId) || boardState.figures?.[0];
@@ -60,6 +61,27 @@ export default function App() {
                 <button type="button" className="ghost" onClick={() => setSocketUrl('')}>Demo Mode</button>
               </form>
               {commandStatus ? <span className="command-status">{commandStatus}</span> : null}
+            </div>
+          </section>
+
+          <section className="socket-card">
+            <div className="socket-controls">
+              <div>
+                <p className="eyebrow">Servo Control</p>
+                <strong>Angle: {servoAngle}°</strong>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="180"
+                value={servoAngle}
+                onChange={(e) => {
+                  const angle = Number(e.target.value);
+                  setServoAngle(angle);
+                  sendServoCommand(angle);
+                }}
+                style={{ width: '100%' }}
+              />
             </div>
           </section>
 
