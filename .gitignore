@@ -2,3 +2,14 @@ frontend/node_modules/
 frontend/dist/
 .DS_Store
 .direnv/
+
+# Python backend
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
+*.egg-info/
+dist/
+build/
