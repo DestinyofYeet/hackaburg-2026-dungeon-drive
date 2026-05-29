@@ -1,3 +1,5 @@
+use std::{thread, time::Duration};
+
 use rppal::gpio::{Gpio, OutputPin};
 
 pub struct Motor {
@@ -46,7 +48,9 @@ impl Motor {
 
         for _ in 0..do_steps {
             self.step_pin.set_high();
+            thread::sleep(Duration::from_millis(50));
             self.step_pin.set_low();
+            thread::sleep(Duration::from_millis(50));
         }
     }
 }
