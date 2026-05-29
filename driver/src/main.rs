@@ -23,10 +23,10 @@ pub struct Args {
     #[arg(short = 'p', long)]
     pin: Option<u8>,
 
-    #[arg(short, long)]
+    #[arg(short = None, long)]
     serial: Option<String>,
 
-    #[arg(short, long)]
+    #[arg(short = None, long)]
     servo: Option<u8>,
 }
 
