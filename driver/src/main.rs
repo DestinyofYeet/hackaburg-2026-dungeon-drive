@@ -8,7 +8,10 @@ use std::{
     time::Duration,
 };
 
-use rppal::gpio::Gpio;
+use rppal::{
+    gpio::Gpio,
+    pwm::{Polarity, Pwm},
+};
 
 use crate::port::Serial;
 
@@ -22,6 +25,9 @@ pub struct Args {
 
     #[arg(short, long)]
     serial: Option<String>,
+
+    #[arg(short, long)]
+    servo: Option<u8>,
 }
 
 fn main() {
@@ -54,6 +60,30 @@ fn main() {
             println!("Done");
 
             thread::sleep(Duration::from_secs(1));
+        }
+    }
+
+    if args.servo.is_some() {
+        let motor = Pwm::new(rppal::pwm::Channel::Pwm0).unwrap();
+        motor.set_pulse_width(Duration::from_micros(1500)).unwrap();
+        motor.set_period(Duration::from_millis(20)).unwrap();
+
+        motor.enable().unwrap();
+        let mut last = Polarity::Normal;
+        loop {
+            println!("Stepping");
+
+            match last {
+                Polarity::Normal => {
+                    motor.set_polarity(Polarity::Inverse).unwrap();
+                    last = Polarity::Inverse;
+                }
+                Polarity::Inverse => {
+                    motor.set_polarity(Polarity::Normal).unwrap();
+                    last = Polarity::Normal;
+                }
+            }
+            sleep(Duration::from_secs(1));
         }
     }
 }
