@@ -54,6 +54,7 @@ fn main() {
         let mut motor_x = Motor::new(17, 27);
         motor_x.step_motor(StepMotor::Forward { steps: 200 });
         let mut motor_y = Motor::new(23, 24);
+        motor_y.step_motor(StepMotor::Forward { steps: 200 });
     }
 
     // if let Some(pin) = args.pin {
