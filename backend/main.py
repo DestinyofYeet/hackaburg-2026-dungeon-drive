@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, Response, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from models import (
@@ -101,11 +101,12 @@ async def create_figure(body: CreateFigureRequest) -> Figure:
     return figure
 
 
-@app.delete("/api/figures/{figure_id}", status_code=204)
-async def delete_figure(figure_id: str) -> None:
+@app.delete("/api/figures/{figure_id}", status_code=204, response_class=Response)
+async def delete_figure(figure_id: str) -> Response:
     _figure_or_404(figure_id)
     game_state.remove_figure(figure_id)
     await game_state.broadcast()
+    return Response(status_code=204)
 
 
 @app.patch("/api/figures/{figure_id}/move", response_model=Figure)
