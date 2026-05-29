@@ -50,6 +50,7 @@ fn main() {
     }
 
     {
+        println!("Moving");
         let mut motor_x = Motor::new(5, 6);
         motor_x.step_motor(StepMotor::Forward { steps: 20 });
         let mut motor_y = Motor::new(23, 24);
