@@ -8,6 +8,7 @@ import AiPanel from './components/AiPanel.jsx';
 import EventLog from './components/EventLog.jsx';
 import LearnDnd from './components/LearnDnd.jsx';
 
+
 const DEFAULT_SOCKET_URL = import.meta.env.VITE_BOARD_SOCKET_URL || 'ws://localhost:8000/ws';
 
 export default function App() {
@@ -65,9 +66,10 @@ export default function App() {
         </button>
       </div>
 
-      {activeTab === 'command' ? (
+      {activeTab === 'learn' ? (
+        <LearnDnd onLaunch={() => setActiveTab('command')} />
+      ) : (
         <>
-
           <section className="overview-grid">
             <div className="overview-main">
               <section className="socket-card">
@@ -105,8 +107,6 @@ export default function App() {
             </aside>
           </div>
         </>
-      ) : (
-        <LearnDnd />
       )}
     </main>
   );
