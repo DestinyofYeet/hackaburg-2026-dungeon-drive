@@ -18,6 +18,7 @@ REST endpoints:
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+import json
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -71,8 +72,114 @@ async def websocket_endpoint(ws: WebSocket) -> None:
     await ws.send_text(game_state.state.to_ws_json())
     try:
         while True:
-            # Keep connection alive; driver mutations push updates via broadcast()
-            await ws.receive_text()
+            frame = await ws.receive()
+
+            if frame.get("type") == "websocket.disconnect":
+                raise WebSocketDisconnect()
+
+            message_text = frame.get("text")
+            if message_text is None and frame.get("bytes") is not None:
+                try:
+                    message_text = frame["bytes"].decode("utf-8")
+                except UnicodeDecodeError:
+                    continue
+
+            if not message_text:
+                continue
+
+            try:
+                message = json.loads(message_text)
+            except json.JSONDecodeError:
+                # Ignore non-JSON messages so malformed clients don't crash the socket.
+                continue
+
+            if message.get("type") != "move_command":
+                # Ignore unknown message types.
+                continue
+
+            command_id = message.get("command_id")
+            figure_id = message.get("figure_id")
+            x = message.get("x")
+            y = message.get("y")
+
+            # Validate command_id
+            if not isinstance(command_id, str) or not command_id:
+                await ws.send_text(json.dumps({
+                    "type": "command_error",
+                    "command_id": command_id or None,
+                    "error": "Missing or invalid command_id"
+                }))
+                continue
+
+            # Validate figure_id
+            if not isinstance(figure_id, str) or not figure_id:
+                await ws.send_text(json.dumps({
+                    "type": "command_error",
+                    "command_id": command_id,
+                    "error": "Missing or invalid figure_id"
+                }))
+                continue
+
+            # Validate x/y are integers
+            try:
+                x_int = int(x)
+                y_int = int(y)
+            except (TypeError, ValueError):
+                await ws.send_text(json.dumps({
+                    "type": "command_error",
+                    "command_id": command_id,
+                    "error": "x and y must be integers"
+                }))
+                continue
+
+            # Validate figure exists
+            figure = game_state.get_figure(figure_id)
+            if figure is None:
+                await ws.send_text(json.dumps({
+                    "type": "command_error",
+                    "command_id": command_id,
+                    "error": f"Figure '{figure_id}' not found"
+                }))
+                continue
+
+            # Validate x/y in bounds
+            board = game_state.state.board
+            if not (0 <= x_int < board.width and 0 <= y_int < board.height):
+                await ws.send_text(json.dumps({
+                    "type": "command_error",
+                    "command_id": command_id,
+                    "error": f"Target ({x_int}, {y_int}) out of bounds"
+                }))
+                continue
+
+            # Command accepted: send ack to sender
+            await ws.send_text(json.dumps({
+                "type": "command_ack",
+                "command_id": command_id,
+                "figure_id": figure_id,
+                "x": x_int,
+                "y": y_int
+            }))
+
+            # Broadcast driver_move_command for hardware integration
+            driver_move_msg = json.dumps({
+                "type": "driver_move_command",
+                "command_id": command_id,
+                "figure_id": figure_id,
+                "x": x_int,
+                "y": y_int
+            })
+            for client in list(game_state._connections):
+                try:
+                    await client.send_text(driver_move_msg)
+                except Exception:
+                    pass
+
+            game_state.add_event(f"Move command accepted: {figure_id} → ({x_int}, {y_int})")
+
+            # Demo behavior: move the digital figure immediately.
+            game_state.move_figure(figure_id, x_int, y_int)
+            await game_state.broadcast()
     except WebSocketDisconnect:
         pass
     finally:

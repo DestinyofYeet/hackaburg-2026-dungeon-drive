@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const mockState = {
   type: 'board_state',
@@ -37,6 +37,7 @@ function normalizeIncoming(data) {
 export function useBoardSocket(socketUrl) {
   const [boardState, setBoardState] = useState(mockState);
   const [connection, setConnection] = useState({ status: 'mock', lastSeen: null, error: null });
+  const socketRef = useRef(null);
 
   useEffect(() => {
     if (!socketUrl) {
@@ -49,6 +50,7 @@ export function useBoardSocket(socketUrl) {
 
     try {
       socket = new WebSocket(socketUrl);
+      socketRef.current = socket;
       setConnection({ status: 'connecting', lastSeen: null, error: null });
 
       socket.onopen = () => {
@@ -81,6 +83,7 @@ export function useBoardSocket(socketUrl) {
     return () => {
       cancelled = true;
       if (socket) socket.close();
+      if (socketRef.current === socket) socketRef.current = null;
     };
   }, [socketUrl]);
 
@@ -93,5 +96,31 @@ export function useBoardSocket(socketUrl) {
     };
   }, [boardState.figures]);
 
-  return { boardState, connection, stats };
+
+  // Simple random command_id generator for hackathon/demo
+  function generateCommandId() {
+    return 'cmd_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  const sendMoveCommand = useCallback((figureId, x, y) => {
+    const socket = socketRef.current;
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      return false;
+    }
+
+    const command_id = generateCommandId();
+
+    socket.send(JSON.stringify({
+      type: 'move_command',
+      command_id,
+      figure_id: figureId,
+      x,
+      y
+    }));
+
+    return command_id;
+  }, []);
+
+  return { boardState, connection, stats, sendMoveCommand };
 }

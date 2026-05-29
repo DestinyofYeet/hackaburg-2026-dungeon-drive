@@ -8,39 +8,29 @@ import AiPanel from './components/AiPanel.jsx';
 import EventLog from './components/EventLog.jsx';
 
 const DEFAULT_SOCKET_URL = import.meta.env.VITE_BOARD_SOCKET_URL || 'ws://localhost:8000/ws';
-const DEFAULT_API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(DEFAULT_SOCKET_URL);
   const [draftUrl, setDraftUrl] = useState(DEFAULT_SOCKET_URL);
   const [selectedId, setSelectedId] = useState('enemy_1');
   const [commandStatus, setCommandStatus] = useState('');
-  const { boardState, connection, stats } = useBoardSocket(socketUrl);
+  const { boardState, connection, stats, sendMoveCommand } = useBoardSocket(socketUrl);
 
   const selected = useMemo(() => {
     return boardState.figures?.find((figure) => figure.id === selectedId) || boardState.figures?.[0];
   }, [boardState.figures, selectedId]);
 
-  const moveFigure = async (figureId, x, y) => {
-    setCommandStatus(`Sending move command for ${figureId}...`);
+  const moveFigure = (figureId, x, y) => {
+    setCommandStatus(`Sending physical move command for ${figureId}...`);
 
-    try {
-      const response = await fetch(`${DEFAULT_API_URL}/api/figures/${figureId}/move`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ x, y })
-      });
+    const sent = sendMoveCommand(figureId, x, y);
 
-      if (!response.ok) {
-        throw new Error(`Move request failed (${response.status})`);
-      }
-
-      setCommandStatus(`Move confirmed for ${figureId} → ${x}, ${y}`);
-    } catch (error) {
-      setCommandStatus(error.message);
+    if (!sent) {
+      setCommandStatus('Move command failed: WebSocket is not connected');
+      return;
     }
+
+    setCommandStatus(`Move command queued for ${figureId} → ${x}, ${y}`);
   };
 
   return (
