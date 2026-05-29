@@ -1,13 +1,15 @@
+mod eventqueue;
+
 use std::{thread, time::Duration};
 
-use rust_gpiozero::DigitalOutputDevice;
+use rppal::gpio::Gpio;
 
 fn main() {
-    let mut motor = DigitalOutputDevice::new(17);
+    let mut motor = Gpio::new().unwrap().get(17).unwrap().into_output_low();
 
     loop {
         println!("Stepping");
-        for _ in 0..200 {
+        for _ in 0..1 {
             motor.toggle();
         }
 
