@@ -1,4 +1,5 @@
 mod eventqueue;
+mod port;
 
 use clap::Parser;
 
@@ -6,23 +7,34 @@ use std::{thread, time::Duration};
 
 use rppal::gpio::Gpio;
 
-use crate::eventqueue::Websocket;
+use crate::port::Serial;
 
 #[derive(Parser, Debug)]
 pub struct Args {
-    #[arg(short = 'w', long)]
-    websocket: Option<String>,
+    #[arg(short, long)]
+    url: Option<String>,
 
     #[arg(short = 'p', long)]
     pin: Option<u8>,
+
+    #[arg(short, long)]
+    serial: Option<String>,
 }
 
 fn main() {
     let args = Args::parse();
 
-    if let Some(socket_addr) = args.websocket {
-        let ws = Websocket::new(socket_addr);
-        println!("Connected to ws");
+    if let Some(serial) = args.serial {
+        let mut port = Serial::new(serial, 9_600);
+
+        loop {
+            println!("{:?}", port.read_value())
+        }
+    } else {
+        println!(
+            "Available ports: {:?}",
+            serialport::available_ports().unwrap()
+        );
     }
 
     if let Some(pin) = args.pin {
