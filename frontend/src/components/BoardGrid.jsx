@@ -12,7 +12,7 @@ function labelFor(x, y) {
   return `${String.fromCharCode(65 + x)}${y + 1}`;
 }
 
-export default function BoardGrid({ board, figures, selectedId, onSelect }) {
+export default function BoardGrid({ board, figures, selectedId, onSelect, onMoveFigure }) {
   const width = board?.width || 10;
   const height = board?.height || 10;
   const cells = Array.from({ length: width * height }, (_, index) => ({
@@ -32,9 +32,19 @@ export default function BoardGrid({ board, figures, selectedId, onSelect }) {
 
       <div className="board-grid" style={{ gridTemplateColumns: `repeat(${width}, minmax(0, 1fr))` }}>
         {cells.map((cell) => (
-          <div className="board-cell" key={`${cell.x}-${cell.y}`}>
+          <button
+            type="button"
+            className="board-cell"
+            key={`${cell.x}-${cell.y}`}
+            onClick={() => {
+              if (selectedId && onMoveFigure) {
+                onMoveFigure(selectedId, cell.x, cell.y);
+              }
+            }}
+            title={`Move selected figure to ${labelFor(cell.x, cell.y)}`}
+          >
             <span>{labelFor(cell.x, cell.y)}</span>
-          </div>
+          </button>
         ))}
 
         <div className="figure-layer">
@@ -62,7 +72,10 @@ export default function BoardGrid({ board, figures, selectedId, onSelect }) {
                   scale: { duration: 0.18 }
                 }}
                 whileHover={{ scale: 1.16 }}
-                onClick={() => onSelect(figure.id)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onSelect(figure.id);
+                }}
                 title={`${figure.name} at ${labelFor(figure.x, figure.y)}`}
               >
                 <Icon size={20} />
