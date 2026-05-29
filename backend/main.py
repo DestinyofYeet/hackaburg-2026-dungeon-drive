@@ -101,7 +101,7 @@ async def create_figure(body: CreateFigureRequest) -> Figure:
     return figure
 
 
-@app.delete("/api/figures/{figure_id}", status_code=204)
+@app.delete("/api/figures/{figure_id}", status_code=200)
 async def delete_figure(figure_id: str) -> None:
     _figure_or_404(figure_id)
     game_state.remove_figure(figure_id)

@@ -7,11 +7,11 @@ import CreaturePanel from './components/CreaturePanel.jsx';
 import AiPanel from './components/AiPanel.jsx';
 import EventLog from './components/EventLog.jsx';
 
-const DEFAULT_SOCKET_URL = import.meta.env.VITE_BOARD_SOCKET_URL || '';
+const DEFAULT_SOCKET_URL = import.meta.env.VITE_BOARD_SOCKET_URL || 'ws://localhost:8000/ws';
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(DEFAULT_SOCKET_URL);
-  const [draftUrl, setDraftUrl] = useState(DEFAULT_SOCKET_URL || 'ws://raspberrypi.local:8000/ws');
+  const [draftUrl, setDraftUrl] = useState(DEFAULT_SOCKET_URL);
   const [selectedId, setSelectedId] = useState('enemy_1');
   const { boardState, connection, stats } = useBoardSocket(socketUrl);
 
@@ -39,7 +39,7 @@ export default function App() {
           <strong>{socketUrl || 'No socket connected — showing polished mock data'}</strong>
         </div>
         <form onSubmit={(event) => { event.preventDefault(); setSocketUrl(draftUrl.trim()); }}>
-          <input value={draftUrl} onChange={(event) => setDraftUrl(event.target.value)} placeholder="ws://raspberrypi.local:8000/ws" />
+          <input value={draftUrl} onChange={(event) => setDraftUrl(event.target.value)} placeholder="ws://localhost:8000/ws" />
           <button type="submit">Connect</button>
           <button type="button" className="ghost" onClick={() => setSocketUrl('')}>Demo Mode</button>
         </form>
