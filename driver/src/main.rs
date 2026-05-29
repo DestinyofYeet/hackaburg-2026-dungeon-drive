@@ -14,7 +14,10 @@ use rppal::{
     pwm::{Polarity, Pwm},
 };
 
-use crate::{motor::Motor, port::Serial};
+use crate::{
+    motor::{Motor, StepMotor},
+    port::Serial,
+};
 
 #[derive(Parser, Debug)]
 pub struct Args {
@@ -48,6 +51,7 @@ fn main() {
 
     {
         let mut motor_x = Motor::new(5, 6);
+        motor_x.step_motor(StepMotor::Forward { steps: 20 });
         let mut motor_y = Motor::new(23, 24);
     }
 
