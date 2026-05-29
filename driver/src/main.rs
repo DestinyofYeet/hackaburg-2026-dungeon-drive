@@ -3,7 +3,10 @@ mod port;
 
 use clap::Parser;
 
-use std::{thread, time::Duration};
+use std::{
+    thread::{self, sleep},
+    time::Duration,
+};
 
 use rppal::gpio::Gpio;
 
@@ -28,7 +31,9 @@ fn main() {
         let mut port = Serial::new(serial, 9_600);
 
         loop {
-            println!("{:?}", port.read_value())
+            let value = port.read_value();
+            println!("value: {:?}", value);
+            sleep(Duration::from_millis(50));
         }
     } else {
         println!(

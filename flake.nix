@@ -23,6 +23,7 @@
           nodejs
           websocat
           udev
+          screen
         ];
 
         # uncomment this is you get some kind of ssl error, usually on anything networking related using reqwest
