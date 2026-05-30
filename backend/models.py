@@ -54,6 +54,20 @@ class BoardState(BaseModel):
 # ── Request bodies ──────────────────────────────────────────────────────────
 
 
+class CreateFigureRequest(BaseModel):
+    id: str
+    name: str
+    role: str
+    team: Team
+    x: int = Field(ge=0)
+    y: int = Field(ge=0)
+    hp: int = Field(ge=0)
+    max_hp: int = Field(alias="maxHp", ge=1)
+    status: str = "idle"
+
+    model_config = {"populate_by_name": True}
+
+
 class MoveFigureRequest(BaseModel):
     x: int = Field(ge=0)
     y: int = Field(ge=0)
@@ -82,14 +96,3 @@ class SensorReading(BaseModel):
     x: float
     y: float
     z: float
-    id: str
-    name: str
-    role: str
-    team: Team
-    x: int = Field(ge=0)
-    y: int = Field(ge=0)
-    hp: int = Field(ge=0)
-    max_hp: int = Field(alias="maxHp", ge=1)
-    status: str = "idle"
-
-    model_config = {"populate_by_name": True}
