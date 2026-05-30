@@ -11,9 +11,9 @@ use serialport::SerialPort;
 
 #[derive(Debug)]
 pub struct SerialValue {
-    x: f64,
-    y: f64,
-    z: f64,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
 }
 
 impl SerialValue {
@@ -41,12 +41,12 @@ impl SerialValue {
     }
 }
 
-pub struct Serial {
+pub struct Magnet {
     buffer: Arc<Mutex<VecDeque<SerialValue>>>,
     read_handle: JoinHandle<()>,
 }
 
-impl Serial {
+impl Magnet {
     pub fn new(port: String, rate: u32) -> Self {
         let port = serialport::new(port, rate)
             .timeout(Duration::from_millis(10))

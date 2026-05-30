@@ -6,7 +6,8 @@ mod port;
 use clap::Parser;
 use serde::Deserialize;
 use std::{
-    thread::sleep,
+    io::Write,
+    thread::{self, sleep},
     time::Duration,
 };
 use tungstenite::{connect, Message};
@@ -16,7 +17,8 @@ use serialport::SerialPort;
 
 use crate::{
     gantry::{Gantry, GantryValue},
-    port::Serial,
+    motor::{Motor, StepMotor},
+    port::Magnet,
 };
 
 /// SG90 servo: 50 Hz, duty cycle 2.5% (0°) to 12.5% (180°).
@@ -150,35 +152,71 @@ pub struct Args {
     #[arg(short, long = "gantry")]
     gantry_serial: Option<String>,
 
-    /// Enable servo mode (SG90).
-    #[arg(long, action = clap::ArgAction::SetTrue)]
-    servo: bool,
-
-    /// Serial port for the Arduino servo controller (e.g. /dev/ttyUSB0).
-    /// If omitted, falls back to software PWM on GPIO 17.
-    #[arg(long)]
-    servo_serial: Option<String>,
+    #[arg(short, long)]
+    no_track: bool,
 }
 
 fn main() {
     let args = Args::parse();
 
-    // ── Magnet sensor serial reader mode ──────────────────────────────────────
-    if let Some(serial) = args.magnet_serial {
-        let mut port = Serial::new(serial, 9_600);
+    println!(
+        "Available ports: {:?}",
+        serialport::available_ports().unwrap()
+    );
 
-        loop {
-            let value = port.read_value();
-            println!("value: {:?}", value);
-            sleep(Duration::from_millis(50));
-        }
+    if args.magnet_serial.is_none() {
+        eprintln!("Magnet serial is needed!");
+        return;
     }
 
-    // ── Gantry serial mode ────────────────────────────────────────────────────
-    if let Some(serial) = args.gantry_serial {
-        let mut gantry = Gantry::new(serial);
-        gantry.write(GantryValue::X(10));
+    if args.gantry_serial.is_none() {
+        eprintln!("Gantry serial is needed!");
         return;
+    }
+
+    let mut magnet_serial = Magnet::new(args.magnet_serial.unwrap(), 9_600);
+
+    let mut gantry = Gantry::new(args.gantry_serial.unwrap());
+
+    loop {
+        let value = match magnet_serial.read_value() {
+            None => continue,
+            Some(value) => value,
+        };
+
+        println!("{value:?}");
+
+        let move_gantry_x = value.x % 20.0 * 20.0;
+        let move_gantry_y = -(value.y % 20.0 * 20.0);
+
+        if value.z.abs() > 45.0 {
+            continue;
+        }
+
+        let value = GantryValue::new()
+            .move_x(move_gantry_x as i32)
+            .move_y(move_gantry_y as i32);
+
+        if !args.no_track {
+            gantry.move_gantry(value);
+        }
+
+        // let mut line = String::new();
+        // print!("Write command: ");
+        // std::io::stdout().flush().unwrap();
+        // std::io::stdin().read_line(&mut line).unwrap();
+
+        // gantry.write_raw(line);
+
+        // let value = GantryValue::new().move_x(2000).move_y(2000);
+        // gantry.move_gantry(value);
+
+        // sleep(Duration::from_secs(2));
+
+        // let value = GantryValue::new().move_x(-2000).move_y(-2000);
+        // gantry.move_gantry(value);
+
+        // sleep(Duration::from_secs(2));
     }
 
     // ── Servo + WebSocket driver mode ─────────────────────────────────────────
