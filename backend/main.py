@@ -14,11 +14,14 @@ REST endpoints:
   PATCH  /api/ai                       – update AI recommendation / narration
   POST   /api/events                   – append an event message
   POST   /api/driver/sync              – bulk-replace state (Raspberry Pi driver)
+  POST   /api/sensor                   – ingest x,y,z magnetic sensor reading
+  GET    /api/sensor                   – latest magnetic sensor reading
 """
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
 import json
+from typing import Optional
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,6 +32,7 @@ from models import (
     CreateFigureRequest,
     Figure,
     MoveFigureRequest,
+    SensorReading,
     UpdateAiRequest,
     UpdateHpRequest,
     UpdateTurnRequest,
@@ -91,6 +95,17 @@ async def websocket_endpoint(ws: WebSocket) -> None:
                 message = json.loads(message_text)
             except json.JSONDecodeError:
                 # Ignore non-JSON messages so malformed clients don't crash the socket.
+                continue
+
+            if message.get("type") == "servo_command":
+                angle = message.get("angle")
+                if isinstance(angle, (int, float)) and 0 <= angle <= 180:
+                    payload = json.dumps({"type": "driver_servo_command", "angle": angle})
+                    for client in list(game_state._connections):
+                        try:
+                            await client.send_text(payload)
+                        except Exception:
+                            pass
                 continue
 
             if message.get("type") != "move_command":
@@ -273,3 +288,22 @@ async def driver_sync(body: BoardState) -> dict:
     game_state.replace_state(body)
     await game_state.broadcast()
     return {"ok": True}
+
+
+# ── REST: magnetic sensor ─────────────────────────────────────────────────────
+
+_latest_sensor: Optional[SensorReading] = None
+
+
+@app.post("/api/sensor", status_code=201)
+async def post_sensor(body: SensorReading) -> SensorReading:
+    global _latest_sensor
+    _latest_sensor = body
+    return _latest_sensor
+
+
+@app.get("/api/sensor")
+async def get_sensor() -> SensorReading:
+    if _latest_sensor is None:
+        raise HTTPException(status_code=404, detail="No sensor reading available yet")
+    return _latest_sensor
