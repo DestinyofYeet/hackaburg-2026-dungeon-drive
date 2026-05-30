@@ -83,9 +83,8 @@ export default function App() {
                     <strong>{`Current IP: ${backendIp}`}</strong>
                   </div>
                   <form onSubmit={(event) => { event.preventDefault(); setSocketUrl(draftUrl.trim()); }}>
-                    <input onChange={(e) => { setBackendIp(e.target.value); setDraftUrl("ws://"+e.target.value+":8000/ws"); }} placeholder="127.0.0.1"/>
+                    <input onChange={(e) => { setBackendIp(e.target.value); setDraftUrl("ws://"+e.target.value+":8000/ws"); }} placeholder={window.location.origin}/>
                     <button type="submit">Connect</button>
-                    <button type="button" className="ghost" onClick={() => setSocketUrl('')}>Demo Mode</button>
                   </form>
                   {commandStatus ? <span className="command-status">{commandStatus}</span> : null}
                 </div>
