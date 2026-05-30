@@ -126,7 +126,7 @@ fn main() {
             sleep(Duration::from_secs(2));
 
             let basic_move = GantryValue::new()
-                .move_y(((y + x) * -400 * 2) as i32)
+                .move_y(((y + x) * -500 * 2) as i32)
                 .move_x((x * 300) as i32)
                 .move_z(180);
             gantry.move_gantry(basic_move);
@@ -134,7 +134,7 @@ fn main() {
             let drop_off = GantryValue::new().move_z(1);
             gantry.move_gantry(drop_off);
 
-            sleep(Duration::from_secs(1));
+            sleep(Duration::from_secs(2));
 
             let revert_basic_move = -basic_move;
             gantry.move_gantry(revert_basic_move);
