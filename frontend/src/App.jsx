@@ -9,14 +9,17 @@ import EventLog from './components/EventLog.jsx';
 import LearnDnd from './components/LearnDnd.jsx';
 
 
-const DEFAULT_SOCKET_URL = import.meta.env.VITE_BOARD_SOCKET_URL || 'ws://localhost:8000/ws';
+const DEFAULT_BACKEND_IP = '127.0.0.1';
+const DEFAULT_SOCKET_URL = `ws://${DEFAULT_BACKEND_IP}:8000/ws`;
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(DEFAULT_SOCKET_URL);
-  const [draftUrl, setDraftUrl] = useState(DEFAULT_SOCKET_URL);
+  const [backendIp, setBackendIp] = useState(DEFAULT_BACKEND_IP);
+  const [draftUrl, setDraftUrl] = useState(
+    DEFAULT_BACKEND_IP ? `ws://${DEFAULT_BACKEND_IP}:8000/ws` : DEFAULT_SOCKET_URL
+  );
   const [selectedId, setSelectedId] = useState('enemy_1');
   const [commandStatus, setCommandStatus] = useState('');
-  const [servoAngle, setServoAngle] = useState(90);
   const [activeTab, setActiveTab] = useState('command');
   const { boardState, connection, stats, sendMoveCommand, sendServoCommand } = useBoardSocket(socketUrl);
 
@@ -77,37 +80,16 @@ export default function App() {
                 <div className="socket-controls">
                   <div>
                     <p className="eyebrow">Raspberry Pi WebSocket</p>
-                    <strong>{socketUrl || 'No socket connected — showing polished mock data'}</strong>
+                    <strong>{`Current IP: ${backendIp}`}</strong>
                   </div>
                   <form onSubmit={(event) => { event.preventDefault(); setSocketUrl(draftUrl.trim()); }}>
-                    <input value={draftUrl} onChange={(event) => setDraftUrl(event.target.value)} placeholder="ws://localhost:8000/ws" />
+                    <input onChange={(e) => { setBackendIp(e.target.value); setDraftUrl("ws://"+e.target.value+":8000/ws"); }} placeholder="127.0.0.1"/>
                     <button type="submit">Connect</button>
                     <button type="button" className="ghost" onClick={() => setSocketUrl('')}>Demo Mode</button>
                   </form>
                   {commandStatus ? <span className="command-status">{commandStatus}</span> : null}
                 </div>
               </section>
-
-          <section className="socket-card">
-            <div className="socket-controls">
-              <div>
-                <p className="eyebrow">Servo Control</p>
-                <strong>Angle: {servoAngle}°</strong>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="180"
-                value={servoAngle}
-                onChange={(e) => {
-                  const angle = Number(e.target.value);
-                  setServoAngle(angle);
-                  sendServoCommand(angle);
-                }}
-                style={{ width: '100%' }}
-              />
-            </div>
-          </section>
 
               <section className="stat-grid">
                 <div className="stat-card"><Gamepad2 /><span>Tracked Pieces</span><strong>{stats.tracked}</strong></div>
