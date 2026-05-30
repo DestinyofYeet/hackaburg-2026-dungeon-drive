@@ -14,9 +14,9 @@ const DEFAULT_SOCKET_URL = `ws://${DEFAULT_BACKEND_IP}:8000/ws`;
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(DEFAULT_SOCKET_URL);
-  const [backendIp, setBackendIp] = useState(DEFAULT_BACKEND_IP);
+  const [backendIp, setBackendIp] = useState(DEFAULT_BACKEND_IP || window.location.hostname);
   const [draftUrl, setDraftUrl] = useState(
-    DEFAULT_BACKEND_IP ? `ws://${DEFAULT_BACKEND_IP}:8000/ws` : DEFAULT_SOCKET_URL
+    `ws://${DEFAULT_BACKEND_IP || window.location.hostname}:8000/ws`
   );
   const [selectedId, setSelectedId] = useState('enemy_1');
   const [commandStatus, setCommandStatus] = useState('');
