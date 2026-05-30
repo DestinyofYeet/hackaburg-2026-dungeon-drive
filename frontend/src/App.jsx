@@ -71,21 +71,17 @@ export default function App() {
       </div>
 
       {activeTab === 'learn' ? (
-        <LearnDnd onLaunch={() => setActiveTab('command')} />
+        <LearnDnd onLaunch={() => { setActiveTab('command'); setDraftUrl(`ws://${window.location.origin}:8000/ws`); }} />
       ) : (
         <>
           <section className="overview-grid">
             <div className="overview-main">
-              <section className="socket-card">
+              <section className="socket-card" onLoad={() => {setDraftUrl(`ws://${window.location.origin}:8000/ws`)} }>
                 <div className="socket-controls">
                   <div>
                     <p className="eyebrow">Raspberry Pi WebSocket</p>
                     <strong>{`Current IP: ${backendIp}`}</strong>
                   </div>
-                  <form onSubmit={(event) => { event.preventDefault(); setSocketUrl(draftUrl.trim()); }}>
-                    <input onChange={(e) => { setBackendIp(e.target.value); setDraftUrl("ws://"+e.target.value+":8000/ws"); }} placeholder={window.location.origin}/>
-                    <button type="submit">Connect</button>
-                  </form>
                   {commandStatus ? <span className="command-status">{commandStatus}</span> : null}
                 </div>
               </section>
