@@ -1,8 +1,11 @@
 #include <IFX9201_XMC1300_StepperMotor.h>
 
-#define DIR_PIN IFX9201_STEPPERMOTOR_STD_DIR		// Pin 9 is standard DIR Pin
-#define STP_PIN IFX9201_STEPPERMOTOR_STD_STP		// Pin 10 is standard STP Pin
-#define DIS_PIN IFX9201_STEPPERMOTOR_STD_DIS		// Pin 11 is standard DIS Pin
+#define DIR_PIN_X 9		// Pin 9 is standard DIR Pin
+#define STP_PIN_X 10		// Pin 10 is standard STP Pin
+#define DIS_PIN_X 7		// Pin 11 is standard DIS Pin
+#define DIR_PIN_Y 3    // Pin 9 is standard DIR Pin
+#define STP_PIN_Y 5    // Pin 10 is standard STP Pin
+#define DIS_PIN_Y 8    // Pin 11 is standard DIS Pin
 
 const int StepsPerRevolution = 800;  // change this to fit the total number of steps per revolution for your motor
 
@@ -14,25 +17,9 @@ const int StepsPerRevolution = 800;  // change this to fit the total number of s
 
 
 // Stepper motor object
-Stepper_motor MyStepperMotor = Stepper_motor(StepsPerRevolution, DIR_PIN, STP_PIN, DIS_PIN);
+Stepper_motor M_X = Stepper_motor(StepsPerRevolution, DIR_PIN_X, STP_PIN_X, DIS_PIN_X);
+Stepper_motor M_Y = Stepper_motor(StepsPerRevolution, DIR_PIN_Y, STP_PIN_Y, DIS_PIN_Y);
 
-IFX9201_STEPPERMOTOR_config_t example_config =
-{
-	.SteppingpMode = IFX9201_STEPPERMOTOR_STEPPINGMODE_FULL,
-	.FreqPWMOut = 20000u,
-	.PWMDutyCycleNormFactor = 10000u, 
-	.NumMicrosteps = 64,
-	.Store = IFX9201_STEPPERMOTOR_STEPPINGMODE_DO_NOT_STORE_CONFIG
-};
-
-IFX9201_STEPPERMOTOR_config_t example_config2 =
-{
-	.SteppingpMode = IFX9201_STEPPERMOTOR_STEPPINGMODE_HALF,
-	.FreqPWMOut = 3000u,
-	.PWMDutyCycleNormFactor = 5000u,
-	.NumMicrosteps = 64,
-	.Store = IFX9201_STEPPERMOTOR_STEPPINGMODE_DO_NOT_STORE_CONFIG
-};
 
 void setup() {
 	// Signal Led
@@ -40,63 +27,50 @@ void setup() {
 	digitalWrite(LED_BUILTIN, LOW);
   delay(2000);
 
-  //config_driver();
-
   // set pins' mode as OUTPUT, set default speed and enable the stepper motor
-  MyStepperMotor.begin();
-
-  Serial.end();
+  M_X.begin();
   
   // set the speed at 10 rpm:
-  MyStepperMotor.setSpeed(20);
+  M_X.setSpeed(300);
 
+  M_Y.begin();
+  M_Y.setSpeed(300);
 
-
-  MyStepperMotor.step(-100);
 
   Serial.begin(115200);
 
 }
 
-bool config_driver(){
-  IFX9201_STEPPERMOTOR_config_t config_read_back;
-
-  // Apply config via serial interface
-  MyStepperMotor.configure(CONFIG_SERIAL, &example_config);
-
-  // Add a short delay to give the �C time to apply the config
-  delay(100);
-
-  // Read back written config
-  MyStepperMotor.configRead(CONFIG_SERIAL, &config_read_back);
-
-  if( (example_config.SteppingpMode == config_read_back.SteppingpMode) && \
-       (example_config.FreqPWMOut == config_read_back.FreqPWMOut) && \
-       (example_config.PWMDutyCycleNormFactor == config_read_back.PWMDutyCycleNormFactor) && \
-       (example_config.NumMicrosteps == config_read_back.NumMicrosteps) && \
-       (example_config.Store == config_read_back.Store) )
-  {
-    return true;
-  }
-  return false;
-}
-
 
 void loop() {
+  int x, y, z;
 
-	
-  digitalWrite(LED_BUILTIN, LOW);
+  if (Serial.available()) {
+    String line = Serial.readStringUntil('\n');
 
-	delay(1000);
-    digitalWrite(LED_BUILTIN, HIGH);
-
-  delay(1000);
-
-  if (Serial.available()){
-        int number = Serial.parseInt();
-        if (number != 0){
-            Serial.println("read num");
-            Serial.print(number);
-        }
+    if (sscanf(line.c_str(), "%d,%d,%d", &x, &y, &z) == 3) {
+      Serial.print("x="); Serial.println(x);
+      Serial.print("y="); Serial.println(y);
+      Serial.print("z="); Serial.println(z);
+      if ( x != 0){
+        Serial.print("x: ");
+        Serial.print(x);
+        Serial.print(" ");
+        M_X.step(x);
+      }
+      if ( y != 0){
+        Serial.print("y: ");
+        Serial.print(y);
+        Serial.print(" ");
+        M_Y.step(y);
+      }
+      if ( z != 0){
+        Serial.print("moving servo");
+        Serial.print(z);
+        Serial.print(" ");
+      }
+    }
   }
-  }
+
+  
+}
