@@ -14,7 +14,7 @@ const DEFAULT_SOCKET_URL = `ws://${DEFAULT_BACKEND_IP}:8000/ws`;
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(DEFAULT_SOCKET_URL);
-  const [backendIp, setBackendIp] = useState(DEFAULT_BACKEND_IP || window.location.hostname);
+  const [backendIp, setBackendIp] = useState(window.location.hostname);
   const [draftUrl, setDraftUrl] = useState(
     `ws://${DEFAULT_BACKEND_IP || window.location.hostname}:8000/ws`
   );
