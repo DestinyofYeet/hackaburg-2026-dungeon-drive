@@ -9,7 +9,6 @@ use std::{
     thread::{self, sleep},
     time::Duration,
 };
-use tungstenite::{connect, Message};
 
 use rppal::gpio::Gpio;
 
@@ -53,13 +52,5 @@ fn main() {
         let mut gantry = Gantry::new(serial);
 
         gantry.write(GantryValue::X(10));
-    }
-
-    // ── Servo + WebSocket driver mode ─────────────────────────────────────────
-    if args.servo {
-        let url = args
-            .url
-            .unwrap_or_else(|| "ws://127.0.0.1:8000/ws".to_string());
-        run_servo_driver(&url);
     }
 }
