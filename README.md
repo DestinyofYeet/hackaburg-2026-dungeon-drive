@@ -15,6 +15,30 @@ A hybrid tabletop RPG platform that blends the tactile feel of miniatures with a
 
 ---
 
+## Pi Init
+### 3 Terminals each for:
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+After that you can open with http://[pi-ip]:5173/
+### Backend
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+### Driver / Middleware
+```bash
+cd driver
+cargo build --release
+./target/release/driver --servo --url ws://127.0.0.1:8000/ws
+```
+
 ## Tech stack
 
 ### Hardware
