@@ -67,6 +67,8 @@ void step(int16_t x, int16_t y) {
   if (y > 0) {
     direction_y = 1;
   }
+  digitalWrite(DIR_PIN_X, direction_x);
+  digitalWrite(DIR_PIN_Y, direction_y);
   x = abs(x);
   y = abs(y);
   while (x > 0 || y > 0) {
