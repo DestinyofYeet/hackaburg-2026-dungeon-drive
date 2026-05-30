@@ -19,6 +19,14 @@ use crate::{
     port::Magnet,
 };
 
+pub fn get_input(prompt: &str) -> String {
+    print!("{prompt}: ");
+    std::io::stdout().flush().unwrap();
+    let mut line = String::new();
+    std::io::stdin().read_line(&mut line).unwrap();
+    line.trim().to_string()
+}
+
 #[derive(Parser, Debug)]
 pub struct Args {
     /// WebSocket URL of the backend.
@@ -33,6 +41,9 @@ pub struct Args {
 
     #[arg(short, long)]
     no_track: bool,
+
+    #[arg(short, long)]
+    manual: bool,
 }
 
 fn main() {
@@ -57,26 +68,75 @@ fn main() {
 
     let mut gantry = Gantry::new(args.gantry_serial.unwrap());
 
+    if args.manual {
+        loop {
+            gantry.write_raw(&get_input("Input"));
+        }
+    }
+
+    // pickup offset: 4300, -500
+
+    let mut last_value: Option<GantryValue> = None;
+
     loop {
         let value = match magnet_serial.read_value() {
-            None => continue,
+            None => {
+                if let Some(last_value) = last_value {
+                    println!("Last try");
+                    gantry.move_gantry(last_value);
+                }
+
+                last_value = None;
+                continue;
+            }
             Some(value) => value,
         };
 
         println!("{value:?}");
 
-        const MAX_Z_POWER: f64 = 45.0;
+        const MAX_Z_POWER: f64 = 70.0;
         const MOVE_SCALE: f64 = 25.0;
-        const MAX_CLAMP: f64 = 150.0;
+        const MAX_CLAMP: f64 = 130.0;
 
-        let move_gantry_x = value.x.signum()
+        let move_gantry_x = value.y.signum()
+            * (1.0 / value.y.powi(2) * MAX_Z_POWER.powi(2) * MOVE_SCALE)
+                .clamp(-MAX_CLAMP, MAX_CLAMP);
+        let move_gantry_y = value.x.signum()
             * (1.0 / value.x.powi(2) * MAX_Z_POWER.powi(2) * MOVE_SCALE)
                 .clamp(-MAX_CLAMP, MAX_CLAMP);
-        let move_gantry_y = -(value.y.signum()
-            * (1.0 / value.y.powi(2) * MAX_Z_POWER.powi(2) * MOVE_SCALE)
-                .clamp(-MAX_CLAMP, MAX_CLAMP));
 
         if value.z.abs() > MAX_Z_POWER {
+            if args.no_track {
+                continue;
+            }
+
+            magnet_serial.write_enable(false);
+
+            if get_input("ready to track? y/N").to_lowercase() != "y" {
+                magnet_serial.clear();
+                magnet_serial.write_enable(true);
+                continue;
+            };
+
+            let pickup_offset = GantryValue::new().move_x(5100).move_y(-500).move_z(180);
+            gantry.move_gantry(pickup_offset);
+
+            sleep(Duration::from_secs(2));
+
+            let basic_move = GantryValue::new().move_y(2000).move_z(180);
+            gantry.move_gantry(basic_move);
+
+            let drop_off = GantryValue::new().move_z(1);
+            gantry.move_gantry(drop_off);
+
+            sleep(Duration::from_secs(1));
+
+            let move_back = GantryValue::new().move_x(-2000).move_y(3000);
+            gantry.move_gantry(move_back);
+
+            magnet_serial.write_enable(true);
+            magnet_serial.clear();
+
             continue;
         }
 
@@ -90,21 +150,6 @@ fn main() {
             println!("Move value: {value}");
         }
 
-        // let mut line = String::new();
-        // print!("Write command: ");
-        // std::io::stdout().flush().unwrap();
-        // std::io::stdin().read_line(&mut line).unwrap();
-
-        // gantry.write_raw(line);
-
-        // let value = GantryValue::new().move_x(2000).move_y(2000);
-        // gantry.move_gantry(value);
-
-        // sleep(Duration::from_secs(2));
-
-        // let value = GantryValue::new().move_x(-2000).move_y(-2000);
-        // gantry.move_gantry(value);
-
-        // sleep(Duration::from_secs(2));
+        last_value = Some(value);
     }
 }

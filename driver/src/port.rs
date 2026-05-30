@@ -18,7 +18,9 @@ pub struct SerialValue {
 
 impl SerialValue {
     pub fn parse(string: &str) -> Option<Self> {
+        // println!("parse: {string}");
         let parts = string.split(",").collect::<Vec<&str>>();
+        // println!("split: {parts:?}");
 
         if parts.len() < 3 {
             return None;
@@ -27,6 +29,8 @@ impl SerialValue {
         let x = parts[0].parse::<f64>();
         let y = parts[1].parse::<f64>();
         let z = parts[2].parse::<f64>();
+
+        // println!("{x:?}, {y:?}, {z:?}");
 
         match (x, y, z) {
             (Ok(x), Ok(y), Ok(z)) => {
@@ -44,6 +48,7 @@ impl SerialValue {
 pub struct Magnet {
     buffer: Arc<Mutex<VecDeque<SerialValue>>>,
     read_handle: JoinHandle<()>,
+    write_ok: Arc<Mutex<bool>>,
 }
 
 impl Magnet {
@@ -55,17 +60,21 @@ impl Magnet {
 
         let buffer = Arc::new(Mutex::new(VecDeque::new()));
 
-        let handle = Self::read_thread(port, buffer.clone());
+        let write_ok = Arc::new(Mutex::new(true));
+
+        let handle = Self::read_thread(port, buffer.clone(), write_ok.clone());
 
         Self {
             buffer: buffer.clone(),
             read_handle: handle,
+            write_ok,
         }
     }
 
     fn read_thread(
         mut port: Box<dyn SerialPort>,
         buffer: Arc<Mutex<VecDeque<SerialValue>>>,
+        write_ok: Arc<Mutex<bool>>,
     ) -> JoinHandle<()> {
         let handle = thread::spawn(move || {
             let mut byte_buffer: Vec<u8> = vec![0; 100];
@@ -81,6 +90,7 @@ impl Magnet {
                 }
 
                 let mut buffer = buffer.lock().expect("to get lock");
+                let write_ok = write_ok.lock().expect("to get lock");
 
                 let mut last_index = 0;
                 // println!("Buffer: {local_buffer}");
@@ -100,7 +110,12 @@ impl Magnet {
                             if let Some(value) = SerialValue::parse(line) {
                                 // println!("last_index: {last_index}");
                                 last_index = index;
-                                buffer.push_back(value);
+                                if *write_ok {
+                                    // println!("write ok");
+                                    buffer.push_back(value);
+                                } else {
+                                    // println!("write not ok");
+                                }
                             }
                         }
                     }
@@ -109,6 +124,7 @@ impl Magnet {
                 local_buffer = local_buffer[last_index..local_buffer.len()].to_string();
 
                 drop(buffer);
+                drop(write_ok)
             }
         });
 
@@ -121,5 +137,17 @@ impl Magnet {
         let mut buffer = self.buffer.lock().expect("to get lock");
 
         buffer.pop_front()
+    }
+
+    pub fn write_enable(&self, value: bool) {
+        println!(
+            "Magnet queue write: {}",
+            if value { "enabled" } else { "disabled" }
+        );
+        *self.write_ok.lock().expect("to get lock") = value;
+    }
+
+    pub fn clear(&mut self) {
+        self.buffer.lock().expect("to get lock").clear();
     }
 }

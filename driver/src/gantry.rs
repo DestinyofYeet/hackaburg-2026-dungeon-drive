@@ -1,8 +1,10 @@
 use std::io::Write;
+use std::ops::Sub;
 use std::{fmt::Display, time::Duration};
 
 use serialport::SerialPort;
 
+#[derive(Debug, Clone, Copy)]
 pub struct GantryValue {
     x: i32,
     y: i32,
@@ -22,6 +24,23 @@ impl GantryValue {
     pub fn move_y(mut self, value: i32) -> Self {
         self.y = value;
         self
+    }
+
+    pub fn move_z(mut self, value: i32) -> Self {
+        self.z = value;
+        self
+    }
+}
+
+impl Sub for GantryValue {
+    type Output = GantryValue;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: 0,
+        }
     }
 }
 
