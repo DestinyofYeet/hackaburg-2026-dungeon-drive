@@ -12,6 +12,7 @@ use std::{
 use tungstenite::{connect, Message};
 
 use rppal::gpio::Gpio;
+use serialport::SerialPort;
 
 use crate::{
     gantry::{Gantry, GantryValue},
@@ -29,8 +30,28 @@ fn angle_to_duty(angle: f64) -> f64 {
     SERVO_MIN_DUTY + (angle.clamp(0.0, 180.0) / 180.0) * (SERVO_MAX_DUTY - SERVO_MIN_DUTY)
 }
 
-fn x_to_duty(x: f64) -> f64 {
-    angle_to_duty((x / (GRID_WIDTH - 1.0)) * 180.0)
+fn x_to_angle(x: f64) -> f64 {
+    (x / (GRID_WIDTH - 1.0)) * 180.0
+}
+
+fn send_angle(target: &mut ServoTarget, angle: f64) {
+    let angle = angle.clamp(0.0, 180.0) as u8;
+    match target {
+        ServoTarget::Serial(port) => {
+            let cmd = format!("servo: {angle}\n");
+            port.write_all(cmd.as_bytes()).expect("Failed to write to serial");
+        }
+        ServoTarget::Gpio(pin) => {
+            let duty = angle_to_duty(angle as f64);
+            pin.set_pwm_frequency(SERVO_FREQ_HZ, duty / 100.0)
+                .expect("Failed to set PWM");
+        }
+    }
+}
+
+enum ServoTarget {
+    Serial(Box<dyn SerialPort>),
+    Gpio(rppal::gpio::OutputPin),
 }
 
 #[derive(Deserialize, Debug)]
@@ -46,22 +67,30 @@ struct DriverMoveCommand {
     command_id: String,
 }
 
-fn run_servo_driver(ws_url: &str) {
+fn run_servo_driver(ws_url: &str, servo_serial: Option<String>) {
     println!("Connecting to backend: {ws_url}");
     let (mut socket, _) = connect(ws_url).expect("Failed to connect to backend WebSocket");
     println!("Connected. Waiting for servo/move commands…");
 
-    let mut pin = Gpio::new()
-        .expect("Failed to init GPIO")
-        .get(17)
-        .expect("Failed to get GPIO 17")
-        .into_output();
+    let mut target = if let Some(port_name) = servo_serial {
+        println!("Servo via serial: {port_name}");
+        let port = serialport::new(port_name, 115_200)
+            .timeout(std::time::Duration::from_millis(10))
+            .open()
+            .expect("Failed to open servo serial port");
+        ServoTarget::Serial(port)
+    } else {
+        println!("Servo via software PWM on GPIO 17");
+        let pin = Gpio::new()
+            .expect("Failed to init GPIO")
+            .get(17)
+            .expect("Failed to get GPIO 17")
+            .into_output();
+        ServoTarget::Gpio(pin)
+    };
 
-    let center_duty = angle_to_duty(90.0);
-    pin.set_pwm_frequency(SERVO_FREQ_HZ, center_duty / 100.0)
-        .expect("Failed to start software PWM");
-
-    println!("SG90 on GPIO 17 (software PWM), centred at {center_duty:.1}%");
+    send_angle(&mut target, 90.0); // centre on startup
+    println!("SG90 centred at 90°");
 
     loop {
         match socket.read() {
@@ -73,24 +102,18 @@ fn run_servo_driver(ws_url: &str) {
                 match value.get("type").and_then(|t| t.as_str()) {
                     Some("driver_servo_command") => {
                         if let Ok(cmd) = serde_json::from_value::<DriverServoCommand>(value) {
-                            let duty = angle_to_duty(cmd.angle);
-                            println!("Servo → {:.1}° ({:.2}% duty)", cmd.angle, duty);
-
-                            pin.set_pwm_frequency(SERVO_FREQ_HZ, duty / 100.0)
-                                .expect("Failed to set PWM");
+                            println!("Servo → {:.1}°", cmd.angle);
+                            send_angle(&mut target, cmd.angle);
                         }
                     }
                     Some("driver_move_command") => {
                         if let Ok(cmd) = serde_json::from_value::<DriverMoveCommand>(value) {
-                            let duty = x_to_duty(cmd.x.min(GRID_WIDTH as u64 - 1) as f64);
-
+                            let angle = x_to_angle(cmd.x.min(GRID_WIDTH as u64 - 1) as f64);
                             println!(
-                                "Moving {} → x={}, y={} ({:.2}% duty) [cmd: {}]",
-                                cmd.figure_id, cmd.x, cmd.y, duty, cmd.command_id
+                                "Moving {} → x={} ({:.1}°) [cmd: {}]",
+                                cmd.figure_id, cmd.x, angle, cmd.command_id
                             );
-
-                            pin.set_pwm_frequency(SERVO_FREQ_HZ, duty / 100.0)
-                                .expect("Failed to set PWM");
+                            send_angle(&mut target, angle);
                         }
                     }
                     _ => {}
@@ -108,7 +131,9 @@ fn run_servo_driver(ws_url: &str) {
         }
     }
 
-    pin.clear_pwm().ok();
+    if let ServoTarget::Gpio(pin) = &mut target {
+        pin.clear_pwm().ok();
+    }
 }
 
 #[derive(Parser, Debug)]
@@ -125,9 +150,14 @@ pub struct Args {
     #[arg(short, long = "gantry")]
     gantry_serial: Option<String>,
 
-    /// Enable servo mode (SG90 via software PWM on GPIO 17).
+    /// Enable servo mode (SG90).
     #[arg(long, action = clap::ArgAction::SetTrue)]
     servo: bool,
+
+    /// Serial port for the Arduino servo controller (e.g. /dev/ttyUSB0).
+    /// If omitted, falls back to software PWM on GPIO 17.
+    #[arg(long)]
+    servo_serial: Option<String>,
 }
 
 fn main() {
@@ -157,7 +187,7 @@ fn main() {
             .url
             .unwrap_or_else(|| "ws://127.0.0.1:8000/ws".to_string());
 
-        run_servo_driver(&url);
+        run_servo_driver(&url, args.servo_serial);
         return;
     }
 

@@ -100,6 +100,7 @@ async def websocket_endpoint(ws: WebSocket) -> None:
             if message.get("type") == "servo_command":
                 angle = message.get("angle")
                 if isinstance(angle, (int, float)) and 0 <= angle <= 180:
+                    _current_servo_angle = float(angle)
                     payload = json.dumps({"type": "driver_servo_command", "angle": angle})
                     for client in list(game_state._connections):
                         try:
@@ -191,6 +192,10 @@ async def websocket_endpoint(ws: WebSocket) -> None:
                     pass
 
             game_state.add_event(f"Move command accepted: {figure_id} → ({x_int}, {y_int})")
+
+            # Track servo angle for /api/servo (x mapped to 0–180°).
+            board = game_state.state.board
+            _current_servo_angle = (x_int / max(board.width - 1, 1)) * 180.0
 
             # Demo behavior: move the digital figure immediately.
             game_state.move_figure(figure_id, x_int, y_int)
@@ -307,3 +312,13 @@ async def get_sensor() -> SensorReading:
     if _latest_sensor is None:
         raise HTTPException(status_code=404, detail="No sensor reading available yet")
     return _latest_sensor
+
+
+# ── REST: servo state ─────────────────────────────────────────────────────────
+
+_current_servo_angle: float = 90.0
+
+
+@app.get("/api/servo")
+async def get_servo() -> dict:
+    return {"angle": _current_servo_angle}
