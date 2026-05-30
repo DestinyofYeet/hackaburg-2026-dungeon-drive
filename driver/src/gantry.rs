@@ -1,5 +1,5 @@
 use std::io::Write;
-use std::ops::Sub;
+use std::ops::{Neg, Sub};
 use std::{fmt::Display, time::Duration};
 
 use serialport::SerialPort;
@@ -39,6 +39,18 @@ impl Sub for GantryValue {
         Self {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
+            z: 0,
+        }
+    }
+}
+
+impl Neg for GantryValue {
+    type Output = GantryValue;
+
+    fn neg(self) -> Self::Output {
+        Self {
+            x: -self.x,
+            y: -self.y,
             z: 0,
         }
     }

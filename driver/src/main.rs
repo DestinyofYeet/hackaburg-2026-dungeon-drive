@@ -1,7 +1,7 @@
-mod eventqueue;
 mod gantry;
 mod motor;
 mod port;
+mod websocket;
 
 use clap::Parser;
 use serde::Deserialize;
@@ -17,6 +17,7 @@ use crate::{
     gantry::{Gantry, GantryValue},
     motor::{Motor, StepMotor},
     port::Magnet,
+    websocket::{WSConn, WebsocketCommand},
 };
 
 pub fn get_input(prompt: &str) -> String {
@@ -31,19 +32,22 @@ pub fn get_input(prompt: &str) -> String {
 pub struct Args {
     /// WebSocket URL of the backend.
     #[arg(short, long)]
-    url: Option<String>,
+    url: String,
 
     #[arg(short = None, long = "magnet")]
-    magnet_serial: Option<String>,
+    magnet_serial: String,
 
     #[arg(short, long = "gantry")]
-    gantry_serial: Option<String>,
+    gantry_serial: String,
 
-    #[arg(short, long)]
+    #[arg(short = None, long)]
     no_track: bool,
 
     #[arg(short, long)]
     manual: bool,
+
+    #[arg(short = None, long)]
+    no_prompt: bool,
 }
 
 fn main() {
@@ -54,19 +58,9 @@ fn main() {
         serialport::available_ports().unwrap()
     );
 
-    if args.magnet_serial.is_none() {
-        eprintln!("Magnet serial is needed!");
-        return;
-    }
+    let mut magnet_serial = Magnet::new(args.magnet_serial, 9_600);
 
-    if args.gantry_serial.is_none() {
-        eprintln!("Gantry serial is needed!");
-        return;
-    }
-
-    let mut magnet_serial = Magnet::new(args.magnet_serial.unwrap(), 9_600);
-
-    let mut gantry = Gantry::new(args.gantry_serial.unwrap());
+    let mut gantry = Gantry::new(args.gantry_serial);
 
     if args.manual {
         loop {
@@ -74,11 +68,16 @@ fn main() {
         }
     }
 
-    // pickup offset: 4300, -500
+    let mut ws = WSConn::new(args.url);
 
     let mut last_value: Option<GantryValue> = None;
 
     loop {
+        if let Some(WebsocketCommand::RespondPong(data)) = ws.peek_value() {
+            _ = ws.get_value();
+            ws.send_pong(data);
+        }
+
         let value = match magnet_serial.read_value() {
             None => {
                 if let Some(last_value) = last_value {
@@ -94,7 +93,7 @@ fn main() {
 
         println!("{value:?}");
 
-        const MAX_Z_POWER: f64 = 70.0;
+        const MAX_Z_POWER: f64 = 33.0;
         const MOVE_SCALE: f64 = 25.0;
         const MAX_CLAMP: f64 = 130.0;
 
@@ -110,20 +109,26 @@ fn main() {
                 continue;
             }
 
-            magnet_serial.write_enable(false);
-
-            if get_input("ready to track? y/N").to_lowercase() != "y" {
-                magnet_serial.clear();
-                magnet_serial.write_enable(true);
+            if args.no_prompt {
                 continue;
+            }
+
+            let (x, y) = match ws.get_value() {
+                Some(WebsocketCommand::DriverMoveCommand { x, y }) => (x, y),
+                _ => continue,
             };
+
+            magnet_serial.write_enable(false);
 
             let pickup_offset = GantryValue::new().move_x(5100).move_y(-500).move_z(180);
             gantry.move_gantry(pickup_offset);
 
             sleep(Duration::from_secs(2));
 
-            let basic_move = GantryValue::new().move_y(2000).move_z(180);
+            let basic_move = GantryValue::new()
+                .move_y(((y + x) * -400 * 2) as i32)
+                .move_x((x * 300) as i32)
+                .move_z(180);
             gantry.move_gantry(basic_move);
 
             let drop_off = GantryValue::new().move_z(1);
@@ -131,8 +136,11 @@ fn main() {
 
             sleep(Duration::from_secs(1));
 
-            let move_back = GantryValue::new().move_x(-2000).move_y(3000);
-            gantry.move_gantry(move_back);
+            let revert_basic_move = -basic_move;
+            gantry.move_gantry(revert_basic_move);
+
+            let revert_pickup = -pickup_offset;
+            gantry.move_gantry(revert_pickup);
 
             magnet_serial.write_enable(true);
             magnet_serial.clear();
