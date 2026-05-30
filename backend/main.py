@@ -14,11 +14,14 @@ REST endpoints:
   PATCH  /api/ai                       – update AI recommendation / narration
   POST   /api/events                   – append an event message
   POST   /api/driver/sync              – bulk-replace state (Raspberry Pi driver)
+  POST   /api/sensor                   – ingest x,y,z magnetic sensor reading
+  GET    /api/sensor                   – latest magnetic sensor reading
 """
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
 import json
+from typing import Optional
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,6 +32,7 @@ from models import (
     CreateFigureRequest,
     Figure,
     MoveFigureRequest,
+    SensorReading,
     UpdateAiRequest,
     UpdateHpRequest,
     UpdateTurnRequest,
@@ -284,3 +288,22 @@ async def driver_sync(body: BoardState) -> dict:
     game_state.replace_state(body)
     await game_state.broadcast()
     return {"ok": True}
+
+
+# ── REST: magnetic sensor ─────────────────────────────────────────────────────
+
+_latest_sensor: Optional[SensorReading] = None
+
+
+@app.post("/api/sensor", status_code=201)
+async def post_sensor(body: SensorReading) -> SensorReading:
+    global _latest_sensor
+    _latest_sensor = body
+    return _latest_sensor
+
+
+@app.get("/api/sensor")
+async def get_sensor() -> SensorReading:
+    if _latest_sensor is None:
+        raise HTTPException(status_code=404, detail="No sensor reading available yet")
+    return _latest_sensor

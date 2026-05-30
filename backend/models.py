@@ -78,7 +78,10 @@ class UpdateAiRequest(BaseModel):
     narration: Optional[str] = None
 
 
-class CreateFigureRequest(BaseModel):
+class SensorReading(BaseModel):
+    x: float
+    y: float
+    z: float
     id: str
     name: str
     role: str
