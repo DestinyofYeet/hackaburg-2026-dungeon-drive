@@ -48,6 +48,63 @@ void setup() {
   Serial.begin(115200);
 }
 
+void step(int16_t x, int16_t y) {
+  uint32_t last_step_time = 0;
+  float duty_ratio = 0.5;
+  uint32_t step_delay = 296;
+  ;
+  M_X.update_accumulated_steps(x);
+  M_Y.update_accumulated_steps(y);
+
+  Serial.print("step_delay");
+  Serial.print(step_delay);
+
+  uint16_t direction_x = 0;
+  if (x > 0) {
+    direction_x = 1;
+  }
+  uint16_t direction_y = 0;
+  if (y > 0) {
+    direction_y = 1;
+  }
+  x = abs(x);
+  y = abs(y);
+  while (x > 0 || y > 0) {
+    uint32_t now = micros();
+
+    while (now - last_step_time < (duty_ratio * step_delay)) {
+      now = micros();
+    }
+
+    // get the timeStamp of when the motor half stepped:
+    last_step_time = now;
+
+    // output a HIGH half step to STP pin
+    if (x > 0) {
+      digitalWrite(STP_PIN_X, HIGH);
+    }
+    if (y > 0) {
+      digitalWrite(STP_PIN_Y, HIGH);
+    }
+
+    while (now - last_step_time < (duty_ratio * step_delay)) {
+      now = micros();
+    }
+
+    // get the timeStamp of when the motor half stepped:
+    last_step_time = now;
+
+    // output a LOW half step to STP pin
+    if (x > 0) {
+      digitalWrite(STP_PIN_X, LOW);
+      x--;
+    }
+    if (y > 0) {
+      digitalWrite(STP_PIN_Y, LOW);
+      y--;
+    }
+  }
+}
 void loop() {
   int x, y, z;
 
@@ -61,17 +118,14 @@ void loop() {
       Serial.println(y);
       Serial.print("z=");
       Serial.println(z);
-      if (x != 0) {
+      if (x != 0 || y != 0) {
         Serial.print("x: ");
         Serial.print(x);
         Serial.print(" ");
-        M_X.step(x);
-      }
-      if (y != 0) {
         Serial.print("y: ");
         Serial.print(y);
         Serial.print(" ");
-        M_Y.step(y);
+        step(x, y);
       }
       if (z != 0) {
         Serial.print("moving servo");
