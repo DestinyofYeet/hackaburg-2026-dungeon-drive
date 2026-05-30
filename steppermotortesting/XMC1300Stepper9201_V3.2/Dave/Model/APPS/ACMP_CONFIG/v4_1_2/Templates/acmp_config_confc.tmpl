@@ -1,0 +1,109 @@
+package Model.APPS.ACMP_CONFIG.v4_1_2.Templates;
+
+import Model.APPS.ACMP_CONFIG.v4_1_2.ACMP_CONFIG
+
+out.print("""
+/**
+ * @cond
+ ***********************************************************************************************************************
+ *
+ * Copyright (c) 2015, Infineon Technologies AG
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
+ * following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, this list of conditions and the  following
+ *   disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *   following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *   Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+ *   products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes
+ * with Infineon Technologies AG (dave@infineon.com).
+ ***********************************************************************************************************************
+ *
+ * Change History
+ * --------------
+ *
+ * 2015-05-13:
+ *     - Initial version<br>
+ *
+ * 2015-06-04:
+ *     - Updated for module_ptr macro change.<br>
+ *
+ * 2016-02-04:
+ *     - Code size optimization done on configuration structure.<br>
+ *     - Function pointer based instance specific initialization implemented.ACMP_CONFIG_Init() API updated.<br>
+ *     - Updated for public release(Productive Version)
+ *
+ * @endcond
+ *
+ */
+/***********************************************************************************************************************
+ * HEADER FILES
+ **********************************************************************************************************************/
+#include "acmp_config.h"
+
+/**********************************************************************************************************************
+* DATA STRUCTURES
+**********************************************************************************************************************/
+""");
+
+List MappedUri       = null;
+String appInst       = null;
+List hysteresis_selection = ["XMC_ACMP_HYSTERESIS_OFF","XMC_ACMP_HYSTERESIS_10","XMC_ACMP_HYSTERESIS_15","XMC_ACMP_HYSTERESIS_20"];
+
+for (Object appIns : appInstancesList )
+{
+  appInst = appIns.getInstanceLabel()
+  MappedUri = appIns.hwres_acmp_slice.getSolverUri()
+
+out.println("""
+/**********************************************************************************************************************
+* ${appInst} STRUCTURE AND FUNCTION DEFINITIONS 
+**********************************************************************************************************************/
+
+void ${appInst}_lInit(void);  
+
+/* ACMP LLD Configuration for ${appInst} */
+const XMC_ACMP_CONFIG_t ${appInst}_lld_config =
+{
+  .filter_disable = (bool)${(appIns.gcheck_disable_anti_glitch_filter.value)},    
+  .output_invert  = (bool)${(appIns.gcheck_invert_comparator.value)},     
+  .hysteresis     = ${hysteresis_selection[appIns.gcombo_hysteresis.options.indexOf(appIns.gcombo_hysteresis.value)]}
+};
+
+/* Configuration for Handle${appInst} */
+ACMP_CONFIG_t ${appInst} =
+{
+  .global_handle         = &${appIns.appres_global_acmp.getInstanceLabel()},  
+  .acmp_config_init_func = ${appInst}_lInit       
+};
+""");   
+
+out.println("""
+/* Instance specific initialization function to initialize analog comparator */
+void ${appInst}_lInit(void)
+{
+  XMC_ACMP_Init(${appInst}_MODULE_PTR, ${appInst}_INSTANCE_NUM, &${appInst}_lld_config); """);
+  if(appIns.gcheck_enable_comparator.value == true)
+  {
+out.println("""
+  XMC_ACMP_EnableComparator(${appInst}_MODULE_PTR, ${appInst}_INSTANCE_NUM);  
+""");
+  }
+out.println("""}"""); 
+}
+out.println(""" """);

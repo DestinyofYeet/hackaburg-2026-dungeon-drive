@@ -1,0 +1,74 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "pdm_bccu_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global PDM_BCCU_0_config
+  18              	 .section .data.PDM_BCCU_0_config,"aw",%progbits
+  19              	 .align 2
+  22              	PDM_BCCU_0_config:
+  23 0000 82       	 .byte 130
+  24 0001 08       	 .byte 8
+  25 0002 0000     	 .space 2
+  26 0004 FF       	 .byte -1
+  27 0005 00       	 .space 1
+  28 0006 27       	 .byte 39
+  29 0007 00       	 .space 1
+  30 0008 00       	 .byte 0
+  31 0009 00       	 .space 1
+  32 000a 00       	 .byte 0
+  33 000b 00       	 .space 1
+  34              	 .global PDM_BCCU_0
+  35              	 .section .data.PDM_BCCU_0,"aw",%progbits
+  36              	 .align 2
+  39              	PDM_BCCU_0:
+  40 0000 00000350 	 .word 1342373888
+  41 0004 00000000 	 .word PDM_BCCU_0_config
+  42 0008 00000000 	 .space 8
+  42      00000000 
+  43 0010 78000350 	 .word 1342374008
+  44 0014 00000000 	 .word GLOBAL_BCCU_0
+  45 0018 00       	 .byte 0
+  46 0019 00       	 .byte 0
+  47 001a 00       	 .byte 0
+  48 001b 00       	 .space 1
+  49 001c 03000000 	 .word 3
+  50 0020 00000000 	 .word 0
+  51 0024 FF0F0000 	 .word 4095
+  52 0028 01000000 	 .word 1
+  53 002c 00       	 .space 1
+  54 002d 00       	 .byte 0
+  55 002e 00       	 .byte 0
+  56 002f 00       	 .space 1
+  57              	 .text
+  58              	.Letext0:
+  59              	 .file 1 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  60              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  61              	 .file 3 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+  62              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_bccu.h"
+  63              	 .file 5 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_gpio.h"
+  64              	 .file 6 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc1_gpio.h"
+  65              	 .file 7 "../Dave/Generated/PDM_BCCU/../GLOBAL_BCCU/global_bccu.h"
+  66              	 .file 8 "../Dave/Generated/PDM_BCCU/pdm_bccu.h"
+  67              	 .file 9 "../Dave/Generated/PDM_BCCU/../GLOBAL_BCCU/global_bccu_extern.h"
+  68              	 .file 10 "../Dave/Generated/PDM_BCCU/pdm_bccu_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pdm_bccu_conf.c
+    {standard input}:22     .data.PDM_BCCU_0_config:00000000 PDM_BCCU_0_config
+    {standard input}:19     .data.PDM_BCCU_0_config:00000000 $d
+    {standard input}:39     .data.PDM_BCCU_0:00000000 PDM_BCCU_0
+    {standard input}:36     .data.PDM_BCCU_0:00000000 $d
+
+UNDEFINED SYMBOLS
+GLOBAL_BCCU_0

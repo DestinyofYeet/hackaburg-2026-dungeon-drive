@@ -1,0 +1,17 @@
+<p1:Tab  xmlns="http://www.eclipse.org/xwt/presentation" xmlns:x="http://www.eclipse.org/xwt" xmlns:p1="clr-namespace:com.ifx.davex.ui.controls.app" x:Class="e" layout="{x:Null}">
+	<p1:TabFolder bounds="5, 5, 600, 500">
+		<p1:GTab text="General Settings" widgetName="gtab_general_settings" visible="true" enabled="true" manifestObj="true">
+			<p1:GTab.control>
+				<p1:Tab layout="{x:Null}">
+					<p1:GGroup text="Analog Comparator " manifestObj="true" widgetName="ggroup_analog_comparator" bounds="5, 5, 575, 142" layout="{x:Null}">
+						<p1:GCheck manifestObj="true" text="Enable comparator" widgetName="gcheck_enable_comparator" bounds="8, 20, 121, 16" toolTipText="Start comparator on initialization" description="Selecting this option enables the comparator during initialization."/>
+						<p1:GCheck text="Invert comparator output" manifestObj="true" widgetName="gcheck_invert_comparator" bounds="8, 46, 155, 16" toolTipText="Comparator output is inverted." description="Comparator output is simply inverted."/>
+						<p1:GCheck text="Disable anti-glitch filter" manifestObj="true" widgetName="gcheck_disable_anti_glitch_filter" bounds="8, 72, 144, 16" toolTipText="Switches off filter to prevent delay." description="Switches off filter to prevent delay."/>
+						<p1:GLabel text="Hysteresis:" visible="true" manifestObj="true" widgetName="glabel_hysteresis" bounds="8, 101, 56, 15"/>
+						<p1:GCombo mandatory="(com.ifx.davex.ui.controls.util.AppUiConstants).FALSE" manifestObj="true" widgetName="gcombo_hysteresis" options="No Hysteresis&#13;&#10;10mV Hysteresis&#13;&#10;15mV Hysteresis&#13;&#10;20mV Hysteresis" value="No Hysteresis" bounds="74, 99, 117, 21" toolTipText="Select the hysteresis voltage to reduce noise sensitivity." description="Select the hysteresis voltage to reduce noise sensitivity."/>
+					</p1:GGroup>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+	</p1:TabFolder>
+</p1:Tab>

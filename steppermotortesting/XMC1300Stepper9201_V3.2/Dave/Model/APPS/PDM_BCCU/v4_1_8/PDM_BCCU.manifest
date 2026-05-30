@@ -1,0 +1,255 @@
+package Model.APPS.PDM_BCCU.v4_1_8;
+
+/*
+ *  Copyright (c) 2015, Infineon Technologies AG
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
+ * following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, this list of conditions and the  following
+ *   disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *   following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *   Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+ *   products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes
+ * with Infineon Technologies AG (dave@infineon.com).
+ */
+
+/*************** Revision History **********************************************
+Version        Date          Description 
+
+  4.0.0       16-Feb-2015   Initial version for DAVEv4
+  4.0.1       20-Feb-2015   1). APP Help documentation improved.<br>
+  			    			2). XMC_ASSERT bug fixed.<br>
+  
+  4.1.0       07-May-2015   1). PDM_BCCU_SelDimEngine() has removed.<br>
+  			                2). APP owner feedbacks are fixed.<br>
+  			                3). XMC_ASSERT debug statement is added in all API's.<br>
+
+ 4.1.2        20-Jun-2015   1). Version check added for XMCLib dependency.<br>
+                            2). _Add Pin is removed.<br> 
+                            
+ 4.1.4       09-Jul-2015    APP Help Doc improved.<br>
+ 
+ 4.1.6       15-Jul-2015    Added support for XMC14xx devices.<br>
+ 
+ 4.1.8       15-Jul-2016    Added support for XMC14xx_T38 and Q40 devices.<br>
+                             			                
+*******************************************************************************/
+
+/* Import statements */
+import ifx.davex.app.manifest.*
+
+class  PDM_BCCU extends PDM_BCCU_GUI {
+
+/* ----------------------------------------------- Begin : APP Properties -------------------------------------------------------------- */
+	/**
+	 * App version
+	 * Format: a string with three digit separated by a dot.
+	 */
+	def version            = '4.1.8'
+	
+	/**
+	 * App categories declaration. 
+	 * It is list of strings. Subcategories are separated by slash.
+	 * No limits on number of categories and subcategories depth.
+	 */
+	def categoriesDescription = ["LED Lighting"]
+
+	/** 
+	 * Minimum DAVE version required for this APP.
+	 * 
+	 * It is string with three digit separated by a dot.
+	 */
+	def minDaveVersion           = '4.0.0'
+	
+	/** 
+	 * Keywords used by search feature in APPs selection view
+	 * 
+	 * It is a list of string.
+	 */
+	def keywords      = [
+		'Channel',
+		'BCCU',
+		'LED Lighting',
+		'PDM_BCCU',
+		'ALL'
+		]
+	
+	/** 
+	 * softwareIDs is used to declare which devices are compatible with this APP.
+	 * It is a map with key a string containing a pattern that shall match the SW id of
+	 * the device and as value the minimal version of the APP.
+	 * 
+	 * 
+	 */
+	def softwareIDs       = [
+		"XMC1.2.00.T038.*":"1.0.0", 
+		"XMC1.2.02.(T028|T016|Q024|Q040).*":"1.0.0", 
+		"XMC1.3.02.(T016|T038|Q024|Q040).*":"1.0.0",
+		"XMC1.4.02.*.*":"1.0.0",
+		"XMC1.4.04.*.*":"1.0.0",
+		]
+
+	/**
+	 * Singleton property:
+	 * When it is true the APP can be instantiated only once.
+	 */
+	def singleton     = false
+	
+	/**
+	 * initProvider property
+	 * It shall be true to add a call to <AppName>_Init()
+	 */
+	def initProvider  = true
+	
+	/**
+	 * Deprecated APP
+	 * Set it to true to indicate that the APP shall be not used for new projects.
+	 */
+	def deprecated    = false
+	
+	/**
+	 * Sharable property.
+	 * It shall be true to allows multiple APPs to require the same instance of this APP.
+	 */
+	def sharable      = false
+	
+	/**
+	 *  APP function description.
+	 */ 
+	def description = "PDM_BCCU APP configures the Channel registers \nof the Brightness and Color Control Unit (BCCU)."
+	
+/* --------------------------------------------------------- End: APP Properties ------------------------------------------------------------- */
+	
+/* ----------------------- Begin : User Variables for hardware resources and virtual signals ------------------------------------------------- */
+	GFloat Actualfastclockfrequency 	=  GFloat(widgetName:"Actualfastclockfrequency")  /* To get the actual clock freq */
+
+	MVirtualResourceGroup hwres_bccu
+	MVirtualResourceGroup hwres_io
+	
+	MVirtualSignal    vs_pdmbccu_out
+	MVirtualSignal    vs_pdmbccu_pad
+	MVirtualSignal    vs_pdmbccu_dimin
+	MVirtualSignal    vs_pdmbccu_in
+	
+	MRequiredApp appres_global_bccu
+		
+/*----------------------- End : User Variables for hardware resources and virtual signals ---------------------------------------------------- */
+
+/*------------------------------------------------------- Begin : APP Constructor and Logic -------------------------------------------------*/
+	public PDM_BCCU(DaveEnv daveEnv) {
+		
+	    String dev_series = (daveEnv.project.selectedDevice.deviceId.family + daveEnv.project.selectedDevice.deviceId.series)
+		
+		
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                          					APP consumption Block                                                        */
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+	    
+		appres_global_bccu = MRequiredApp("GLOBAL_BCCU","GLOBAL_BCCU APP", RSHARABLE, "4.0.2")
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------	Hardware resource consumption block -----------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+		
+		hwres_bccu =  MVirtualResourceGroup("BCCUChannel", ["peripheral", "bccu", "*", "channel", "*"])
+		hwres_io = MVirtualResourceGroup("PDM Output pin", ["port", "p", "*", "pad", "*"],  MF({gcheck_output_enable.value}, Boolean))
+			
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                                 Virtual Signals Definitions                                                                               */
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/	
+			
+		vs_pdmbccu_out  =  MVirtualSignal(hwres_bccu,"pdm_output","out",true,true)
+		@AddPin
+		vs_pdmbccu_pad = MVirtualSignal(hwres_io,"pdm_output_pin","pad", MF({gcheck_output_enable.value}, Boolean), MF({gcheck_output_enable.value}, Boolean))
+		vs_pdmbccu_dimin  =  MVirtualSignal(hwres_bccu,"dimming_level_input","dimin",true,true)
+		vs_pdmbccu_in  =  MVirtualSignal(hwres_bccu,"gating_input","in",true,true)
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                                 Virtual Signals Connections                                                                               */
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+		
+		addConnectionConstraint(vs_pdmbccu_out, vs_pdmbccu_pad,MF({gcheck_output_enable.value}, Boolean) )
+		
+				
+		gtab_dummy.visible = MF({false}, Boolean)
+
+		/* Configuring reset values */ 
+		if(dev_series == "XMC14")
+		{
+			ginteger_number_of_on_bits_grouped_together.value = 4
+			ginteger_number_of_off_bits_grouped_together.value = 96
+		}
+		
+		/* ----------- TAB : Channel Configuration --------------------- */
+		
+		gimage_channelconfig.visible = MF({gcheck_dimming_input_bypass.value == false}, Boolean)
+		gimage_channelconfig_bypass.visible = MF({gcheck_dimming_input_bypass.value == true}, Boolean)
+		
+		/* Actualfastclockfrequency.value = 0.8 */
+		Actualfastclockfrequency.value = MF({appres_global_bccu.getVal(["gfloat_actual_fast_clock_freq", "value"])}, Float)
+	
+		 /* Controlling MIN and MAX value of Desired Linear Walk Time depending on Actual fast clock freq */
+		
+		 gfloat_desired_initial_linear_walk_time.maxValue = MF({
+			((8192 * 1023) / (Actualfastclockfrequency.value * 1000)) 	/*  LINEARWALKTIME = LINPRES * 8192 / fBCCUfclk  */
+		   }, Float)
+		 
+		
+		ginteger_linpres.value =  MF({
+			Math.round((gfloat_desired_initial_linear_walk_time.value * Actualfastclockfrequency.value * 1000) / (8192 ))
+			},Integer)
+		
+		gfloat_actual_initial_linear_walk_time.value =MF({
+			((ginteger_linpres.value * 8192 )/(Actualfastclockfrequency.value * 1000))
+			},Float)
+		
+		gfloat_actual_initial_linear_walk_time.maxValue = MF({
+			((8192 * 1023) / (Actualfastclockfrequency.value * 1000))
+		   }, Float)
+	
+		
+		/* if packer is enabled, ON-bit time counter will be enabled */
+		ginteger_initial_on_bit_counter_value.enabled = MF({gcheck_enable_packer_selection.value}, Boolean)
+		/* if packer is enabled, OFF-bit time counter will be enabled */
+		ginteger_initial_off_bit_counter_value.enabled = MF({gcheck_enable_packer_selection.value}, Boolean)
+		/* if packer is enabled, ON-bits grouped will be enabled */
+		ginteger_number_of_on_bits_grouped_together.enabled = MF({gcheck_enable_packer_selection.value}, Boolean)
+		/* if packer is enabled, OFF-bits grouped will be enabled */
+		ginteger_number_of_off_bits_grouped_together.enabled = MF({gcheck_enable_packer_selection.value}, Boolean)
+		/* if packer is selected, force trigger will be disabled */
+		gcheck_forced_trigger_enable.enabled = MF({gcheck_enable_packer_selection.value == false}, Boolean)
+		/* Direct output pin configuration  */
+		gcombo_output_characteristics.enabled = MF({gcheck_output_enable.value}, Boolean)
+				
+	}
+	
+/*------------------------------------------------------- End : APP Constructor and Logic -------------------------------------------------*/
+
+	/* File Generation */
+	def generateFiles(){
+
+		copy("pdm_bccu.h", "pdm_bccu.h")
+		copy("pdm_bccu.c", "pdm_bccu.c")
+		generate("pdm_bccu_confh.tmpl", "pdm_bccu_conf.h")
+		generate("pdm_bccu_confc.tmpl", "pdm_bccu_conf.c")
+		generate("pdm_bccu_externh.tmpl", "pdm_bccu_extern.h")
+	}
+ 
+		
+}

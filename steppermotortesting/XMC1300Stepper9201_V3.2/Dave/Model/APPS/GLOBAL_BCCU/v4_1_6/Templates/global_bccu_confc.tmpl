@@ -1,0 +1,191 @@
+package Model.APPS.GLOBAL_BCCU.v4_1_6.Templates;
+
+import Model.APPS.GLOBAL_BCCU.v4_1_6.GLOBAL_BCCU
+
+out.print("""
+/**
+ * @cond
+ ***********************************************************************************************************************
+ *
+ * Copyright (c) 2015, Infineon Technologies AG
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
+ * following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, this list of conditions and the  following
+ *   disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *   following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *   Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+ *   products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes
+ * with Infineon Technologies AG (dave@infineon.com).
+ ***********************************************************************************************************************
+ *
+ * Change History
+ * --------------
+ *
+ * 2015-02-16:
+ *     - Initial version<br>
+ * 2015-03-27
+ *      - Dummy read safely handled.<br>
+ *      - Maps are used to reduce the if-else statements to assign combo options.<br>
+ *      - Trap edge configuration is added.<br>
+ *      - code comments added.<br>
+ *      - Template coding guidelines ensured.<br>
+ * 
+ * 2015-07-14
+ *      - trigger delay configuration bug fixed.
+ *
+ * @endcond
+ *
+ */
+/***********************************************************************************************************************
+ * HEADER FILES
+ **********************************************************************************************************************/
+#include "global_bccu.h"
+""");
+
+/* To hold APP instance number */
+String appInst = null;
+int enable_events_hold = 0;
+/* To hold GLOBAL_BCCU APP mapped number */
+List GLOBAL_BCCUUri     = null
+/* To hold TRAP MUX configuration */
+List trapsource = [
+	'XMC_BCCU_CH_TRAP_INA',
+	'XMC_BCCU_CH_TRAP_INB',
+	'XMC_BCCU_CH_TRAP_INC',
+	'XMC_BCCU_CH_TRAP_IND',
+	'XMC_BCCU_CH_TRAP_INE',
+	'XMC_BCCU_CH_TRAP_INF',
+	'XMC_BCCU_CH_TRAP_ING',
+	'XMC_BCCU_CH_TRAP_INH',
+	'XMC_BCCU_CH_TRAP_INI',
+	'XMC_BCCU_CH_TRAP_INJ',
+	'XMC_BCCU_CH_TRAP_INK',
+	'XMC_BCCU_CH_TRAP_INL',
+	'XMC_BCCU_CH_TRAP_INM',
+	'XMC_BCCU_CH_TRAP_INN',
+	'XMC_BCCU_CH_TRAP_INO',
+	'XMC_BCCU_CH_TRAP_INP'
+];
+/* for loop  for multiple instance */
+for (GLOBAL_BCCU GLOBAL_BCCUInstance : appInstancesList ) {
+/* retrives APP instance number */
+appInst   = GLOBAL_BCCUInstance.getInstanceLabel()
+/* retrives BCCU module number */
+GLOBAL_BCCUUri = GLOBAL_BCCUInstance.hwres_global.getSolverUri() 
+
+/* Safely handling dummy read */
+String dummy_read 
+
+if(GLOBAL_BCCUInstance.hwres_trigger.getRegValue("", "evier_t0ien") != null)
+{
+	dummy_read = GLOBAL_BCCUInstance.hwres_trigger.getRegValue("", "evier_t0ien")
+}
+
+if(GLOBAL_BCCUInstance.hwres_trigger.getRegValue("", "evier_t1ien")!= null)
+{
+	dummy_read = GLOBAL_BCCUInstance.hwres_trigger.getRegValue("", "evier_t1ien")
+}
+
+if(GLOBAL_BCCUInstance.hwres_packer_fifo_event.getRegValue("", "evier_eien")!= null)
+{
+	dummy_read = GLOBAL_BCCUInstance.hwres_packer_fifo_event.getRegValue("", "evier_eien")
+}
+
+if(GLOBAL_BCCUInstance.hwres_packer_fifo_event.getRegValue("", "evier_fien")!= null)
+{
+	dummy_read = GLOBAL_BCCUInstance.hwres_packer_fifo_event.getRegValue("", "evier_fien")
+}
+
+if(GLOBAL_BCCUInstance.hwres_trap.getRegValue("", "evier_tpien")!= null)
+{
+	dummy_read = GLOBAL_BCCUInstance.hwres_trap.getRegValue("", "evier_tpien")
+}
+/* Assigns trigger mode based on GUI selection */
+out.print("""
+XMC_BCCU_GLOBAL_CONFIG_t confighandle =
+{
+  .trig_mode = 	${["XMC_BCCU_TRIGMODE0,",
+	
+		           "XMC_BCCU_TRIGMODE1,"
+				 
+                  ][GLOBAL_BCCUInstance.gcombo_trigger_mode_select.options.indexOf(GLOBAL_BCCUInstance.gcombo_trigger_mode_select.value)]}
+""");
+/* Assigns trigger delay based on GUI selection */
+
+if(GLOBAL_BCCUInstance.gcombo_bit_clock_mode.value == "Fast Mode (BCLK = FCLK)")
+{
+out.print("""
+  .trig_delay = XMC_BCCU_TRIGDELAY_NO_DELAY, """);
+}
+else
+{
+out.print("""
+  .trig_delay = ${["XMC_BCCU_TRIGDELAY_NO_DELAY,",
+	
+		           "XMC_BCCU_TRIGDELAY_QUARTER_BIT,",
+
+                   "XMC_BCCU_TRIGDELAY_HALF_BIT,"
+				 
+                  ][GLOBAL_BCCUInstance.gcombo_trigger_delay_select.options.indexOf(GLOBAL_BCCUInstance.gcombo_trigger_delay_select.value)]}
+""");
+}
+/* Assigns maximum number of zero's at output based on GUI selection */
+out.print("""
+  .maxzero_at_output = ${GLOBAL_BCCUInstance.ginteger_on_bit_insertion_threshold.value}U,""");
+/* Assigns fast clock prescaler caliculated in manifest based on GUI selection */
+out.print("""
+  .fclk_ps = ${GLOBAL_BCCUInstance.ginteger_fast_clock_prescaler_factor.value}U,""");
+/* Assigns Dim clock prescaler caliculated in manifest based on GUI selection */
+out.print("""
+  .dclk_ps = ${GLOBAL_BCCUInstance.ginteger_dimming_clock_prescaler_factor.value}U,""");
+
+out.print("""
+  .bclk_sel = ${["XMC_BCCU_BCLK_MODE_NORMAL,",
+	
+	              "XMC_BCCU_BCLK_MODE_FAST,"
+				 
+                  ][GLOBAL_BCCUInstance.gcombo_bit_clock_mode.options.indexOf(GLOBAL_BCCUInstance.gcombo_bit_clock_mode.value)]}
+""");
+/* Assigns global dimming level based on GUI selection */
+out.print("""
+  .global_dimlevel = ${GLOBAL_BCCUInstance.ginteger_global_dimming_level.value}U \n};
+   
+GLOBAL_BCCU_t ${appInst} = 
+{
+  .bccuregs = BCCU${GLOBAL_BCCUUri[4]},
+  .config = &confighandle,
+  .enable_events = """);
+/* Assigns events based on GUI selection */  
+if(GLOBAL_BCCUInstance.gcheck_enable_trigger0_interrupt.value == true){ enable_events_hold |= 1;}
+if(GLOBAL_BCCUInstance.gcheck_enable_trigger1_interrupt.value == true){ enable_events_hold |= 2;}
+if(GLOBAL_BCCUInstance.gcheck_enable_fifo_full_interrupt.value == true){ enable_events_hold |= 4;}
+if(GLOBAL_BCCUInstance.gcheck_enable_fifo_empty_interrupt.value == true){ enable_events_hold |= 8;}
+if(GLOBAL_BCCUInstance.gcheck_enable_trap_interrupt.value == true){ enable_events_hold |= 16;}
+/* Assigns Trap input source and edge type  from slover */
+out.print("""${enable_events_hold}U,
+  .trap_source = ${trapsource[(int)(GLOBAL_BCCUInstance.hwres_trap.getRegValue("globcon","globcon_trapis").value)]},
+  .trap_edge = ${["XMC_BCCU_CH_TRAP_EDGE_RISING,",
+
+	  	          "XMC_BCCU_CH_TRAP_EDGE_FALLING,",
+
+                  ][GLOBAL_BCCUInstance.gcombo_trap_edge_select.options.indexOf(GLOBAL_BCCUInstance.gcombo_trap_edge_select.value)]}
+  .init_status = false
+}; """);
+
+}

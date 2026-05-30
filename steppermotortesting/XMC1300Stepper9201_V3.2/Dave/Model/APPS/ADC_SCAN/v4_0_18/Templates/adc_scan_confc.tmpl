@@ -1,0 +1,255 @@
+package Model.APPS.ADC_SCAN.v4_0_18.Templates;
+
+import Model.APPS.ADC_SCAN.v4_0_18.ADC_SCAN
+
+out.print("""
+/**
+ * @cond
+ ***********************************************************************************************************************
+ *
+ * Copyright (c) 2015-2016, Infineon Technologies AG
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
+ * following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, this list of conditions and the  following
+ *   disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *   following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *   Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+ *   products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes
+ * with Infineon Technologies AG (dave@infineon.com).
+ ***********************************************************************************************************************
+ *
+ * Change History
+ * --------------
+ *
+ * 2015-02-16:
+ *     - Initial version for DAVEv4.<BR>
+ *
+ * 2015-04-27:
+ *     - Updated the ADC_SCAN_Init() API for consistency.<BR>
+ *
+ * 2015-06-20:
+ *     - Updated the copyright section.<BR>
+ *     
+ * 2015-07-09:
+ *     - Documentation updated.<BR>
+ *
+ * 2015-07-31:
+ *     - Updated the APP to support new devices.<BR>
+ *
+ * 2015-10-01:
+ *     - Iclass signal added to the APP.<BR>
+ *
+ * 2015-10-08:
+ *     - Added support for XMC4700/XMC4800 devices.<BR>
+ *
+ * 2015-12-15:     
+ *          - Added support for XMC4300 devices.<BR>
+ *          - Updated the APP to optimize the request source callback.<BR>
+ *          - APIs touched are ADC_SCAN_InsertScanEntry(), ADC_SCAN_ResetListContents(), 
+ *            ADC_SCAN_ReqSrcEventHandler().<BR>      
+ *
+ * 2016-01-19:
+ *          - Added new APIs ADC_SCAN_EnableArbitration() and ADC_SCAN_DisableArbitration().<BR>
+ *
+ * 2016-04-03:
+ *          - Total conversion time now includes post calibration time as well for XMC1x.<BR>
+ *
+ * 2016-08-18:
+ *     - Minimum sample time at low frequencies changed to incorporate Errata ADC_AI.H006 and ADC_AI.H007.
+ *
+ * @endcond
+ *
+ */
+
+/***********************************************************************************************************************
+ * HEADER FILES
+ **********************************************************************************************************************/
+#include "adc_scan.h"
+ 
+/**********************************************************************************************************************
+* DATA STRUCTURES
+**********************************************************************************************************************/
+/**
+ * @ingroup ADC_SCAN_datastructures
+ * @{
+ */
+""");
+List MappedUri       = null;
+int instnum1         = 0;
+int cpu_app_was_consumed =0;
+String appInst       = null;
+List MappedClassUri  = null;
+String appInstLabel  = null;
+String GroupNo       = null;
+String ClassNo       = null;
+String SRCNodeID     = "0";
+String CPU_HANDLE = "";
+List VarCnvModeArray = ['XMC_VADC_CONVMODE_12BIT','XMC_VADC_CONVMODE_10BIT','XMC_VADC_CONVMODE_8BIT','XMC_VADC_CONVMODE_FASTCOMPARE'];
+List TriggerMode     = ['XMC_VADC_TRIGGER_EDGE_NONE','XMC_VADC_TRIGGER_EDGE_RISING','XMC_VADC_TRIGGER_EDGE_FALLING','XMC_VADC_TRIGGER_EDGE_ANY'];
+List gatingMode      = ['XMC_VADC_GATEMODE_BLOCK','XMC_VADC_GATEMODE_IGNORE','XMC_VADC_GATEMODE_ACTIVEHIGH','XMC_VADC_GATEMODE_ACTIVELOW','XMC_VADC_GATEMODE_MAX'];
+List StartMode       = ['XMC_VADC_STARTMODE_WFS','XMC_VADC_STARTMODE_CIR','XMC_VADC_STARTMODE_CNR']
+List rs_priority	  = ['XMC_VADC_GROUP_RS_PRIORITY_0','XMC_VADC_GROUP_RS_PRIORITY_1','XMC_VADC_GROUP_RS_PRIORITY_2','XMC_VADC_GROUP_RS_PRIORITY_3']
+
+List Gating_signal  = ['XMC_VADC_REQ_GT_A','XMC_VADC_REQ_GT_B','XMC_VADC_REQ_GT_C','XMC_VADC_REQ_GT_D','XMC_VADC_REQ_GT_E','XMC_VADC_REQ_GT_F',
+					   'XMC_VADC_REQ_GT_G','XMC_VADC_REQ_GT_H','XMC_VADC_REQ_GT_I','XMC_VADC_REQ_GT_J','XMC_VADC_REQ_GT_K','XMC_VADC_REQ_GT_L',
+					   'XMC_VADC_REQ_GT_M','XMC_VADC_REQ_GT_N','XMC_VADC_REQ_GT_O','XMC_VADC_REQ_GT_P']
+
+List trigger_signal = [ 'XMC_VADC_REQ_TR_A','XMC_VADC_REQ_TR_B','XMC_VADC_REQ_TR_C','XMC_VADC_REQ_TR_D','XMC_VADC_REQ_TR_E','XMC_VADC_REQ_TR_F',
+	  					'XMC_VADC_REQ_TR_G','XMC_VADC_REQ_TR_H','XMC_VADC_REQ_TR_I','XMC_VADC_REQ_TR_J','XMC_VADC_REQ_TR_K','XMC_VADC_REQ_TR_L',
+						'XMC_VADC_REQ_TR_M','XMC_VADC_REQ_TR_N','XMC_VADC_REQ_TR_O','XMC_VADC_REQ_TR_P']
+
+List ServiceRequestLines = ['XMC_VADC_SR_GROUP_SR0','XMC_VADC_SR_GROUP_SR1','XMC_VADC_SR_GROUP_SR2','XMC_VADC_SR_GROUP_SR3',
+	                        'XMC_VADC_SR_SHARED_SR0','XMC_VADC_SR_SHARED_SR1','XMC_VADC_SR_SHARED_SR2','XMC_VADC_SR_SHARED_SR3'];
+
+String family = daveEnv.project.selectedDevice.deviceId.family;
+
+for (Object appIns : appInstancesList ) {
+	
+	if(appIns.gcheck_src_enable_intr.value)
+	{
+		cpu_app_was_consumed = 1;
+	}
+}
+						
+for (Object appIns : appInstancesList ) {
+	appInst = appIns.getInstanceLabel()
+	MappedUri = appIns.hwres_vadc_scan.getSolverUri()
+	MappedSrcNvicUri = appIns.hwres_nvicnode_srcevt.getSolverUri()
+	MappedClassUri = appIns.hwres_vadc_sgrpclass.getSolverUri()
+	GroupNo = MappedUri[6]
+	ClassNo = MappedClassUri[8]
+	String irqctrl = "";
+	String nvic_sharing = '';
+	if(MappedSrcNvicUri != null)
+	{
+		SRCNodeID = MappedSrcNvicUri[7]
+		priority		= appIns.ginterruptprio_request_src_intr.priorityValue.toInteger()
+		sub_priority 	= appIns.ginterruptprio_request_src_intr.subPriorityValue.toInteger()
+		// Dummy read for NVIC
+		appIns.hwres_nvicnode_srcevt.getRegValue("","iser_setena");
+		nvic_sharing = appIns.hwres_nvicnode_srcevt.getRegValue("","intcr_insel")
+		if(nvic_sharing != null && nvic_sharing.toInteger() != 0)
+		{
+			irqctrl = ",\n  .irqctrl = (uint32_t) ${nvic_sharing}"
+		}
+	}
+	else
+	{
+		SRCNodeID 	 = "0"
+		priority 	 = "0"
+		sub_priority = "0"
+	}
+	
+	/******************************************************************************/
+	/* Conversion Mode Class 0 */
+	/******************************************************************************/
+	int extTrig_enable
+	if((appIns.gcombo_trigger_edge_sel.options.indexOf(appIns.gcombo_trigger_edge_sel.value) )== 0 ){ extTrig_enable= 0 } else { extTrig_enable = 1 }
+	
+	//${appIns.getAppLabel()}
+	out.print("""
+ADC_SCAN_ENTRY_t adc_scan_list_ch_index_${instnum1}[ADC_SCAN_NUM_CHANNELS];
+
+/**
+ * ADC_SCAN ISR Handle for ${appInst}
+ */
+const ADC_SCAN_ISR_t ${appInst}_reqsrc_config_${instnum1} =
+{
+  .node_id          = ${SRCNodeID}U,
+  .priority         = ${priority}U,${if(family != "XMC1"){
+"\n  .sub_priority     = "+sub_priority+"U,"}else{""}}
+  .interrupt_enable = (bool)${appIns.gcheck_src_enable_intr.value} ${if(irqctrl != "null"){irqctrl}else{}}
+};
+
+/**
+ * ADC SCAN LLD Handle for configuring the ${appInst}
+ */
+const XMC_VADC_SCAN_CONFIG_t ${appInst}_init_handle${instnum1} =
+{
+  .conv_start_mode   = (uint32_t) ${StartMode[appIns.gcombo_adc_start_mode.options.indexOf(appIns.gcombo_adc_start_mode.value)]}, 		/* Conversion start mode WFS/CIR/CNR*/
+  .req_src_priority  = (uint32_t) ${rs_priority[appIns.gcombo_rs_priority.options.indexOf(appIns.gcombo_rs_priority.value)]}, /*The scan request source priority */
+  .trigger_signal    = (uint32_t) ${String temp = appIns.hwres_vadc_scan.getRegValue("","gasctrl_xtsel"); if(temp !=null){ trigger_signal[temp.toInteger()] } else { trigger_signal[0]} }, 			/*If trigger needed the signal input*/
+  .trigger_edge      = (uint32_t) ${TriggerMode[appIns.gcombo_trigger_edge_sel.options.indexOf(appIns.gcombo_trigger_edge_sel.value)]},   /*Trigger edge needed if trigger enabled*/
+  .gate_signal       = (uint32_t) ${String temp = appIns.hwres_vadc_scan.getRegValue("","gasctrl_gtsel"); if(temp !=null){ Gating_signal[temp.toInteger()] } else { Gating_signal[0]} },            /*If gating needed the signal input*/
+  .timer_mode		 = (uint32_t) 0,                            /* Disabled equidistant sampling*/
+  .external_trigger	 = (uint32_t) ${extTrig_enable}, 						/*External trigger Enabled/Disabled*/
+  .req_src_interrupt = (uint32_t) ${if(appIns.gcheck_src_enable_intr.value){1 } else { 0 } }, 						/*Request source event Enabled/disabled*/
+  .enable_auto_scan  = (uint32_t) ${if(appIns.gcheck_autoscan_enable.value){1 } else { 0 } },  /*Autoscan enabled/disabled */
+  .load_mode	     = (uint32_t) XMC_VADC_SCAN_LOAD_COMBINE,   /*Response from SCAN when a Load event occours.*/
+};
+
+ADC_SCAN_t ${appInst} = 
+{
+  .iclass_config_handle	= {
+                           .sample_time_std_conv= (uint8_t) ${appIns.gint_adc_scan_stc0.value}, /*The required STCS value.*/
+                           .conversion_mode_standard        = ${VarCnvModeArray[appIns.gcombo_conv_mode.options.indexOf(appIns.gcombo_conv_mode.value)]}, /* Conversion mode for ${appInst}*/
+                          },
+  .group_handle	        = (XMC_VADC_GROUP_t*) (void*) VADC_G${GroupNo}, /* Group pointer for ${appInst}*/
+  .scan_config_handle   = (XMC_VADC_SCAN_CONFIG_t*) &${appInst}_init_handle${instnum1}, /* Scan configuration structure for ${appInst}*/
+  .global_handle        = (GLOBAL_ADC_t*) &${appIns.appres_global_adc.getInstanceLabel()}, /*The GLOBAL_ADC App handle*/
+  .rs_intr_handle	    = (ADC_SCAN_ISR_t*) &${appInst}_reqsrc_config_${instnum1}, /* The request source interrupt config handler*/
+  .gating_mode          = ${gatingMode[appIns.gcombo_gate_sel.options.indexOf(appIns.gcombo_gate_sel.value)]},     /*Gating edge needed if gate enabled*/
+  .srv_req_node		    = ${String temp = appIns.hwres_vadc_scan.getRegValue("GSEVNP","gsevnp_sev1np"); if(temp !=null){ ServiceRequestLines[temp.toInteger()] } else { ServiceRequestLines[0]} }, /*Service Request line for Request source Event */
+  .init_status			= ADC_SCAN_UNINITIALIZED, /* ${appInst} INIT status*/
+  .instance_number      = (uint8_t) ${instnum1}, /* App Instance number for ${appInst}*/
+  .iclass_num	        = (uint8_t) ${ClassNo},  /* The selected ICLASS configuration for ${appInst}*/
+  .group_index          = (uint8_t) ${GroupNo},  /* The Group index for ${appInst}*/
+};
+""");
+instnum1++;
+}
+instnum1=0;
+for (Object appIns : appInstancesList ) {
+	appInst          = appIns.getInstanceLabel()
+
+	if(appIns.gcheck_src_enable_intr.value)
+	{
+out.print("""
+/* Request source Event Handler generated for Instance-${instnum1} of ADC_SCAN App */
+void ADC_SCAN_${instnum1}_ReqSrcEventHandler(void)
+{
+	ADC_SCAN_ReqSrcEventHandler(&${appInst});
+}
+	""");
+	}
+instnum1++;
+	}
+
+out.print("""
+/**
+ * @}
+ */
+/* API generated to initialise list pointers */
+void ADC_SCAN_lInitializeListToDefaults(uint8_t instance_num)
+{
+""");
+instnum1=0;
+for (Object appIns : appInstancesList ) {
+	appInst = appIns.getInstanceLabel()
+	MappedUri = appIns.hwres_vadc_scan.getSolverUri()
+	GroupNo1 = MappedUri[6]
+	out.print("""
+  adc_scan_list_ptrs[${instnum1}] = adc_scan_list_ch_index_${instnum1};
+ """);	
+instnum1++;
+}
+out.print("""
+  /* Reset channels */
+  ADC_SCAN_ResetListContents(instance_num);
+}""");

@@ -1,0 +1,69 @@
+package Model.APPS.GLOBAL_BCCU.v4_1_6;
+
+/* Import statements */
+import ifx.davex.app.manifest.*
+
+abstract class GLOBAL_BCCU_GUI extends AppManifest {
+	/* Begin : UI variable section */
+	 public GImage gimage_bclk_mode_normal;
+	 public GImage gimage_bclk_mode_fast;
+	 public GImage gimage_trigmode_0;
+	 public GImage gimage_trigmode_1;
+	 public GImage gimage_watchdog;
+	 public GInteger ginteger_fast_clock_prescaler_factor;
+	 public GInteger ginteger_dimming_clock_prescaler_factor;
+	 public GInteger ginteger_global_dimming_level;
+	 public GInteger ginteger_on_bit_insertion_threshold;
+	 public GCombo gcombo_bit_clock_mode;
+	 public GCombo gcombo_trigger_mode_select;
+	 public GCombo gcombo_trigger_delay_select;
+	 public GCombo gcombo_trap_edge_select;
+	 public GFloat gfloat_desired_fast_clock_freq;
+	 public GFloat gfloat_actual_fast_clock_freq;
+	 public GFloat gfloat_actual_bit_clock_freq;
+	 public GFloat gfloat_actual_bit_clock_time;
+	 public GFloat gfloat_desired_dimming_clock_freq;
+	 public GFloat gfloat_actual_dimming_clock_freq;
+	 public GFloat gfloat_minimum_brightness;
+	 public GFloat gfloat_longest_off_time;
+	 public GFloat gfloat_lowest_frequency;
+	 public GCheck gcheck_enable_trigger0_interrupt;
+	 public GCheck gcheck_enable_trigger1_interrupt;
+	 public GCheck gcheck_enable_fifo_full_interrupt;
+	 public GCheck gcheck_enable_fifo_empty_interrupt;
+	 public GCheck gcheck_enable_trap_interrupt;
+
+	 public GLOBAL_BCCU_GUI(DaveEnv daveEnv){
+
+	 gimage_bclk_mode_normal = GImage(widgetName:"gimage_bclk_mode_normal", path: "doc/UI-Clock_Configuration_normal_mode.png", enabled:true, visible:true)
+	 gimage_bclk_mode_fast = GImage(widgetName:"gimage_bclk_mode_fast", path: "doc/UI-Clock_Configuration_fast_mode.png", enabled:true, visible:true)
+	 gimage_trigmode_0 = GImage(widgetName:"gimage_trigmode_0", path: "doc/UI-Global_Configuration_mode_0.png", enabled:true, visible:true)
+	 gimage_trigmode_1 = GImage(widgetName:"gimage_trigmode_1", path: "doc/UI-Global_Configuration_mode_1.png", enabled:true, visible:true)
+	 gimage_watchdog = GImage(widgetName:"gimage_watchdog", path: "doc/UI-Global_Configuration_watchdog.png", enabled:true, visible:true)
+	 ginteger_fast_clock_prescaler_factor = GInteger(widgetName:"ginteger_fast_clock_prescaler_factor", value:200, minValue:0, maxValue:4095, enabled:false, visible:true, isMandatoryValue:false)
+	 ginteger_dimming_clock_prescaler_factor = GInteger(widgetName:"ginteger_dimming_clock_prescaler_factor", value:110, minValue:0, maxValue:4095, enabled:false, visible:true, isMandatoryValue:false)
+	 ginteger_global_dimming_level = GInteger(widgetName:"ginteger_global_dimming_level", value:0, minValue:0, maxValue:4095, enabled:true, visible:true, isMandatoryValue:false)
+	 ginteger_on_bit_insertion_threshold = GInteger(widgetName:"ginteger_on_bit_insertion_threshold", value:800, minValue:2, maxValue:4095, enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_bit_clock_mode = GCombo(widgetName:"gcombo_bit_clock_mode", options:["Normal Mode (BCLK = FCLK/4)","Fast Mode (BCLK = FCLK)"], value:"Normal Mode (BCLK = FCLK/4)", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_trigger_mode_select = GCombo(widgetName:"gcombo_trigger_mode_select", options:["Mode 0: Trigger On Any Channel","Mode 1: Trigger On Active Channel"], value:"Mode 0: Trigger On Any Channel", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_trigger_delay_select = GCombo(widgetName:"gcombo_trigger_delay_select", options:["BCCU Trigger On Channel Trigger","BCCU Trigger Delayed By 1/4 Bit Time","BCCU Trigger Delayed By 1/2 Bit Time"], value:"BCCU Trigger On Channel Trigger", enabled:true, visible:true, isMandatoryValue:false)
+	 gcombo_trap_edge_select = GCombo(widgetName:"gcombo_trap_edge_select", options:["Rising Edge","Falling Edge"], value:"Rising Edge", enabled:true, visible:true, isMandatoryValue:false)
+	 gfloat_desired_fast_clock_freq = GFloat(widgetName:"gfloat_desired_fast_clock_freq", value:0.8, minValue:0.007814, maxValue:32.0, enabled:true, visible:true, isMandatoryValue:false)
+	 gfloat_actual_fast_clock_freq = GFloat(widgetName:"gfloat_actual_fast_clock_freq", value:0.8, minValue:0.007814, maxValue:32.0, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_actual_bit_clock_freq = GFloat(widgetName:"gfloat_actual_bit_clock_freq", value:0.2, minValue:0.000015, maxValue:64.0, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_actual_bit_clock_time = GFloat(widgetName:"gfloat_actual_bit_clock_time", value:5, minValue:0.015, maxValue:66, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_desired_dimming_clock_freq = GFloat(widgetName:"gfloat_desired_dimming_clock_freq", value:0.292237, minValue:0.007814, maxValue:32.0, enabled:true, visible:true, isMandatoryValue:false)
+	 gfloat_actual_dimming_clock_freq = GFloat(widgetName:"gfloat_actual_dimming_clock_freq", value:0.292237, minValue:0.007814, maxValue:32.0, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_minimum_brightness = GFloat(widgetName:"gfloat_minimum_brightness", value:80, minValue:0.00, maxValue:100.00, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_longest_off_time = GFloat(widgetName:"gfloat_longest_off_time", value:4000, minValue:0, maxValue:270270, enabled:false, visible:true, isMandatoryValue:false)
+	 gfloat_lowest_frequency = GFloat(widgetName:"gfloat_lowest_frequency", value:250, minValue:1, maxValue:64000000, enabled:false, visible:true, isMandatoryValue:false)
+	 gcheck_enable_trigger0_interrupt = GCheck(widgetName:"gcheck_enable_trigger0_interrupt", value:false, enabled:true, visible:true)
+	 gcheck_enable_trigger1_interrupt = GCheck(widgetName:"gcheck_enable_trigger1_interrupt", value:false, enabled:true, visible:true)
+	 gcheck_enable_fifo_full_interrupt = GCheck(widgetName:"gcheck_enable_fifo_full_interrupt", value:false, enabled:true, visible:true)
+	 gcheck_enable_fifo_empty_interrupt = GCheck(widgetName:"gcheck_enable_fifo_empty_interrupt", value:false, enabled:true, visible:true)
+	 gcheck_enable_trap_interrupt = GCheck(widgetName:"gcheck_enable_trap_interrupt", value:false, enabled:true, visible:true)
+
+
+	 }
+	/* End : UI variable section */
+}

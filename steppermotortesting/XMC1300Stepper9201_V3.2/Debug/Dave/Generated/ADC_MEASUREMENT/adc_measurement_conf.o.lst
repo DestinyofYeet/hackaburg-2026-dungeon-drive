@@ -1,0 +1,147 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "adc_measurement_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global global_iclass_config
+  18              	 .section .rodata.global_iclass_config,"a",%progbits
+  19              	 .align 2
+  22              	global_iclass_config:
+  23 0000 02       	 .byte 2
+  24 0001 00       	 .byte 0
+  25 0002 0000     	 .space 2
+  26              	 .global CH3_Udc_ch_config
+  27              	 .section .data.CH3_Udc_ch_config,"aw",%progbits
+  28              	 .align 2
+  31              	CH3_Udc_ch_config:
+  32 0000 02       	 .byte 2
+  33 0001 00       	 .byte 0
+  34 0002 2C       	 .byte 44
+  35 0003 00       	 .byte 0
+  36 0004 00000000 	 .word 0
+  37 0008 00000000 	 .space 4
+  38 000c 00       	 .byte 0
+  39 000d FF       	 .byte -1
+  40 000e 0000     	 .space 2
+  41              	 .global CH3_Udc_res_config
+  42              	 .section .bss.CH3_Udc_res_config,"aw",%nobits
+  43              	 .align 2
+  46              	CH3_Udc_res_config:
+  47 0000 00000000 	 .space 4
+  48              	 .global ADC_MEASUREMENT_CH3_Udc_handle
+  49              	 .section .data.ADC_MEASUREMENT_CH3_Udc_handle,"aw",%progbits
+  50              	 .align 2
+  53              	ADC_MEASUREMENT_CH3_Udc_handle:
+  54 0000 00000000 	 .word CH3_Udc_ch_config
+  55 0004 00000000 	 .word CH3_Udc_res_config
+  56 0008 00080348 	 .word 1208158208
+  57 000c 01       	 .byte 1
+  58 000d 06       	 .byte 6
+  59 000e 0000     	 .space 2
+  60              	 .global CH4_Poti_ch_config
+  61              	 .section .data.CH4_Poti_ch_config,"aw",%progbits
+  62              	 .align 2
+  65              	CH4_Poti_ch_config:
+  66 0000 02       	 .byte 2
+  67 0001 00       	 .byte 0
+  68 0002 24       	 .byte 36
+  69 0003 00       	 .byte 0
+  70 0004 00000000 	 .word 0
+  71 0008 00000000 	 .space 4
+  72 000c 00       	 .byte 0
+  73 000d FF       	 .byte -1
+  74 000e 0000     	 .space 2
+  75              	 .global CH4_Poti_res_config
+  76              	 .section .bss.CH4_Poti_res_config,"aw",%nobits
+  77              	 .align 2
+  80              	CH4_Poti_res_config:
+  81 0000 00000000 	 .space 4
+  82              	 .global ADC_MEASUREMENT_CH4_Poti_handle
+  83              	 .section .data.ADC_MEASUREMENT_CH4_Poti_handle,"aw",%progbits
+  84              	 .align 2
+  87              	ADC_MEASUREMENT_CH4_Poti_handle:
+  88 0000 00000000 	 .word CH4_Poti_ch_config
+  89 0004 00000000 	 .word CH4_Poti_res_config
+  90 0008 00080348 	 .word 1208158208
+  91 000c 01       	 .byte 1
+  92 000d 07       	 .byte 7
+  93 000e 0000     	 .space 2
+  94              	 .global ADC_MEASUREMENT_channel_array
+  95              	 .section .data.ADC_MEASUREMENT_channel_array,"aw",%progbits
+  96              	 .align 2
+  99              	ADC_MEASUREMENT_channel_array:
+ 100 0000 00000000 	 .word ADC_MEASUREMENT_CH3_Udc_handle
+ 101 0004 00000000 	 .word ADC_MEASUREMENT_CH4_Poti_handle
+ 102              	 .global backgnd_config
+ 103              	 .section .rodata.backgnd_config,"a",%progbits
+ 104              	 .align 2
+ 107              	backgnd_config:
+ 108 0000 05       	 .byte 5
+ 109 0001 000000   	 .space 3
+ 110 0004 00       	 .space 1
+ 111 0005 00       	 .byte 0
+ 112 0006 00       	 .byte 0
+ 113 0007 00       	 .byte 0
+ 114 0008 00       	 .byte 0
+ 115 0009 000000   	 .space 3
+ 116              	 .global ADC_MEASUREMENT_0
+ 117              	 .section .data.ADC_MEASUREMENT_0,"aw",%progbits
+ 118              	 .align 2
+ 121              	ADC_MEASUREMENT_0:
+ 122 0000 00000000 	 .word ADC_MEASUREMENT_channel_array
+ 123 0004 00000000 	 .word backgnd_config
+ 124 0008 00000000 	 .word global_iclass_config
+ 125 000c 00000000 	 .word GLOBAL_ADC_0
+ 126 0010 00000000 	 .word 0
+ 127 0014 00000000 	 .word 0
+ 128 0018 02       	 .byte 2
+ 129 0019 04       	 .byte 4
+ 130 001a 01       	 .byte 1
+ 131 001b 00       	 .space 1
+ 132              	 .text
+ 133              	.Letext0:
+ 134              	 .file 1 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 135              	 .file 2 "c:\\davev4\\dave-4.3.2\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 136              	 .file 3 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 137              	 .file 4 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/XMCLib/inc/xmc_vadc.h"
+ 138              	 .file 5 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Dave/Generated/GLOBAL_ADC/global_adc.h"
+ 139              	 .file 6 "../Dave/Generated/ADC_MEASUREMENT/adc_measurement.h"
+ 140              	 .file 7 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+ 141              	 .file 8 "C:/Workspaces/DAVE-4.3/WS_2016_09_02/XMC1300Stepper9201_V3.2/Dave/Generated/GLOBAL_ADC/global_adc_extern.h"
+ 142              	 .file 9 "../Dave/Generated/ADC_MEASUREMENT/adc_measurement_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 adc_measurement_conf.c
+    {standard input}:22     .rodata.global_iclass_config:00000000 global_iclass_config
+    {standard input}:19     .rodata.global_iclass_config:00000000 $d
+    {standard input}:31     .data.CH3_Udc_ch_config:00000000 CH3_Udc_ch_config
+    {standard input}:28     .data.CH3_Udc_ch_config:00000000 $d
+    {standard input}:46     .bss.CH3_Udc_res_config:00000000 CH3_Udc_res_config
+    {standard input}:43     .bss.CH3_Udc_res_config:00000000 $d
+    {standard input}:53     .data.ADC_MEASUREMENT_CH3_Udc_handle:00000000 ADC_MEASUREMENT_CH3_Udc_handle
+    {standard input}:50     .data.ADC_MEASUREMENT_CH3_Udc_handle:00000000 $d
+    {standard input}:65     .data.CH4_Poti_ch_config:00000000 CH4_Poti_ch_config
+    {standard input}:62     .data.CH4_Poti_ch_config:00000000 $d
+    {standard input}:80     .bss.CH4_Poti_res_config:00000000 CH4_Poti_res_config
+    {standard input}:77     .bss.CH4_Poti_res_config:00000000 $d
+    {standard input}:87     .data.ADC_MEASUREMENT_CH4_Poti_handle:00000000 ADC_MEASUREMENT_CH4_Poti_handle
+    {standard input}:84     .data.ADC_MEASUREMENT_CH4_Poti_handle:00000000 $d
+    {standard input}:99     .data.ADC_MEASUREMENT_channel_array:00000000 ADC_MEASUREMENT_channel_array
+    {standard input}:96     .data.ADC_MEASUREMENT_channel_array:00000000 $d
+    {standard input}:107    .rodata.backgnd_config:00000000 backgnd_config
+    {standard input}:104    .rodata.backgnd_config:00000000 $d
+    {standard input}:121    .data.ADC_MEASUREMENT_0:00000000 ADC_MEASUREMENT_0
+    {standard input}:118    .data.ADC_MEASUREMENT_0:00000000 $d
+
+UNDEFINED SYMBOLS
+GLOBAL_ADC_0

@@ -1,0 +1,193 @@
+package Model.APPS.ACMP_CONFIG.v4_1_2;
+
+/*
+Copyright (c) 2016, Infineon Technologies AG
+All rights reserved.                       
+                                           
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+following conditions are met:  
+                                                                            
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+disclaimer.                       
+ 
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided with the distribution.                      
+ 
+Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote
+products derived from this software without specific prior written permission.                                          
+                                                                            
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                                 
+                                                                            
+To improve the quality of the software, users are encouraged to share modifications, enhancements or bug fixes with 
+Infineon Technologies AG: dave@infineon.com. */
+
+/*************** Revision History **********************************************
+ Version     Date          Description
+ 
+ 4.0.0       13-May-2015   Initial version for DAVEv4
+ 4.0.2       04-Jun-2015   Updated ACMP_CONFIG_Init API for XMC_ACMP_Init() 
+                           return type removal (LLD change).
+ 4.0.3       04-July-2015  Updated version number for Public release(Beta Version)
+ 4.0.5       31-July-2015  Added support for XMC1400 devices. 
+ 4.1.2       04-Feb-2016   1. Code size optimization done on configuration structure.<br>
+                           2. Function pointer based instance specific initialization implemented.<br>
+                           3. Updated for public release(Productive Version) 
+*******************************************************************************/
+ 
+import ifx.davex.app.manifest.*
+
+class  ACMP_CONFIG extends ACMP_CONFIG_GUI {
+
+    // Note  : Following App properties are mandatory and important
+    // Begin : App property section
+
+    /**
+     * App version
+     * Format: a string with three digit separated by a dot.
+     */
+    def version            = '4.1.2'
+
+    /**
+     * App categories declaration. 
+     * It is list of strings. Subcategories are separated by slash.
+     * No limits on number of categories and subcategories depth.
+     */
+    def categoriesDescription = [
+	"Peripheral Configuration"
+    ]
+
+    /** 
+     * Minimum DAVE version required for this app.
+     * 
+     * It is string with three digit separated by a dot.
+     */
+    def minDaveVersion           = '4.0.0'
+
+    /** 
+     * Keywords used by search feature in Apps selection view
+     * 
+     * It is a list of string.
+     */
+    def keywords      = ['analog comparartor','comparator','anacmp','compare','all']
+
+    /** 
+     * softwareIDs is used to declare which devices are compatible with this app.
+     * It is a map with key a string containing a pattern that shall match the SW id of
+     * the device and as value the minimal version of the app.
+     * 
+     * 
+     */
+    
+    //Any step, any variant and any packages of XMC1200 and XMC1300
+    //Any step, any variant and any packages of XMC1200 and XMC1300
+    def softwareIDs = [
+          "XMC1.2.02.*.*":"1.0.0",
+          "XMC1.2.00.*.*":"1.0.0",
+          "XMC1.3.*.*.*":"1.0.0",
+		  "XMC1.4.02.*.*":"1.0.0",
+		  "XMC1.4.04.*.*":"1.0.0"]
+    /**
+     * Singleton property:
+     * When it is true the app can be instantiated only once. 
+     */
+    def singleton     = false
+
+
+    /**
+     * initProvider property
+     * It shall be true to add a call to <AppName>_Init() 
+     */
+    def initProvider  = true
+
+    /**
+     * Deprecated app
+     * Set it to true to indicate that the app shall be not used for new projects.
+     */
+    def deprecated    = false
+
+    /**
+     * Sharable property.
+     * It shall be true to allows multiple apps to require the same instance of this app.
+     */
+    def sharable      = false
+
+    /**
+     *  App function description.
+     */
+    def description = "Configures the properties of analog comparator peripheral"
+
+    // End   : App property section
+
+    // Begin : User app property section
+    // End   : User app property section
+
+
+    MRequiredApp appres_global_acmp
+
+    MVirtualResourceGroup hwres_acmp_slice
+
+    MVirtualSignal vs_acmp_out
+    MVirtualSignal vs_acmp_inn
+    MVirtualSignal vs_acmp_inp
+
+    // App Constructor
+    public ACMP_CONFIG(DaveEnv daveEnv)
+    {
+
+	/* ---------------------------------------------------------- */
+	/* ------------ App consumption Block ----------------------- */
+	/* ---------------------------------------------------------- */
+
+	appres_global_acmp = MRequiredApp("GLOBAL_ACMP","Analog Comparator Global APP", RSHARABLE, "4.0.4", true)
+
+	/* ---------------------------------------------------------- */
+	/* ------------ Hardware resource consumption block --------- */
+	/* ---------------------------------------------------------- */
+
+	hwres_acmp_slice = MVirtualResourceGroup("analog comparator", [
+	    "peripheral",
+	    "scu",
+	    "*",
+	    "cmpcu",
+	    "anacmp",
+	    "*"
+	],true)
+
+	/* ---------------------------------------------------------- */
+	/* -------------- APP IO Signals ---------------------------- */
+	/* ---------------------------------------------------------- */
+
+	vs_acmp_inn = MVirtualSignal(hwres_acmp_slice,"acmp_inn","inn",true, true)
+	vs_acmp_inp = MVirtualSignal(hwres_acmp_slice,"acmp_inp","inp",true, true)
+	vs_acmp_out = MVirtualSignal(hwres_acmp_slice,"acmp_out","out",true, true)
+	
+
+	/* ---------------------------------------------------------- */
+	/* ---------------- APP IO Connections ---------------------- */
+	/* ---------------------------------------------------------- */
+
+
+	/* -------------------------------------------------------- */
+	/* ------------ APP Configuration ------------------------- */
+	/* -------------------------------------------------------- */
+
+    }
+
+    /* -------------------------------------------------------- */
+    /* ------------  File Generation  ------------------------- */
+    /* -------------------------------------------------------- */
+    def generateFiles(){
+	copy("acmp_config.c", "acmp_config.c")
+	copy("acmp_config.h", "acmp_config.h")
+	generate("acmp_config_confc.tmpl", "acmp_config_conf.c")
+	generate("acmp_config_confh.tmpl", "acmp_config_conf.h")
+	generate("acmp_config_extern.tmpl", "acmp_config_extern.h")
+    }
+
+}
